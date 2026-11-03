@@ -1,0 +1,97 @@
+import type { Payment } from '@/features/payments';
+
+import { findById, paginate, type MockRoute } from './server';
+
+/** Centralized, realistic mock dataset — one entry per status, across a few vehicles. */
+const MOCK_PAYMENTS: Payment[] = [
+  {
+    id: 'PAY_201',
+    reference: 'INV-2026-0142',
+    title: 'Annual service',
+    amountMinor: 24999,
+    currency: 'USD',
+    status: 'paid',
+    vehicleLabel: 'Toyota Corolla 2022',
+    issuedAt: '2026-10-02T09:30:00.000Z',
+    dueAt: '2026-10-16T00:00:00.000Z',
+    paidAt: '2026-10-05T14:00:00.000Z',
+    dealershipName: 'Downtown Toyota',
+  },
+  {
+    id: 'PAY_202',
+    reference: 'INV-2026-0150',
+    title: 'Brake pad replacement',
+    amountMinor: 18500,
+    currency: 'USD',
+    status: 'pending',
+    vehicleLabel: 'Toyota Corolla 2022',
+    issuedAt: '2026-10-28T12:00:00.000Z',
+    dueAt: '2026-11-11T00:00:00.000Z',
+    dealershipName: 'Downtown Toyota',
+    description: 'Payment submitted, awaiting bank confirmation.',
+  },
+  {
+    id: 'PAY_203',
+    reference: 'INV-2026-0138',
+    title: 'Diagnostics fee',
+    amountMinor: 7500,
+    currency: 'USD',
+    status: 'unpaid',
+    vehicleLabel: 'Honda CR-V 2021',
+    issuedAt: '2026-10-27T15:30:00.000Z',
+    dueAt: '2026-11-10T00:00:00.000Z',
+    dealershipName: 'Riverside Honda',
+  },
+  {
+    id: 'PAY_204',
+    reference: 'INV-2026-0099',
+    title: 'Recall: airbag inflator',
+    amountMinor: 0,
+    currency: 'USD',
+    status: 'paid',
+    vehicleLabel: 'Ford F-150 2023',
+    issuedAt: '2026-08-14T13:15:00.000Z',
+    paidAt: '2026-08-14T13:15:00.000Z',
+    dealershipName: 'Northgate Ford',
+    description: 'Manufacturer safety recall, no charge.',
+  },
+  {
+    id: 'PAY_205',
+    reference: 'INV-2026-0121',
+    title: 'Tire rotation',
+    amountMinor: 4000,
+    currency: 'USD',
+    status: 'failed',
+    vehicleLabel: 'Honda CR-V 2021',
+    issuedAt: '2026-09-05T09:00:00.000Z',
+    dueAt: '2026-09-19T00:00:00.000Z',
+    dealershipName: 'Riverside Honda',
+    description: 'Card declined. Please try another payment method.',
+  },
+  {
+    id: 'PAY_206',
+    reference: 'INV-2026-0087',
+    title: 'Cabin air filter',
+    amountMinor: 3200,
+    currency: 'USD',
+    status: 'refunded',
+    vehicleLabel: 'Toyota Corolla 2022',
+    issuedAt: '2026-09-17T10:30:00.000Z',
+    paidAt: '2026-09-18T09:00:00.000Z',
+    dealershipName: 'Downtown Toyota',
+    description: 'Service cancelled; refunded in full.',
+  },
+];
+
+export const paymentsRoutes: MockRoute[] = [
+  {
+    method: 'GET',
+    path: '/payments',
+    handle: ({ query }) => paginate(MOCK_PAYMENTS, query.cursor, 10),
+  },
+  {
+    method: 'GET',
+    path: '/payments/:id',
+    handle: ({ params }) => findById(MOCK_PAYMENTS, params.id),
+  },
+];

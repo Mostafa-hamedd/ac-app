@@ -1,0 +1,66 @@
+{
+  "expo": {
+    "name": "AutoConnect",
+    "slug": "autoconnect-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "autoconnect",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.beyondcreation.autoconnect"
+    },
+    "android": {
+      "package": "com.beyondcreation.autoconnect",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0B0B0C",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 180,
+          "dark": {
+            "backgroundColor": "#0B0B0C"
+          }
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#1E40AF"
+        }
+      ],
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "AutoConnect uses your photo library to upload copies of your documents for identity verification.",
+          "cameraPermission": "AutoConnect uses your camera to scan your documents for identity verification.",
+          "microphonePermission": false
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d06406db-6949-43bb-8afb-370917eb757e"
+      }
+    },
+    "owner": "mostafahamed"
+  }
+}
