@@ -13,8 +13,8 @@ const USER_ZOOM = 15;
 /** Apple Maps lets us tint markers; Google's default pins can't be recoloured here. */
 const ORIGIN_TINT = colors.link;
 
-export const CENTER_MARKER_PREFIX = 'center:';
-export const ORIGIN_MARKER_ID = 'origin';
+const CENTER_MARKER_PREFIX = 'center:';
+const ORIGIN_MARKER_ID = 'origin';
 
 export type MapCenterMarker = { id: string; coordinates: Coordinates; title: string };
 export type MapCameraRequest = { id: number; target: CameraTarget };
