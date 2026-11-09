@@ -1,12 +1,7 @@
 import '@/global.css';
 import '@/mocks/install';
 
-import {
-  Poppins_400Regular,
-  Poppins_500Medium,
-  Poppins_600SemiBold,
-  useFonts,
-} from '@expo-google-fonts/poppins';
+import { useFonts } from 'expo-font';
 import { router, Stack, type Href } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -40,10 +35,14 @@ function RootNavigator() {
   useSessionBootstrap();
   const status = useSessionStatus();
   const [fontsLoaded, fontError] = useFonts({
-    Poppins_400Regular,
-    Poppins_500Medium,
-    Poppins_600SemiBold,
+    // Names match each file's PostScript name and the fonts embedded by the expo-font plugin
+    // in app.json, so the same family string resolves on iOS and Android.
+    'Poppins-Regular': require('../../assets/fonts/Poppins-Regular.ttf'),
+    'Poppins-Medium': require('../../assets/fonts/Poppins-Medium.ttf'),
+    'Poppins-SemiBold': require('../../assets/fonts/Poppins-SemiBold.ttf'),
   });
+  if (fontError)
+    console.warn('Poppins failed to load; falling back to the system font.', fontError);
   const ready = status !== 'restoring' && (fontsLoaded || !!fontError);
 
   useEffect(() => {

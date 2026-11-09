@@ -57,11 +57,15 @@ const fontSize = {
   '2xl': [26, 39],
 };
 
-/** Each weight is its own font file in React Native, so weights are picked by family. */
+/**
+ * Each weight is its own font file in React Native, so weights are picked by family.
+ * These are the fonts' PostScript names (files in assets/fonts, embedded by the expo-font
+ * plugin in app.json): iOS only resolves a custom font by that name.
+ */
 const fontFamily = {
-  regular: 'Poppins_400Regular',
-  medium: 'Poppins_500Medium',
-  semibold: 'Poppins_600SemiBold',
+  regular: 'Poppins-Regular',
+  medium: 'Poppins-Medium',
+  semibold: 'Poppins-SemiBold',
 };
 
 module.exports = { colors, radius, fontSize, fontFamily };
