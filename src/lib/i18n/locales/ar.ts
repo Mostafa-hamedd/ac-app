@@ -44,12 +44,6 @@ export const ar: TranslationResources = {
     greeting: 'مرحبًا، {{name}}',
     welcomeBack: 'مرحبًا بعودتك',
     subtitle: 'إليك آخر المستجدات الخاصة بسياراتك.',
-    requestsTitle: 'طلبات الصيانة',
-    requestsDescription: 'تابع حالة حجوزاتك',
-    vehiclesTitle: 'سياراتي',
-    vehiclesDescription: 'السيارات المرتبطة بحسابك',
-    paymentsTitle: 'الفواتير والمدفوعات',
-    paymentsDescription: 'راجع فواتيرك',
   },
   requests: {
     title: 'طلب صيانة',

@@ -42,12 +42,6 @@ export const en = {
     greeting: 'Hello, {{name}}',
     welcomeBack: 'Welcome back',
     subtitle: "Here's what's happening with your vehicles.",
-    requestsTitle: 'Service requests',
-    requestsDescription: 'Track the status of your bookings',
-    vehiclesTitle: 'My vehicles',
-    vehiclesDescription: 'Vehicles linked to your account',
-    paymentsTitle: 'Invoices & payments',
-    paymentsDescription: 'Review your invoices',
   },
   requests: {
     title: 'Service request',
