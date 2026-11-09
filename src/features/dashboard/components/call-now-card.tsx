@@ -16,9 +16,13 @@ export function CallNowCard({ onPress }: { onPress: () => void }) {
         <TriangleAlert size={20} color={colors.foreground} />
         <Text className="flex-1 text-sm">{t('dashboard.callNowTitle')}</Text>
       </View>
-      <Button className="h-10 rounded-full px-5" onPress={onPress}>
-        {t('dashboard.callNow')}
-      </Button>
+      <Button
+        size="sm"
+        shape="pill"
+        className="px-5"
+        onPress={onPress}
+        label={t('dashboard.callNow')}
+      />
     </Card>
   );
 }

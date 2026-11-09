@@ -88,14 +88,19 @@ export function AssistanceSheet({ ref }: AssistanceSheetProps) {
         <View className="h-px bg-border" />
 
         <View className="gap-3">
-          <Button loading={isLocating} onPress={handleShareLocation}>
-            <Navigation size={14} color={colors['primary-foreground']} />
-            <Text>{t('assistance.shareLocation')}</Text>
-          </Button>
-          <Button variant="outline" onPress={handleCall}>
-            <Phone size={14} color={colors.foreground} />
-            <Text className="font-sans">{t('assistance.callHotline')}</Text>
-          </Button>
+          <Button
+            loading={isLocating}
+            onPress={handleShareLocation}
+            label={t('assistance.shareLocation')}
+            leftIcon={({ color }) => <Navigation size={14} color={color} />}
+          />
+          <Button
+            variant="outline"
+            onPress={handleCall}
+            label={t('assistance.callHotline')}
+            textClassName="font-sans"
+            leftIcon={({ color }) => <Phone size={14} color={color} />}
+          />
         </View>
       </BottomSheetView>
     </BottomSheetModal>

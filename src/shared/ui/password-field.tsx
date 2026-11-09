@@ -5,11 +5,11 @@ import { Pressable } from 'react-native';
 
 import { colors } from '@/theme';
 
-import { FloatingLabelField, type FloatingLabelFieldProps } from './floating-label-field';
+import { Input, type InputProps } from './input';
 
 export type PasswordFieldProps = Omit<
-  FloatingLabelFieldProps,
-  'secureTextEntry' | 'trailing' | 'label'
+  InputProps,
+  'secureTextEntry' | 'trailing' | 'label' | 'variant'
 > & { label?: string };
 
 /** Password field with a show/hide toggle (eye-off while the text is hidden). */
@@ -18,7 +18,7 @@ export function PasswordField({ label, ...props }: PasswordFieldProps) {
   const [visible, setVisible] = useState(false);
 
   return (
-    <FloatingLabelField
+    <Input
       label={label ?? t('fields.password')}
       secureTextEntry={!visible}
       trailing={

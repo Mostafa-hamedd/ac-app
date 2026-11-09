@@ -282,29 +282,28 @@ export function LocationScreen() {
           />
 
           {details.phone ? (
-            <Button variant="outline" onPress={callCenter}>
-              <Phone size={16} color={colors.foreground} />
-              <Text>{t('location.call')}</Text>
-            </Button>
+            <Button
+              variant="outline"
+              onPress={callCenter}
+              label={t('location.call')}
+              leftIcon={({ color }) => <Phone size={16} color={color} />}
+            />
           ) : null}
 
-          <Pressable
-            accessibilityRole="button"
+          <Button
             onPress={openInMaps}
-            className="h-13 flex-row items-center justify-center gap-2 rounded-lg bg-primary active:opacity-80">
-            <Map size={18} color={colors['primary-foreground']} />
-            <Text className="font-sans-medium text-base text-primary-foreground">
-              {t('location.openInMaps')}
-            </Text>
-            <ExternalLink size={16} color={colors['primary-foreground']} />
-          </Pressable>
+            label={t('location.openInMaps')}
+            textClassName="text-base"
+            leftIcon={({ color }) => <Map size={18} color={color} />}
+            rightIcon={({ color }) => <ExternalLink size={16} color={color} />}
+          />
 
-          <Pressable
-            accessibilityRole="button"
+          <Button
+            variant="ghost"
+            size="auto"
             onPress={copyAddress}
-            className="items-center active:opacity-70">
-            <Text className="font-sans-medium text-sm">{t('location.copyAddress')}</Text>
-          </Pressable>
+            label={t('location.copyAddress')}
+          />
         </ScrollView>
       </View>
     </View>

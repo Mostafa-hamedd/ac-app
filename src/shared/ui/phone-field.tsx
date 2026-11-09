@@ -15,11 +15,11 @@ import {
 } from '@/lib/phone/phone-country';
 
 import { CountryPickerSheet } from './country-picker-sheet';
-import { FloatingLabelField, type FloatingLabelFieldProps } from './floating-label-field';
+import { Input, type InputProps } from './input';
 
 export type PhoneFieldProps = Omit<
-  FloatingLabelFieldProps,
-  'leading' | 'keyboardType' | 'maxLength' | 'label'
+  InputProps,
+  'leading' | 'keyboardType' | 'maxLength' | 'label' | 'variant'
 > & {
   label?: string;
   /** The selected country's two-letter code, e.g. 'EG'. */
@@ -43,7 +43,7 @@ export function PhoneField({
 
   return (
     <>
-      <FloatingLabelField
+      <Input
         label={label ?? t('fields.mobileNumber')}
         onChangeText={(text) => onChangeText?.(text.replace(/\D/g, '').slice(0, maxLength))}
         keyboardType="number-pad"

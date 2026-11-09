@@ -33,6 +33,7 @@ jest.mock('../hooks/use-device-location', () => ({ useDeviceLocation: () => mock
 jest.mock('../hooks/use-reverse-geocode', () => ({
   useReverseGeocode: (coords: Coords | null) => mockReverseGeocode(coords),
 }));
+jest.mock('react-native-reanimated', () => require('@tests/mocks/react-native-reanimated'));
 jest.mock('lucide-react-native', () => new Proxy({}, { get: () => () => null }));
 jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn() }));
 jest.mock('expo-router', () => ({ router: { back: jest.fn() } }));

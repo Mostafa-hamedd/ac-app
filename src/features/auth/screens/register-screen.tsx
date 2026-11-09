@@ -5,8 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
 import { DEFAULT_COUNTRY_VALUE } from '@/lib/phone/phone-country';
-import { Button } from '@/shared/ui/button';
-import { FloatingLabelField } from '@/shared/ui/floating-label-field';
+import { Button, Input } from '@/shared/ui';
 import { PasswordField } from '@/shared/ui/password-field';
 import { PhoneField } from '@/shared/ui/phone-field';
 import { Screen } from '@/shared/ui/screen';
@@ -63,7 +62,7 @@ export function RegisterScreen() {
           control={control}
           name="email"
           render={({ field, fieldState }) => (
-            <FloatingLabelField
+            <Input
               label={t('fields.email')}
               value={field.value}
               onChangeText={field.onChange}

@@ -59,9 +59,7 @@ export function LocationNotice({ status, isApproximate, onRequest, onRetry }: Lo
         {message}
       </Text>
       {action ? (
-        <Button variant="outline" className="h-10" onPress={action.onPress}>
-          {action.label}
-        </Button>
+        <Button variant="outline" size="sm" onPress={action.onPress} label={action.label} />
       ) : null}
     </View>
   );

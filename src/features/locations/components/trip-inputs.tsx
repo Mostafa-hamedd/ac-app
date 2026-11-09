@@ -1,8 +1,9 @@
 import { Circle, MapPin, Navigation, Search, X } from 'lucide-react-native';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, TextInput, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
+import { Input } from '@/shared/ui';
 import { Text } from '@/shared/ui/text';
 import { cn } from '@/shared/utils/cn';
 import { colors } from '@/theme';
@@ -102,17 +103,18 @@ export function TripInputs({
           <Text variant="muted" className={align}>
             {t('location.toLabel')}
           </Text>
-          <TextInput
+          <Input
+            variant="bare"
+            size="sm"
             value={query}
             onChangeText={onQueryChange}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
+            label={t('location.toLabel')}
             placeholder={t('location.searchPlaceholder')}
-            placeholderTextColor={colors['muted-foreground']}
-            accessibilityLabel={t('location.toLabel')}
             returnKeyType="search"
-            className={cn('h-6 p-0 font-sans-semibold text-sm text-foreground', align)}
-            style={{ textAlign: isArabic ? 'right' : 'left', textAlignVertical: 'center' }}
+            inputClassName="font-sans-semibold"
+            style={{ textAlignVertical: 'center' }}
           />
         </View>
         {query.length > 0 || hasDestination ? (
