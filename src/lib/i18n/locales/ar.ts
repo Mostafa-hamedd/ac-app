@@ -36,10 +36,12 @@ export const ar: TranslationResources = {
   },
   tabs: {
     home: 'الرئيسية',
-    vehicles: 'السيارات',
-    requests: 'الطلبات',
+    explore: 'استكشف',
     notifications: 'الإشعارات',
-    profile: 'حسابي',
+    menu: 'القائمة',
+    brand: 'أوتو كونكت',
+    comingSoon: 'قريبًا',
+    comingSoonDescription: 'هذا القسم غير متاح حاليًا.',
   },
   dashboard: {
     greeting: 'مرحبًا، {{name}}',

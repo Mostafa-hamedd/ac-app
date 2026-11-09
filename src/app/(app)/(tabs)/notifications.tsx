@@ -1,3 +1,3 @@
-import { NotificationsScreen } from '@/features/notifications';
+import { ComingSoon } from '@/shared/ui/coming-soon';
 
-export default NotificationsScreen;
+export default ComingSoon;

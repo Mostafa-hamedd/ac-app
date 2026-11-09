@@ -34,10 +34,12 @@ export const en = {
   },
   tabs: {
     home: 'Home',
-    vehicles: 'Vehicles',
-    requests: 'Requests',
+    explore: 'Explore',
     notifications: 'Notifications',
-    profile: 'Profile',
+    menu: 'Menu',
+    brand: 'AutoConnect',
+    comingSoon: 'Coming soon',
+    comingSoonDescription: 'This section is not available yet.',
   },
   dashboard: {
     greeting: 'Hello, {{name}}',

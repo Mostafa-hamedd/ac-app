@@ -1,52 +1,56 @@
 import { Tabs } from 'expo-router/js-tabs';
-import { Bell, Car, ClipboardList, House, UserRound } from 'lucide-react-native';
+import { Bell, Globe, Menu, Warehouse } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 
-import { colors } from '@/theme';
+import { useUnreadNotificationCount } from '@/features/notifications';
+import { BrandLogo } from '@/shared/ui/brand-logo';
+import { FloatingTabBar } from '@/shared/ui/floating-tab-bar';
 
 export default function TabsLayout() {
   const { t } = useTranslation();
+  const unread = useUnreadNotificationCount();
+
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors['muted-foreground'],
-        tabBarStyle: { backgroundColor: colors.card, borderTopColor: colors.border },
-        headerShadowVisible: false,
-      }}>
+      tabBar={(props) => <FloatingTabBar {...props} />}
+      screenOptions={{ headerShadowVisible: false }}>
       <Tabs.Screen
         name="index"
         options={{
           title: t('tabs.home'),
-          tabBarIcon: ({ color, size }) => <House color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => <Warehouse color={color} size={size} />,
         }}
       />
       <Tabs.Screen
-        name="vehicles"
+        name="explore"
         options={{
-          title: t('tabs.vehicles'),
-          tabBarIcon: ({ color, size }) => <Car color={color} size={size} />,
-        }}
-      />
-      <Tabs.Screen
-        name="requests"
-        options={{
-          title: t('tabs.requests'),
-          tabBarIcon: ({ color, size }) => <ClipboardList color={color} size={size} />,
+          title: t('tabs.explore'),
+          tabBarIcon: ({ color, size }) => <Globe color={color} size={size} />,
         }}
       />
       <Tabs.Screen
         name="notifications"
         options={{
           title: t('tabs.notifications'),
+          tabBarBadge: unread > 0 ? unread : undefined,
           tabBarIcon: ({ color, size }) => <Bell color={color} size={size} />,
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="menu"
         options={{
-          title: t('tabs.profile'),
-          tabBarIcon: ({ color, size }) => <UserRound color={color} size={size} />,
+          title: t('tabs.menu'),
+          tabBarIcon: ({ color, size }) => <Menu color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="brand"
+        options={{
+          title: t('tabs.brand'),
+          headerShown: false,
+          tabBarIcon: ({ color, focused }) => (
+            <BrandLogo color={color} size={focused ? 32 : 36} ringed={!focused} />
+          ),
         }}
       />
     </Tabs>
