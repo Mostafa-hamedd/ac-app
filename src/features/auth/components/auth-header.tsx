@@ -4,7 +4,7 @@ import { useTextAlign } from '@/shared/hooks/use-text-align';
 import { Text } from '@/shared/ui/text';
 import { cn } from '@/shared/utils/cn';
 
-import { BackButton } from './back-button';
+import { BackButton } from '@/shared/ui/back-button';
 
 /** Back button, title and optional subtitle at the top of every sign-in and registration form. */
 export function AuthHeader({ title, subtitle }: { title: string; subtitle?: string }) {

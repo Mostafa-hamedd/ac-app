@@ -19,11 +19,13 @@ const variantClasses = {
   secondary: 'bg-muted-foreground',
   outline: 'border border-input bg-card',
   ghost: 'bg-transparent',
+  light: 'bg-card',
 } satisfies Record<ButtonVariant, string>;
 
 const sizeClasses = {
   sm: 'h-10 px-4',
   md: 'h-13 px-4',
+  icon: 'size-9',
   auto: '',
 } satisfies Record<ButtonSize, string>;
 
@@ -37,6 +39,7 @@ const textVariantClasses = {
   secondary: 'text-primary-foreground',
   outline: 'text-foreground',
   ghost: 'text-foreground',
+  light: 'text-foreground',
 } satisfies Record<ButtonVariant, string>;
 
 /** Icon / spinner colour per variant, matching its label. */
@@ -45,6 +48,7 @@ const contentColor = {
   secondary: colors['primary-foreground'],
   outline: colors.foreground,
   ghost: colors.foreground,
+  light: colors.foreground,
 } satisfies Record<ButtonVariant, string>;
 
 const ICON_SIZE = 16;

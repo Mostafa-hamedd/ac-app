@@ -80,6 +80,7 @@ describe('Button', () => {
     ['secondary', 'bg-muted-foreground'],
     ['outline', 'border-input'],
     ['ghost', 'bg-transparent'],
+    ['light', 'bg-card'],
   ] as const)('applies the %s variant classes', async (variant, expected) => {
     await render(<Button label="V" variant={variant} testID="v" />);
     expect(String(screen.getByTestId('v').props.className)).toContain(expected);
@@ -88,6 +89,7 @@ describe('Button', () => {
   it.each([
     ['sm', 'h-10'],
     ['md', 'h-13'],
+    ['icon', 'size-9'],
   ] as const)('applies the %s size', async (size, expected) => {
     await render(<Button label="S" size={size} testID="s" />);
     expect(String(screen.getByTestId('s').props.className)).toContain(expected);

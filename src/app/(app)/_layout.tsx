@@ -12,6 +12,7 @@ export default function AppLayout() {
     <Stack screenOptions={{ headerBackButtonDisplayMode: 'minimal' }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="location" options={{ headerShown: false }} />
+      <Stack.Screen name="update-photo" options={{ headerShown: false }} />
       <Stack.Screen name="vehicles/[vehicleId]" options={{ title: t('vehicles.title') }} />
       <Stack.Screen name="requests/[requestId]" options={{ title: t('requests.title') }} />
       <Stack.Screen name="payments/index" options={{ title: t('payments.title') }} />

@@ -1,8 +1,10 @@
 import type { BottomSheetModal } from '@gorhom/bottom-sheet';
+import { router } from 'expo-router';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 
+import { VehicleHeroCard } from '@/features/vehicles';
 import { Screen } from '@/shared/ui/screen';
 import { Text } from '@/shared/ui/text';
 
@@ -17,12 +19,13 @@ export function DashboardScreen({ userName }: { userName?: string }) {
   return (
     <>
       <Screen preset="scroll" edges={[]} contentClassName="gap-4">
-        <View className="gap-1">
-          <Text variant="h2">
+        <View className="gap-1 rtl:text-right">
+          <Text variant="h2" className="rtl:text-right">
             {firstName ? t('dashboard.greeting', { name: firstName }) : t('dashboard.welcomeBack')}
           </Text>
-          <Text variant="muted">{t('dashboard.subtitle')}</Text>
+          <Text variant="muted" className="rtl:text-right">{t('dashboard.subtitle')}</Text>
         </View>
+        <VehicleHeroCard onEditPhoto={() => router.push('/update-photo')} />
         <CallNowCard onPress={() => assistanceRef.current?.present()} />
       </Screen>
       <AssistanceSheet ref={assistanceRef} />

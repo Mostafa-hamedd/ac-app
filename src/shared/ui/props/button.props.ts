@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
 import type { PressableProps } from 'react-native';
 
-/** Visual style. `default` is the filled primary button. */
-export type ButtonVariant = 'default' | 'secondary' | 'outline' | 'ghost';
+/** Visual style. `default` is the filled primary button; `light` is a white button for use over images. */
+export type ButtonVariant = 'default' | 'secondary' | 'outline' | 'ghost' | 'light';
 
-/** `md` is the design's 52dp button, `sm` a compact 40dp one, `auto` hugs its content. */
-export type ButtonSize = 'sm' | 'md' | 'auto';
+/** `md` is the design's 52dp button, `sm` a compact 40dp one, `icon` is a 36dp square for an icon-only button, `auto` hugs its content. */
+export type ButtonSize = 'sm' | 'md' | 'icon' | 'auto';
 
 /** Corner style: the design's rounded rectangle or a fully rounded pill. */
 export type ButtonShape = 'rounded' | 'pill';

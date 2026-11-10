@@ -18,6 +18,8 @@ const colors = {
   card: '#FFFFFF',
   'card-foreground': '#0B0B0C',
   muted: '#EDEDED',
+  /** Backdrop behind vehicle photos and illustrations. */
+  photo: '#D9D9D9',
   'muted-foreground': '#717171',
   placeholder: '#999999',
   border: '#E2E2E2',

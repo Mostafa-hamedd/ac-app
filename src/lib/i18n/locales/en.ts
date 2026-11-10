@@ -116,6 +116,15 @@ export const en = {
   },
   vehicles: {
     title: 'Vehicle',
+    updatePhoto: 'Update Photo',
+    savePhoto: 'Save photo',
+    changePhoto: 'Change vehicle photo',
+    takePhoto: 'Take Photo',
+    chooseFromGallery: 'Choose from Gallery',
+    removePhoto: 'Remove Photo',
+    photoPermissionTitle: 'Photo access needed',
+    photoPermissionMessage:
+      'Allow camera and photo access in Settings to update your vehicle photo.',
     emptyTitle: 'No vehicles yet',
     emptyDescription: 'Vehicles linked to your account will appear here.',
     plate: 'Plate {{plate}}',
