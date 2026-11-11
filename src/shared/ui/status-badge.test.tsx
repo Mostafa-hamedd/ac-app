@@ -8,4 +8,10 @@ describe('StatusBadge', () => {
     expect(screen.getByText('Completed')).toBeTruthy();
     expect(screen.getByLabelText('Status: Completed')).toBeTruthy();
   });
+
+  it('supports the outlined tone used on service cards', async () => {
+    await render(<StatusBadge label="Ongoing" tone="outline" />);
+    expect(screen.getByText('Ongoing')).toBeTruthy();
+    expect(screen.getByLabelText('Status: Ongoing')).toBeTruthy();
+  });
 });

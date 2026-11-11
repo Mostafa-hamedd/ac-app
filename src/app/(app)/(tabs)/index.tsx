@@ -1,5 +1,5 @@
-import { DashboardScreen } from '@/features/dashboard';
+import { MyGarageScreen } from '@/features/my-garage';
 
-export default function DashboardRoute() {
-  return <DashboardScreen />;
+export default function MyGarageRoute() {
+  return <MyGarageScreen />;
 }

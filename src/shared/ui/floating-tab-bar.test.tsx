@@ -4,7 +4,7 @@ import { View } from 'react-native';
 
 import { FloatingTabBar } from './floating-tab-bar';
 
-type TabSpec = { key: string; name: string; title: string; badge?: number };
+type TabSpec = { key: string; name: string; title: string; badge?: number; hidden?: boolean };
 
 function setup(tabs: TabSpec[], focusedIndex = 0, defaultPrevented = false) {
   const emitter = { emit: jest.fn(() => ({ defaultPrevented })) };
@@ -21,6 +21,7 @@ function setup(tabs: TabSpec[], focusedIndex = 0, defaultPrevented = false) {
           options: {
             title: tab.title,
             tabBarBadge: tab.badge,
+            tabBarItemStyle: tab.hidden ? { display: 'none' } : undefined,
             tabBarIcon: ({ focused }: { focused: boolean }) => (
               <View testID={`icon-${tab.name}-${focused ? 'on' : 'off'}`} />
             ),
@@ -85,6 +86,28 @@ describe('FloatingTabBar', () => {
     const many = setup([TABS[0]!, TABS[1]!, { ...TABS[2]!, badge: 23 }]);
     await rerender(<FloatingTabBar {...many.props} />);
     expect(screen.getByText('9+')).toBeTruthy();
+  });
+
+  it('shows no button for tabs hidden from the bar', async () => {
+    const { props } = setup([
+      ...TABS,
+      { key: 'svc-1', name: 'services', title: 'All Services', hidden: true },
+    ]);
+    await render(<FloatingTabBar {...props} />);
+    expect(screen.getAllByRole('tab')).toHaveLength(3);
+    expect(screen.queryByLabelText('All Services')).toBeNull();
+  });
+
+  it('keeps the first tab highlighted while a hidden screen is open, and lets it navigate back', async () => {
+    const tabs = [...TABS, { key: 'svc-1', name: 'services', title: 'All Services', hidden: true }];
+    const { props, navigateToTab } = setup(tabs, 3);
+    await render(<FloatingTabBar {...props} />);
+    expect(screen.getByLabelText('Home').props.accessibilityState.selected).toBe(true);
+    expect(screen.getByLabelText('Explore').props.accessibilityState.selected).toBe(false);
+
+    // Pressing the highlighted Home tab leaves the hidden screen.
+    await fireEvent.press(screen.getByLabelText('Home'));
+    expect(navigateToTab).toHaveBeenCalledWith('home-1');
   });
 
   it('hides the badge when there is no count', async () => {

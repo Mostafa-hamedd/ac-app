@@ -14,14 +14,14 @@ export function CallNowCard({ onPress }: { onPress: () => void }) {
     <Card className="flex-row items-center justify-between gap-3 py-3">
       <View className="flex-1 flex-row items-center gap-3">
         <TriangleAlert size={20} color={colors.foreground} />
-        <Text className="flex-1 text-sm">{t('dashboard.callNowTitle')}</Text>
+        <Text className="flex-1 text-sm">{t('myGarage.callNowTitle')}</Text>
       </View>
       <Button
         size="sm"
         shape="pill"
         className="px-5"
         onPress={onPress}
-        label={t('dashboard.callNow')}
+        label={t('myGarage.callNow')}
       />
     </Card>
   );

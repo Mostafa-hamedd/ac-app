@@ -4,7 +4,7 @@ import { Alert, Linking } from 'react-native';
 
 import '@/lib/i18n';
 
-import { useVehiclePhotoStore } from '../store/vehicle-photo-store';
+import { selectCurrentPhoto, useVehiclePhotoStore } from '../store/vehicle-photo-store';
 
 import { UpdatePhotoScreen } from './update-photo-screen';
 
@@ -42,7 +42,7 @@ const isDisabled = (element: ReturnType<typeof submitButton>) =>
 
 beforeEach(() => {
   jest.clearAllMocks();
-  useVehiclePhotoStore.getState().removePhoto();
+  useVehiclePhotoStore.setState({ selectedVehicleId: null, photos: {} });
   jest.spyOn(Alert, 'alert').mockImplementation(() => undefined);
   jest.spyOn(Linking, 'openSettings').mockResolvedValue(undefined);
 });
@@ -75,7 +75,7 @@ describe('UpdatePhotoScreen', () => {
     expect(screen.getByTestId('vehicle-photo-custom').props.source).toEqual({
       uri: 'file:///camera.jpg',
     });
-    expect(useVehiclePhotoStore.getState().photoUri).toBeNull();
+    expect(selectCurrentPhoto(useVehiclePhotoStore.getState())).toBeNull();
   });
 
   it('saves a photo chosen from the gallery and goes back on submit', async () => {
@@ -88,7 +88,7 @@ describe('UpdatePhotoScreen', () => {
     await waitFor(() => expect(isDisabled(submitButton())).toBe(false));
 
     await fireEvent.press(submitButton());
-    expect(useVehiclePhotoStore.getState().photoUri).toBe('file:///gallery.jpg');
+    expect(selectCurrentPhoto(useVehiclePhotoStore.getState())).toBe('file:///gallery.jpg');
     expect(router.back).toHaveBeenCalledTimes(1);
   });
 
@@ -128,11 +128,11 @@ describe('UpdatePhotoScreen', () => {
 
     await fireEvent.press(screen.getByLabelText('Remove Photo'));
     expect(screen.getByTestId('vehicle-photo-default')).toBeTruthy();
-    expect(useVehiclePhotoStore.getState().photoUri).toBe('file:///saved.jpg');
+    expect(selectCurrentPhoto(useVehiclePhotoStore.getState())).toBe('file:///saved.jpg');
     expect(isDisabled(submitButton())).toBe(false);
 
     await fireEvent.press(submitButton());
-    expect(useVehiclePhotoStore.getState().photoUri).toBeNull();
+    expect(selectCurrentPhoto(useVehiclePhotoStore.getState())).toBeNull();
     expect(router.back).toHaveBeenCalledTimes(1);
   });
 

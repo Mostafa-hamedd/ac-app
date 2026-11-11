@@ -11,7 +11,7 @@ import { Screen } from '@/shared/ui/screen';
 import { ScreenHeader } from '@/shared/ui/screen-header';
 
 import { VehiclePhoto } from '../components/vehicle-photo';
-import { useVehiclePhotoStore } from '../store/vehicle-photo-store';
+import { selectCurrentPhoto, useVehiclePhotoStore } from '../store/vehicle-photo-store';
 
 /**
  * Lets the user take, choose or remove the vehicle photo shown on Home.
@@ -20,7 +20,7 @@ import { useVehiclePhotoStore } from '../store/vehicle-photo-store';
 export function UpdatePhotoScreen() {
   const { t } = useTranslation();
   const { pickFromCamera, pickFromGallery, isPicking } = useImagePicker();
-  const savedUri = useVehiclePhotoStore((state) => state.photoUri);
+  const savedUri = useVehiclePhotoStore(selectCurrentPhoto);
   const setPhoto = useVehiclePhotoStore((state) => state.setPhoto);
   const removePhoto = useVehiclePhotoStore((state) => state.removePhoto);
   const [draftUri, setDraftUri] = useState<string | null>(savedUri);

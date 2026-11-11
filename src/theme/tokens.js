@@ -13,10 +13,10 @@ const colors = {
   'primary-foreground': '#FFFFFF',
 
   // Surfaces and text
-  background: '#F5F5F5',
-  foreground: '#0B0B0C',
+  background: '#FFFFFF',
+  foreground: '#0F172A',
   card: '#FFFFFF',
-  'card-foreground': '#0B0B0C',
+  'card-foreground': '#0F172A',
   muted: '#EDEDED',
   /** Backdrop behind vehicle photos and illustrations. */
   photo: '#D9D9D9',

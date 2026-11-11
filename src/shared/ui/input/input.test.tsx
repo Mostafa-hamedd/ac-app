@@ -93,6 +93,30 @@ describe('Input (outline)', () => {
   });
 });
 
+describe('Input (outline, multiline)', () => {
+  it('is a text area that passes multiline props through and has no fixed height', async () => {
+    const onChangeText = jest.fn();
+    await render(
+      <Input
+        variant="outline"
+        label="Notes"
+        placeholder="Describe"
+        multiline
+        numberOfLines={4}
+        onChangeText={onChangeText}
+        testID="field"
+      />,
+    );
+    const field = screen.getByTestId('field');
+    expect(field.props.multiline).toBe(true);
+    expect(field.props.numberOfLines).toBe(4);
+    expect(String(field.props.className)).toContain('min-h-24');
+    expect(String(field.props.className)).not.toContain('h-14');
+    await fireEvent.changeText(field, 'Strange noise');
+    expect(onChangeText).toHaveBeenCalledWith('Strange noise');
+  });
+});
+
 describe('Input (bare)', () => {
   it('renders only the input, labelled for screen readers', async () => {
     await render(

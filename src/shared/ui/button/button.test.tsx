@@ -81,6 +81,7 @@ describe('Button', () => {
     ['outline', 'border-input'],
     ['ghost', 'bg-transparent'],
     ['light', 'bg-card'],
+    ['subtle', 'border-border'],
   ] as const)('applies the %s variant classes', async (variant, expected) => {
     await render(<Button label="V" variant={variant} testID="v" />);
     expect(String(screen.getByTestId('v').props.className)).toContain(expected);

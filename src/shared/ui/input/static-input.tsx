@@ -43,6 +43,8 @@ export function StaticInput({
   const [focused, setFocused] = useState(false);
   const isOutline = variant === 'outline';
   const isArabic = i18n.language === 'ar';
+  // A text area grows with its lines instead of having a fixed height.
+  const multiline = !!props.multiline;
 
   return (
     <View className={cn('gap-1.5', disabled && 'opacity-50', containerClassName)}>
@@ -51,10 +53,11 @@ export function StaticInput({
       ) : null}
       <View
         className={cn(
-          'flex-row items-center',
+          'flex-row',
+          !multiline && 'items-center',
           isOutline && [
             'rounded-lg border px-4',
-            OUTLINE_HEIGHT[size],
+            multiline ? 'min-h-28 items-start py-3' : OUTLINE_HEIGHT[size],
             focused ? 'border-input/50' : 'border-input/20',
             error && 'border-destructive',
           ],
@@ -79,11 +82,19 @@ export function StaticInput({
           }}
           className={cn(
             'flex-1 font-sans text-sm text-foreground',
-            isOutline ? OUTLINE_HEIGHT[size] : cn('p-0', BARE_HEIGHT[size]),
+            multiline
+              ? 'min-h-24 p-0'
+              : isOutline
+                ? OUTLINE_HEIGHT[size]
+                : cn('p-0', BARE_HEIGHT[size]),
             inputClassName,
             className,
           )}
-          style={[{ textAlign: isArabic ? 'right' : 'left' }, style]}
+          style={[
+            { textAlign: isArabic ? 'right' : 'left' },
+            multiline && { textAlignVertical: 'top' as const },
+            style,
+          ]}
           {...props}
         />
         {trailing}

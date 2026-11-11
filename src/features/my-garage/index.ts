@@ -1,1 +1,1 @@
-export { DashboardScreen } from './screens/dashboard-screen';
+export { MyGarageScreen } from './screens/my-garage-screen';

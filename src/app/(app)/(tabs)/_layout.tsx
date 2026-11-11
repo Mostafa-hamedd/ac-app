@@ -46,6 +46,32 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="services"
+        // A tab we can navigate to but don't list in the bar. `href: null` would make the
+        // route unreachable (hidden tabs redirect), so only its bar button is hidden.
+        options={{
+          headerShown: false,
+          title: t('services.title'),
+          tabBarItemStyle: { display: 'none' },
+        }}
+      />
+      <Tabs.Screen
+        name="book-service"
+        options={{
+          headerShown: false,
+          title: t('services.bookScreenTitle'),
+          tabBarItemStyle: { display: 'none' },
+        }}
+      />
+      <Tabs.Screen
+        name="book-new-service"
+        options={{
+          headerShown: false,
+          title: t('services.bookScreenTitle'),
+          tabBarItemStyle: { display: 'none' },
+        }}
+      />
+      <Tabs.Screen
         name="explore"
         options={{
           title: t('tabs.explore'),

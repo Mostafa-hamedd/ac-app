@@ -32,6 +32,8 @@ module.exports = {
       spacing: {
         // Button height from the design.
         13: px(52),
+        // Side padding of the car tabs.
+        4.5: px(18),
       },
     },
   },

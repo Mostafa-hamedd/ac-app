@@ -5,19 +5,27 @@ import { Image, View, type ViewProps } from 'react-native';
 import { cn } from '@/shared/utils/cn';
 import { colors } from '@/theme';
 
-import { useVehiclePhotoStore } from '../store/vehicle-photo-store';
+import { selectCurrentPhoto, useVehiclePhotoStore } from '../store/vehicle-photo-store';
 
 type VehiclePhotoProps = ViewProps & {
   /** Photo to show instead of the saved one (e.g. a not-yet-saved choice). `null` shows the placeholder. */
   uri?: string | null;
+  /** Size of the placeholder icon, so it fits small thumbnails. */
+  iconSize?: number;
 };
 
 /**
  * The vehicle's photo, filling its frame. Shows a neutral placeholder when there is no photo
  * yet, or when the photo cannot be loaded.
  */
-export function VehiclePhoto({ uri, className, children, ...props }: VehiclePhotoProps) {
-  const savedUri = useVehiclePhotoStore((state) => state.photoUri);
+export function VehiclePhoto({
+  uri,
+  iconSize = 48,
+  className,
+  children,
+  ...props
+}: VehiclePhotoProps) {
+  const savedUri = useVehiclePhotoStore(selectCurrentPhoto);
   const photoUri = uri === undefined ? savedUri : uri;
   const [failedUri, setFailedUri] = useState<string | null>(null);
   const showPlaceholder = !photoUri || failedUri === photoUri;
@@ -26,7 +34,7 @@ export function VehiclePhoto({ uri, className, children, ...props }: VehiclePhot
     <View className={cn('overflow-hidden rounded-2xl bg-photo', className)} {...props}>
       {showPlaceholder ? (
         <View testID="vehicle-photo-default" className="size-full items-center justify-center">
-          <Car size={48} strokeWidth={1.25} color={colors['muted-foreground']} />
+          <Car size={iconSize} strokeWidth={1.25} color={colors['muted-foreground']} />
         </View>
       ) : (
         <Image

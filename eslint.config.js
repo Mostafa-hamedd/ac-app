@@ -5,12 +5,14 @@ const prettierConfig = require('eslint-config-prettier');
 
 const FEATURES = [
   'auth',
-  'dashboard',
+  'my-garage',
   'vehicles',
   'requests',
   'payments',
   'notifications',
   'profile',
+  'locations',
+  'services',
 ];
 
 module.exports = defineConfig([
