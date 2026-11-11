@@ -33,7 +33,7 @@ export const en = {
     goHome: 'Go home',
   },
   tabs: {
-    home: 'Home',
+    myGarage: 'My Garage',
     explore: 'Explore',
     notifications: 'Notifications',
     menu: 'Menu',
@@ -42,9 +42,6 @@ export const en = {
     comingSoonDescription: 'This section is not available yet.',
   },
   dashboard: {
-    greeting: 'Hello, {{name}}',
-    welcomeBack: 'Welcome back',
-    subtitle: "Here's what's happening with your vehicles.",
     callNowTitle: 'Need roadside help?',
     callNow: 'Call now',
   },

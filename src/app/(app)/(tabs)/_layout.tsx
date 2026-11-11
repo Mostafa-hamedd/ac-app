@@ -1,13 +1,21 @@
 import { Tabs } from 'expo-router/js-tabs';
 import { Bell, Globe, Menu, Warehouse } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
+import { Image, View } from 'react-native';
 
 import { useUnreadNotificationCount } from '@/features/notifications';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { FloatingTabBar } from '@/shared/ui/floating-tab-bar';
+import { Text } from '@/shared/ui/text';
+import { cn } from '@/shared/utils/cn';
+import { colors } from '@/theme';
+
+const WORDMARK = require('../../../../assets/images/splash-icon.png');
+/** Matches `BrandLogo` wordmark proportions. */
+const WORDMARK_RATIO = 430 / 120;
 
 export default function TabsLayout() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const unread = useUnreadNotificationCount();
 
   return (
@@ -17,7 +25,23 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: t('tabs.home'),
+          title: t('tabs.myGarage'),
+          headerTitleAlign: 'left',
+          headerTitle: () => (
+            <View
+              className={cn(
+                'items-center gap-2',
+                i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row',
+              )}>
+              <Image
+                accessibilityIgnoresInvertColors
+                source={WORDMARK}
+                resizeMode="contain"
+                style={{ width: 72, height: 72 / WORDMARK_RATIO, tintColor: colors.foreground }}
+              />
+              <Text variant="h3">{t('tabs.myGarage')}</Text>
+            </View>
+          ),
           tabBarIcon: ({ color, size }) => <Warehouse color={color} size={size} />,
         }}
       />

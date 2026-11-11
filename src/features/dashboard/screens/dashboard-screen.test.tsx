@@ -27,8 +27,7 @@ jest.mock('../components/assistance-sheet', () => ({ AssistanceSheet: () => null
 
 describe('DashboardScreen', () => {
   it('shows the vehicle photo card above the roadside help card', async () => {
-    await render(<DashboardScreen userName="Mostafa Hamed" />);
-    expect(screen.getByText('Hello, Mostafa')).toBeTruthy();
+    await render(<DashboardScreen />);
     expect(screen.getByTestId('vehicle-photo-default')).toBeTruthy();
     expect(screen.getByText('Need roadside help?')).toBeTruthy();
   });

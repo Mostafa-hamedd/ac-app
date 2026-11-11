@@ -35,7 +35,7 @@ export const ar: TranslationResources = {
     goHome: 'الذهاب للرئيسية',
   },
   tabs: {
-    home: 'الرئيسية',
+    myGarage: 'سياراتي',
     explore: 'استكشف',
     notifications: 'الإشعارات',
     menu: 'القائمة',
@@ -44,9 +44,6 @@ export const ar: TranslationResources = {
     comingSoonDescription: 'هذا القسم غير متاح حاليًا.',
   },
   dashboard: {
-    greeting: 'مرحبًا، {{name}}',
-    welcomeBack: 'مرحبًا بعودتك',
-    subtitle: 'إليك آخر المستجدات الخاصة بسياراتك.',
     callNowTitle: 'تحتاج مساعدة على الطريق؟',
     callNow: 'اتصل الآن',
   },
