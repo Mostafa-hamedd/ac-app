@@ -1,4 +1,3 @@
-import * as Clipboard from 'expo-clipboard';
 import { router } from 'expo-router';
 import { ChevronLeft, ExternalLink, Map, Phone } from 'lucide-react-native';
 import { useRef, useState } from 'react';
@@ -9,6 +8,7 @@ import {
   Linking,
   Pressable,
   ScrollView,
+  Share,
   StyleSheet,
   useWindowDimensions,
   View,
@@ -172,10 +172,16 @@ export function LocationScreen() {
       return;
     }
     try {
+      // Lazy load so a missing native module does not crash the screen on import.
+      const Clipboard = require('expo-clipboard') as typeof import('expo-clipboard');
       await Clipboard.setStringAsync(text);
       Alert.alert(t('location.addressCopied'));
     } catch {
-      Alert.alert(t('location.copyFailed'));
+      try {
+        await Share.share({ message: text });
+      } catch {
+        Alert.alert(t('location.copyFailed'));
+      }
     }
   }
 

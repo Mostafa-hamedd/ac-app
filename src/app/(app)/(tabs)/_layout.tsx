@@ -109,6 +109,14 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="payment-details"
+        options={{
+          headerShown: false,
+          title: t('services.payment.title'),
+          tabBarItemStyle: { display: 'none' },
+        }}
+      />
+      <Tabs.Screen
         name="explore"
         options={{
           title: t('tabs.explore'),

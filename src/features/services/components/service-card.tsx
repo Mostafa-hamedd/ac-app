@@ -60,7 +60,9 @@ export function ServiceCard({
         <StatusBadge tone={statusTone} label={statusLabel} />
       </View>
       <View className={cn(row, 'items-center justify-between gap-3')}>
-        <Text className={cn('flex-1 font-sans-medium text-xs', isArabic && 'text-right')}>{footer}</Text>
+        <Text className={cn('flex-1 font-sans-medium text-xs', isArabic && 'text-right')}>
+          {footer}
+        </Text>
         <Button
           size="auto"
           shape="pill"

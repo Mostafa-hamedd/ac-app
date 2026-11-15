@@ -129,6 +129,40 @@ export const en = {
       terms: "By booking a new service, you agree to AutoConnect's Terms and Conditions.",
       confirm: 'Confirm Booking',
     },
+    payment: {
+      title: 'Payment Details',
+      service: 'Service',
+      vehicle: 'Vehicle',
+      dateTime: 'Date & Time',
+      lines: { labour: 'Labour', parts: 'Parts', inspection: 'Inspection' },
+      subtotal: 'Subtotal',
+      taxesFees: 'Taxes & Fees',
+      totalDue: 'Total Due',
+      amount: '{{amount}} EGP',
+      quoteNotice: 'The price will be confirmed by the service center after inspection.',
+      change: 'Change',
+      terms: 'Terms and Conditions',
+      payNow: 'Pay Now',
+      agreePrefix: 'I have read and agree to the ',
+      termsClauses: {
+        booking: {
+          title: 'Booking',
+          body: 'Your slot is held for you once the booking is confirmed. Please arrive 10 minutes early.',
+        },
+        cancellation: {
+          title: 'Changes and cancellation',
+          body: 'You can edit or cancel a booking free of charge up to 24 hours before the appointment.',
+        },
+        pricing: {
+          title: 'Pricing',
+          body: 'The estimate may change after inspection. Any extra work needs your approval first.',
+        },
+        payment: {
+          title: 'Payment',
+          body: 'The total includes taxes and fees. You are charged when the payment is confirmed.',
+        },
+      },
+    },
     status: {
       ongoing: 'Ongoing',
       upcoming: 'Upcoming',

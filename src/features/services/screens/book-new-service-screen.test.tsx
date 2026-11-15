@@ -14,7 +14,7 @@ jest.mock('@react-native-community/netinfo', () =>
 jest.mock('lucide-react-native', () => new Proxy({}, { get: () => () => null }));
 jest.mock('react-native-reanimated', () => require('@tests/mocks/react-native-reanimated'));
 jest.mock('expo-router', () => ({
-  router: { back: jest.fn(), navigate: jest.fn() },
+  router: { back: jest.fn(), navigate: jest.fn(), push: jest.fn() },
   useLocalSearchParams: () => mockParams,
 }));
 jest.mock('react-native-keyboard-controller', () => {
@@ -218,6 +218,34 @@ describe('BookNewServiceScreen: other services', () => {
     await fireEvent.press(futureDay());
     await fireEvent.press(screen.getByText('03:30 PM'));
     await waitFor(() => expect(confirmDisabled()).toBe(false));
+  });
+
+  it('opens Payment Details with the booking when Confirm is pressed', async () => {
+    await renderScreen();
+    await screen.findByText('Toyota Corolla 2022');
+    await openSelect('Service Center *');
+    await fireEvent.press(screen.getByRole('radio', { name: 'AutoConnect Maadi Center' }));
+    await fireEvent.press(futureDay());
+    await fireEvent.press(screen.getByText('03:30 PM'));
+    await waitFor(() => expect(confirmDisabled()).toBe(false));
+    await fireEvent.press(confirm());
+    expect(router.push).toHaveBeenCalledTimes(1);
+    const call = (router.push as jest.Mock).mock.calls[0]![0];
+    expect(call.pathname).toBe('/payment-details');
+    expect(call.params).toMatchObject({
+      type: 'tireService',
+      packageKm: '',
+      centerId: 'maadi',
+      time: '15:30',
+    });
+    expect(call.params.vehicleId).toBeTruthy();
+    expect(Number.isNaN(new Date(call.params.date).getTime())).toBe(false);
+  });
+
+  it('does not open Payment Details while the form is incomplete', async () => {
+    await renderScreen();
+    await fireEvent.press(confirm());
+    expect(router.push).not.toHaveBeenCalled();
   });
 
   it('treats an unknown or missing service type like Other', async () => {

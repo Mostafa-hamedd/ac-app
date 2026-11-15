@@ -20,16 +20,8 @@ import {
   needsMaintenancePackage,
   TIME_SLOTS,
 } from '../data/booking-options';
+import { formatSlot } from '../utils/format-slot';
 import { isBookingComplete, isServiceTypeId, type BookingForm } from '../utils/booking-form';
-
-/** Formats an "HH:mm" slot as a time in the app's language. */
-function formatSlot(slot: string, locale: string): string {
-  const [hours, minutes] = slot.split(':').map(Number);
-  return new Date(2000, 0, 1, hours, minutes).toLocaleTimeString(locale, {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
 
 /**
  * Step two of booking. Regular maintenance asks which mileage package; every other service
@@ -67,11 +59,11 @@ export function BookNewServiceScreen() {
         title={t('services.bookScreenTitle')}
         titleVariant="large"
         bordered
-         // Tabs remember the last tab, not the last step, so go to the type picker explicitly.
+        // Tabs remember the last tab, not the last step, so go to the type picker explicitly.
         onBack={() => router.navigate('/book-service')}
       />
       <ScrollView
-        contentContainerClassName="gap-4 px-5 pb-6 pt-[20px]"
+        contentContainerClassName="gap-4 px-5 pb-6 pt-5"
         keyboardShouldPersistTaps="handled">
         {/* The car is the one selected in My Garage; it cannot be changed here. */}
         <SelectField
@@ -100,13 +92,19 @@ export function BookNewServiceScreen() {
           />
         ) : null}
 
-        <View className={cn(row, 'items-center justify-between rounded-lg border border-border border-[#000] px-4 py-4')}>
+        <View
+          className={cn(
+            row,
+            'items-center justify-between rounded-lg border border-border border-[#000] px-4 py-4',
+          )}>
           <Text className="font-sans-medium text-xs">{t('services.form.estimatedCost')}</Text>
           <Text className="font-sans-medium text-xs">{costText}</Text>
         </View>
 
         <Card className="gap-4">
-          <Text className="font-sans-medium text-sm rtl:text-right">{t('services.form.appointmentDetails')}</Text>
+          <Text className="font-sans-medium text-sm rtl:text-right">
+            {t('services.form.appointmentDetails')}
+          </Text>
 
           <SelectField
             label={t('services.form.serviceCenter')}
@@ -154,13 +152,28 @@ export function BookNewServiceScreen() {
               numberOfLines={4}
             />
           ) : null}
-
         </Card>
 
         <Text variant="muted" className="text-center">
           {t('services.form.terms')}
         </Text>
-        <Button disabled={!isBookingComplete(form)} label={t('services.form.confirm')} />
+        <Button
+          disabled={!isBookingComplete(form)}
+          label={t('services.form.confirm')}
+          onPress={() =>
+            router.push({
+              pathname: '/payment-details',
+              params: {
+                type: serviceType,
+                packageKm: packageKm === null ? '' : String(packageKm),
+                vehicleId: vehicleId ?? '',
+                centerId: centerId ?? '',
+                date: date ? date.toISOString() : '',
+                time: time ?? '',
+              },
+            })
+          }
+        />
       </ScrollView>
     </View>
   );

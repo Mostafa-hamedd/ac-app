@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import * as Clipboard from 'expo-clipboard';
-import { Alert, Linking } from 'react-native';
+import { Alert, Linking, Share } from 'react-native';
 
 import { i18n } from '@/lib/i18n';
 
@@ -378,8 +378,9 @@ describe('Copy Address follows the sheet', () => {
     expect(Alert.alert).toHaveBeenCalledWith('No address available to copy yet.');
   });
 
-  it('shows a failure message when the clipboard rejects', async () => {
+  it('shows a failure message when clipboard and share both reject', async () => {
     clipboard.mockRejectedValueOnce(new Error('no clipboard'));
+    jest.spyOn(Share, 'share').mockRejectedValueOnce(new Error('no share'));
     await render(<LocationScreen />);
     await fireEvent.press(screen.getByText('Copy Address'));
     await waitFor(() => expect(Alert.alert).toHaveBeenCalledWith('Could not copy the address.'));
