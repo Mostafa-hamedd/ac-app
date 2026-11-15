@@ -12,12 +12,14 @@ import { formatNumber } from '@/shared/utils/format';
 import { ServiceCard } from '../components/service-card';
 import { MOCK_ACTIVE_SERVICES, MOCK_SERVICE_HISTORY } from '../data/mock-services';
 import type { Localized } from '../types/service.types';
+import { cn } from '@/shared/utils/cn';
 
 /** Every service of the vehicle: the ones in progress or booked, and the finished ones. */
 export function AllServicesScreen() {
   const { t, i18n } = useTranslation();
   const lang = i18n.language === 'ar' ? 'ar' : 'en';
   const pick = (value: Localized) => value[lang];
+  const isArabic = i18n.language === 'ar';
 
   async function callSupport() {
     try {
@@ -39,7 +41,7 @@ export function AllServicesScreen() {
         />
 
         <View className="gap-3">
-          <Text className="font-sans-medium text-xs">
+          <Text className={cn(' font-sans-medium text-xs', isArabic && 'text-right')}>
             {t('services.activeServices', { count: MOCK_ACTIVE_SERVICES.length })}
           </Text>
           {MOCK_ACTIVE_SERVICES.map((service) => (

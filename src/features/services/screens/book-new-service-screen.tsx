@@ -106,7 +106,7 @@ export function BookNewServiceScreen() {
         </View>
 
         <Card className="gap-4">
-          <Text className="font-sans-medium text-sm">{t('services.form.appointmentDetails')}</Text>
+          <Text className="font-sans-medium text-sm rtl:text-right">{t('services.form.appointmentDetails')}</Text>
 
           <SelectField
             label={t('services.form.serviceCenter')}

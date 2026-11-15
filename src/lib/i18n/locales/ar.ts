@@ -95,7 +95,7 @@ export const ar: TranslationResources = {
     completedOn: 'اكتملت في {{date}}',
     paid: 'تم دفع {{amount}} {{currency}}',
     trackService: 'تتبع الخدمة',
-    viewBooking: 'عرض الحجز',
+    viewBooking: 'عرض',
     viewDetails: 'عرض التفاصيل',
     needHelp: 'تحتاج مساعدة؟',
     bookScreenTitle: 'حجز خدمة جديدة',

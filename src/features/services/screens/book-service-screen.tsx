@@ -36,7 +36,7 @@ export function BookServiceScreen() {
       />
       <ScrollView contentContainerClassName="gap-5 px-6 pb-4 pt-2">
         <SelectedVehicleStrip />
-        <Text className="font-sans-medium text-base text-primary font-bold">{t('services.selectServiceType')}</Text>
+        <Text className="font-sans-medium text-base text-primary font-bold rtl:text-right">{t('services.selectServiceType')}</Text>
         <View className={cn(row, 'flex-wrap gap-3')} accessibilityRole="radiogroup">
           {SERVICE_TYPES.map((type) => (
             <ServiceTypeCard
@@ -51,7 +51,7 @@ export function BookServiceScreen() {
         </View>
       </ScrollView>
 
-      <View className="gap-3 px-6 pb-3 pt-2">
+      <View className="gap-3 px-6 pb-3 pt-2 ">
         <Button
           disabled={!selected}
           label={selected ? t('services.continue') : t('services.selectToContinue')}

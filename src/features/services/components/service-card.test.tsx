@@ -35,4 +35,18 @@ describe('ServiceCard', () => {
     await render(<ServiceCard {...baseProps} actionLabel="View Details" actionVariant="outline" />);
     expect(screen.getByText('View Details')).toBeTruthy();
   });
+
+  it('maps completed and upcoming labels in English and Arabic', async () => {
+    await render(<ServiceCard {...baseProps} statusLabel="Completed" />);
+    expect(screen.getByLabelText('Status: Completed')).toBeTruthy();
+
+    await render(<ServiceCard {...baseProps} statusLabel="مكتملة" />);
+    expect(screen.getByLabelText('Status: مكتملة')).toBeTruthy();
+
+    await render(<ServiceCard {...baseProps} statusLabel="Upcoming" />);
+    expect(screen.getByLabelText('Status: Upcoming')).toBeTruthy();
+
+    await render(<ServiceCard {...baseProps} statusLabel="قادمة" />);
+    expect(screen.getByLabelText('Status: قادمة')).toBeTruthy();
+  });
 });

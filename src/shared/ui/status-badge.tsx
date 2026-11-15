@@ -10,8 +10,8 @@ const badgeVariants = cva('self-start rounded-full px-2.5 py-1', {
   variants: {
     tone: {
       neutral: 'bg-muted',
-      info: 'bg-info/15',
-      success: 'bg-success/15',
+      info: 'border border-info bg-info/15',
+      success: 'border border-success bg-success/15',
       warning: 'bg-warning/15',
       danger: 'bg-destructive/15',
       outline: 'border border-foreground bg-card',

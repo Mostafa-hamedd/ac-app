@@ -16,18 +16,18 @@ export function SelectedVehicleStrip({ className }: { className?: string }) {
   const { data: vehicles } = useVehicles();
   const selectedId = useVehiclePhotoStore((state) => state.selectedVehicleId);
   const vehicle = vehicles?.find((item) => item.id === selectedId) ?? vehicles?.[0];
-
+  const isArabic = i18n.language === 'ar';
   if (!vehicle) return null;
 
   return (
     <View
       className={cn(
         'items-center gap-3 rounded-lg border border-border bg-card p-3',
-        i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row',
-        className,
+        isArabic ? ' flex-row-reverse' : 'flex-row',
+        className, 
       )}>
       <VehiclePhoto className="size-10 rounded-md" iconSize={20} />
-      <View className="flex-1">
+      <View className={cn('flex-1', isArabic ? 'items-end' : 'items-start')}>
         <Text className="font-sans-medium text-sm">{vehicleLabel(vehicle)}</Text>
         <Text variant="muted">
           {vehicle.licensePlate} · {vehicle.year}

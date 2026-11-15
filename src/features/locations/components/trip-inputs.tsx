@@ -1,7 +1,7 @@
 import { Circle, MapPin, Navigation, Search, X } from 'lucide-react-native';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 import { Input } from '@/shared/ui';
 import { Text } from '@/shared/ui/text';
@@ -28,6 +28,8 @@ type TripInputsProps = {
 };
 
 const MAX_SUGGESTIONS = 5;
+/** Approx. height of one suggestion row (`py-2.5` + two text lines). */
+const SUGGESTION_ROW_HEIGHT = 52;
 
 /** "From" (live GPS or a picked map point) and "To" (searchable maintenance centers). */
 export function TripInputs({
@@ -46,11 +48,23 @@ export function TripInputs({
 }: TripInputsProps) {
   const { t, i18n } = useTranslation();
   const [focused, setFocused] = useState(false);
+  const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isArabic = i18n.language === 'ar';
   const row = isArabic ? 'flex-row-reverse' : 'flex-row';
   const align = isArabic ? 'text-right' : 'text-left';
 
   const showSuggestions = focused && !hasDestination;
+  const visibleSuggestions = suggestions.slice(0, MAX_SUGGESTIONS);
+
+  function focusTo() {
+    if (blurTimer.current) clearTimeout(blurTimer.current);
+    setFocused(true);
+  }
+
+  function blurTo() {
+    // Delay hide so a suggestion press can fire before the list unmounts.
+    blurTimer.current = setTimeout(() => setFocused(false), 150);
+  }
 
   return (
     <View className="gap-2 rounded-2xl bg-white p-3">
@@ -108,8 +122,8 @@ export function TripInputs({
             size="sm"
             value={query}
             onChangeText={onQueryChange}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
+            onFocus={focusTo}
+            onBlur={blurTo}
             label={t('location.toLabel')}
             placeholder={t('location.searchPlaceholder')}
             returnKeyType="search"
@@ -130,26 +144,41 @@ export function TripInputs({
       </View>
 
       {showSuggestions ? (
-        <View className="gap-1">
-          {suggestions.length === 0 ? (
-            <Text variant="muted" className={cn('px-1 py-2', align)}>
+        <View className="overflow-hidden rounded-xl border border-border bg-card">
+          {visibleSuggestions.length === 0 ? (
+            <Text variant="muted" className={cn('px-3 py-3', align)}>
               {t('location.noResults')}
             </Text>
           ) : (
-            suggestions.slice(0, MAX_SUGGESTIONS).map((suggestion) => (
-              <Pressable
-                key={suggestion.id}
-                accessibilityRole="button"
-                onPress={() => onSelectSuggestion(suggestion.id)}
-                className="rounded-lg bg-muted px-3 py-2 active:opacity-70">
-                <Text className={cn('font-sans-medium text-sm', align)} numberOfLines={1}>
-                  {suggestion.name}
-                </Text>
-                <Text variant="muted" className={align} numberOfLines={1}>
-                  {suggestion.subtitle}
-                </Text>
-              </Pressable>
-            ))
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              nestedScrollEnabled
+              bounces={suggestions.length > MAX_SUGGESTIONS}
+              style={{ maxHeight: SUGGESTION_ROW_HEIGHT * MAX_SUGGESTIONS }}>
+              {visibleSuggestions.map((suggestion, index) => (
+                <Pressable
+                  key={suggestion.id}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${suggestion.name}, ${suggestion.subtitle}`}
+                  onPress={() => {
+                    if (blurTimer.current) clearTimeout(blurTimer.current);
+                    setFocused(false);
+                    onSelectSuggestion(suggestion.id);
+                  }}
+                  className={cn(
+                    'px-3 py-2.5 active:bg-muted',
+                    index > 0 && 'border-t border-border',
+                  )}
+                  style={{ minHeight: SUGGESTION_ROW_HEIGHT }}>
+                  <Text className={cn('font-sans-medium text-sm', align)} numberOfLines={1}>
+                    {suggestion.name}
+                  </Text>
+                  <Text variant="muted" className={align} numberOfLines={1}>
+                    {suggestion.subtitle}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
           )}
         </View>
       ) : null}

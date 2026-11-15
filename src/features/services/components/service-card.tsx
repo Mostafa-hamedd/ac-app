@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { Button } from '@/shared/ui';
 import type { ButtonVariant } from '@/shared/ui';
 import { Card } from '@/shared/ui/card';
-import { StatusBadge } from '@/shared/ui/status-badge';
+import { StatusBadge, type StatusTone } from '@/shared/ui/status-badge';
 import { Text } from '@/shared/ui/text';
 import { cn } from '@/shared/utils/cn';
 
@@ -22,6 +22,19 @@ type ServiceCardProps = {
   onAction?: () => void;
 };
 
+/** Status label → badge tone. Keys cover EN/AR service copy. */
+const STATUS_TONES: Record<string, StatusTone> = {
+  completed: 'success',
+  مكتمل: 'success',
+  مكتملة: 'success',
+  upcoming: 'info',
+  قادمة: 'info',
+};
+
+function statusToneForLabel(label: string): StatusTone {
+  return STATUS_TONES[label.trim().toLowerCase()] ?? 'outline';
+}
+
 /** One service in the All Services list: what it is, its status, and an action button. */
 export function ServiceCard({
   title,
@@ -34,22 +47,26 @@ export function ServiceCard({
 }: ServiceCardProps) {
   const { i18n } = useTranslation();
   const row = i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row';
+  const isArabic = i18n.language === 'ar';
+  const statusTone = statusToneForLabel(statusLabel);
 
   return (
     <Card className="gap-4">
       <View className={cn(row, 'items-start justify-between gap-3')}>
-        <View className="flex-1 gap-1.5">
+        <View className={cn('flex-1 gap-1.5', isArabic && 'items-end')}>
           <Text className="font-sans-medium text-xs">{title}</Text>
           <Text className="font-sans-medium text-xs">{subtitle}</Text>
         </View>
-        <StatusBadge tone="outline" label={statusLabel} />
+        <StatusBadge tone={statusTone} label={statusLabel} />
       </View>
       <View className={cn(row, 'items-center justify-between gap-3')}>
-        <Text className="flex-1 font-sans-medium text-xs">{footer}</Text>
+        <Text className={cn('flex-1 font-sans-medium text-xs', isArabic && 'text-right')}>{footer}</Text>
         <Button
           size="auto"
+          shape="pill"
           variant={actionVariant}
-          className="px-4 py-2"
+          className="shrink-0 px-5"
+          style={isArabic ? { height: 36, minWidth: 88 } : { height: 36 }}
           textClassName="text-xs"
           label={actionLabel}
           onPress={onAction}
