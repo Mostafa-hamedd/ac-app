@@ -17,6 +17,10 @@ jest.mock('expo-router', () => ({
   router: { back: jest.fn(), navigate: jest.fn() },
   useLocalSearchParams: () => mockParams,
 }));
+const mockProcessPayment = jest.fn();
+jest.mock('../data/payment-gateway.mock', () => ({
+  processMockPayment: () => mockProcessPayment(),
+}));
 jest.mock('react-native-keyboard-controller', () => {
   const { ScrollView } = require('react-native');
   return { KeyboardAwareScrollView: ScrollView };
@@ -117,6 +121,53 @@ describe('PaymentDetailsScreen', () => {
     );
     expect(screen.getByText(/confirmed by the service center/)).toBeTruthy();
     expect(screen.queryByText('Subtotal')).toBeNull();
+  });
+
+  describe('paying', () => {
+    async function tickAndPay() {
+      await renderWithProviders(<PaymentDetailsScreen />);
+      await fireEvent.press(screen.getByRole('checkbox'));
+      await fireEvent.press(screen.getByRole('button', { name: 'Pay Now' }));
+    }
+
+    it('opens the success screen with the amount and transaction code', async () => {
+      mockProcessPayment.mockResolvedValue({ status: 'success', transactionCode: '1234567' });
+      await tickAndPay();
+      await waitFor(() => expect(router.navigate).toHaveBeenCalledTimes(1));
+      const call = (router.navigate as jest.Mock).mock.calls[0]![0];
+      expect(call.pathname).toBe('/payment-success');
+      expect(call.params).toMatchObject({
+        ...maintenanceParams,
+        amount: '12050',
+        code: '1234567',
+      });
+      expect(Number.isNaN(new Date(call.params.paidAt).getTime())).toBe(false);
+    });
+
+    it('opens the failed screen, keeping the booking so the user can try again', async () => {
+      mockProcessPayment.mockResolvedValue({ status: 'failed' });
+      await tickAndPay();
+      await waitFor(() =>
+        expect(router.navigate).toHaveBeenCalledWith({
+          pathname: '/payment-failed',
+          params: maintenanceParams,
+        }),
+      );
+    });
+
+    it('does not charge twice while a payment is processing', async () => {
+      let finish: (value: unknown) => void = () => undefined;
+      mockProcessPayment.mockReturnValue(new Promise((resolve) => (finish = resolve)));
+      await renderWithProviders(<PaymentDetailsScreen />);
+      await fireEvent.press(screen.getByRole('checkbox'));
+      // The press only settles once the payment does, so don't wait for it.
+      void fireEvent.press(screen.getByRole('button', { name: 'Pay Now' }));
+      await waitFor(() => expect(mockProcessPayment).toHaveBeenCalledTimes(1));
+      void fireEvent.press(screen.getByRole('button', { name: 'Pay Now' }));
+      expect(mockProcessPayment).toHaveBeenCalledTimes(1);
+      finish({ status: 'failed' });
+      await waitFor(() => expect(router.navigate).toHaveBeenCalledTimes(1));
+    });
   });
 
   it('goes back to the booking form', async () => {

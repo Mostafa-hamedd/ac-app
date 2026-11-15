@@ -12,6 +12,7 @@ const FEATURES = [
   'profile',
   'locations',
   'services',
+  'payments',
 ];
 
 module.exports = defineConfig([

@@ -112,7 +112,23 @@ export default function TabsLayout() {
         name="payment-details"
         options={{
           headerShown: false,
-          title: t('services.payment.title'),
+          title: t('payments.title'),
+          tabBarItemStyle: { display: 'none' },
+        }}
+      />
+      <Tabs.Screen
+        name="payment-success"
+        options={{
+          headerShown: false,
+          title: t('payments.result.successTitle'),
+          tabBarItemStyle: { display: 'none' },
+        }}
+      />
+      <Tabs.Screen
+        name="payment-failed"
+        options={{
+          headerShown: false,
+          title: t('payments.result.failedTitle'),
           tabBarItemStyle: { display: 'none' },
         }}
       />

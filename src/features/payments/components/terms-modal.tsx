@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button } from '@/shared/ui';
 import { Text } from '@/shared/ui/text';
 
-/** Keys of the clauses under `services.payment.termsClauses`. */
+/** Keys of the clauses under `payments.termsClauses`. */
 const CLAUSES = ['booking', 'cancellation', 'pricing', 'payment'] as const;
 
 export type TermsModalProps = {
@@ -35,16 +35,16 @@ export function TermsModal({ visible, onClose }: TermsModalProps) {
           className="max-h-[80%] gap-4 rounded-t-xl bg-background px-5 pt-5"
           style={{ paddingBottom: Math.max(insets.bottom, 16) + 8 }}>
           <Text accessibilityRole="header" variant="h3" className={textAlign}>
-            {t('services.payment.terms')}
+            {t('payments.terms')}
           </Text>
           <ScrollView contentContainerClassName="gap-4">
             {CLAUSES.map((clause) => (
               <View key={clause} className="gap-1">
                 <Text className={`font-sans-semibold text-sm ${textAlign ?? ''}`}>
-                  {t(`services.payment.termsClauses.${clause}.title`)}
+                  {t(`payments.termsClauses.${clause}.title`)}
                 </Text>
                 <Text variant="muted" className={textAlign}>
-                  {t(`services.payment.termsClauses.${clause}.body`)}
+                  {t(`payments.termsClauses.${clause}.body`)}
                 </Text>
               </View>
             ))}

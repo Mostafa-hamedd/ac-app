@@ -1,15 +1,15 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Linking, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
-import { ROADSIDE_HOTLINE } from '@/config/support';
 import { SelectedVehicleStrip } from '@/features/vehicles';
 import { Button } from '@/shared/ui';
 import { ScreenHeader } from '@/shared/ui/screen-header';
 import { Text } from '@/shared/ui/text';
 import { cn } from '@/shared/utils/cn';
 
+import { useContactSupport } from '@/shared/hooks/use-contact-support';
 import { ServiceTypeCard } from '../components/service-type-card';
 import { SERVICE_TYPES, type ServiceTypeId } from '../data/service-types';
 
@@ -19,13 +19,7 @@ export function BookServiceScreen() {
   const [selected, setSelected] = useState<ServiceTypeId | null>(null);
   const row = i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row';
 
-  async function contactSupport() {
-    try {
-      await Linking.openURL(`tel:${ROADSIDE_HOTLINE}`);
-    } catch {
-      Alert.alert(t('assistance.callUnavailable'));
-    }
-  }
+  const contactSupport = useContactSupport();
 
   return (
     <View className="flex-1 bg-background">

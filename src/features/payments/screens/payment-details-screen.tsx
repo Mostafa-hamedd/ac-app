@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ScrollView, View } from 'react-native';
 
-import { MAINTENANCE_CENTERS } from '@/features/locations';
-import { useSelectedVehicle, vehicleLabel } from '@/features/vehicles';
 import { Button } from '@/shared/ui';
 import { Card } from '@/shared/ui/card';
 import { Checkbox } from '@/shared/ui/checkbox';
@@ -16,9 +14,9 @@ import { formatNumber } from '@/shared/utils/format';
 import { colors } from '@/theme';
 
 import { TermsModal } from '../components/terms-modal';
-import { estimateCost } from '../data/booking-options';
-import { isServiceTypeId } from '../utils/booking-form';
-import { formatSlot } from '../utils/format-slot';
+import { processMockPayment } from '../data/payment-gateway.mock';
+import { useBookingSummary, type BookingParams } from '@/features/services';
+import { formatSlot } from '@/features/services';
 import { buildPaymentSummary } from '../utils/payment-summary';
 
 /** "1,100.00" in the app's language. */
@@ -38,29 +36,14 @@ export function PaymentDetailsScreen() {
   const locale = i18n.language === 'ar' ? 'ar' : 'en';
   const row = locale === 'ar' ? 'flex-row-reverse' : 'flex-row';
   const textAlign = locale === 'ar' ? 'text-right' : undefined;
-  const params = useLocalSearchParams<{
-    type?: string;
-    packageKm?: string;
-    vehicleId?: string;
-    centerId?: string;
-    date?: string;
-    time?: string;
-  }>();
-  const { vehicles } = useSelectedVehicle();
+  const params = useLocalSearchParams<BookingParams>();
   const [termsOpen, setTermsOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
+  const [paying, setPaying] = useState(false);
 
-  const serviceType = isServiceTypeId(params.type) ? params.type : 'other';
-  const packageKm = params.packageKm ? Number(params.packageKm) : null;
-  const cost = estimateCost(serviceType, packageKm);
+  const booking = useBookingSummary(params);
+  const { serviceType, cost } = booking;
   const summary = typeof cost === 'number' ? buildPaymentSummary(cost) : null;
-
-  const serviceName =
-    serviceType === 'regularMaintenance' && packageKm !== null
-      ? t('services.form.maintenancePackage', { km: formatNumber(packageKm) })
-      : t(`services.types.${serviceType}`);
-  const vehicle = vehicles.find((item) => item.id === params.vehicleId);
-  const center = MAINTENANCE_CENTERS.find((item) => item.id === params.centerId);
   const date = params.date ? new Date(params.date) : null;
   const dateText =
     date && !Number.isNaN(date.getTime())
@@ -77,24 +60,46 @@ export function PaymentDetailsScreen() {
       : cost === null
         ? t('services.form.toBeQuoted')
         : t('services.form.cost', { amount: formatNumber(cost) });
-  const money = (amount: number) =>
-    t('services.payment.amount', { amount: formatMoney(amount, locale) });
+  const money = (amount: number) => t('payments.amount', { amount: formatMoney(amount, locale) });
+
+  async function pay() {
+    if (!summary || paying) return;
+    setPaying(true);
+    try {
+      const result = await processMockPayment();
+      if (result.status === 'success') {
+        router.navigate({
+          pathname: '/payment-success',
+          params: {
+            ...params,
+            amount: String(summary.total),
+            code: result.transactionCode,
+            paidAt: new Date().toISOString(),
+          },
+        });
+      } else {
+        router.navigate({ pathname: '/payment-failed', params });
+      }
+    } finally {
+      setPaying(false);
+    }
+  }
 
   const details = [
-    { label: t('services.payment.service'), value: serviceName },
+    { label: t('payments.service'), value: booking.serviceName },
     {
-      label: t('services.payment.vehicle'),
-      value: vehicle ? `${vehicleLabel(vehicle)} ${vehicle.year}` : '—',
+      label: t('payments.vehicle'),
+      value: booking.vehicleText,
     },
-    { label: t('services.form.serviceCenter'), value: center ? center.name[locale] : '—' },
-    { label: t('services.payment.dateTime'), value: dateText },
+    { label: t('services.form.serviceCenter'), value: booking.centerName },
+    { label: t('payments.dateTime'), value: dateText },
     { label: t('services.form.estimatedCost'), value: costText },
   ];
 
   return (
     <View className="flex-1 bg-background">
       <ScreenHeader
-        title={t('services.payment.title')}
+        title={t('payments.title')}
         titleVariant="large"
         bordered
         // Tabs remember the last tab, not the last step, so go back to the form explicitly.
@@ -137,14 +142,14 @@ export function PaymentDetailsScreen() {
                     index > 0 && 'border-t border-border',
                   )}>
                   <Text className="font-sans-semibold text-xs">
-                    {t(`services.payment.lines.${line.id}`)}
+                    {t(`payments.lines.${line.id}`)}
                   </Text>
                   <Text className="font-sans text-xs">{money(line.amount)}</Text>
                 </View>
               ))
             ) : (
               <Text variant="muted" className={cn('py-2.5', textAlign)}>
-                {t('services.payment.quoteNotice')}
+                {t('payments.quoteNotice')}
               </Text>
             )}
           </View>
@@ -152,7 +157,7 @@ export function PaymentDetailsScreen() {
             <View className="gap-1.5 px-5 py-3">
               <View className={cn(row, 'justify-between')}>
                 <Text variant="muted" className="text-2xs">
-                  {t('services.payment.subtotal')}
+                  {t('payments.subtotal')}
                 </Text>
                 <Text variant="muted" className="text-2xs">
                   {money(summary.subtotal)}
@@ -160,7 +165,7 @@ export function PaymentDetailsScreen() {
               </View>
               <View className={cn(row, 'justify-between')}>
                 <Text variant="muted" className="text-2xs">
-                  {t('services.payment.taxesFees')}
+                  {t('payments.taxesFees')}
                 </Text>
                 <Text variant="muted" className="text-2xs">
                   {money(summary.taxesAndFees)}
@@ -173,7 +178,7 @@ export function PaymentDetailsScreen() {
               row,
               'items-center justify-between border-t border-border px-5 pb-4 pt-3.5',
             )}>
-            <Text className="font-sans-semibold text-xs">{t('services.payment.totalDue')}</Text>
+            <Text className="font-sans-semibold text-xs">{t('payments.totalDue')}</Text>
             <Text className="font-sans-semibold text-sm">
               {summary ? money(summary.total) : t('services.form.toBeQuoted')}
             </Text>
@@ -186,7 +191,7 @@ export function PaymentDetailsScreen() {
             <CreditCard size={20} color={colors.foreground} />
             <Text className="font-sans-medium text-xs">•••• 4242</Text>
           </View>
-          <Text className="font-sans-medium text-xs underline">{t('services.payment.change')}</Text>
+          <Text className="font-sans-medium text-xs underline">{t('payments.change')}</Text>
         </Card>
 
         {/* Terms: the box must be ticked to pay; the underlined words open the full text. */}
@@ -194,15 +199,15 @@ export function PaymentDetailsScreen() {
           <Checkbox
             checked={agreed}
             onCheckedChange={setAgreed}
-            accessibilityLabel={`${t('services.payment.agreePrefix')}${t('services.payment.terms')}`}
+            accessibilityLabel={`${t('payments.agreePrefix')}${t('payments.terms')}`}
           />
           <Text className={cn('flex-1 font-sans-medium text-xs', textAlign)}>
-            {t('services.payment.agreePrefix')}
+            {t('payments.agreePrefix')}
             <Text
               accessibilityRole="link"
               onPress={() => setTermsOpen(true)}
               className="font-sans-medium text-xs underline">
-              {t('services.payment.terms')}
+              {t('payments.terms')}
             </Text>
           </Text>
         </Card>
@@ -210,7 +215,9 @@ export function PaymentDetailsScreen() {
         <Button
           className="mt-3"
           disabled={!summary || !agreed}
-          label={t('services.payment.payNow')}
+          loading={paying}
+          label={t('payments.payNow')}
+          onPress={pay}
         />
       </ScrollView>
       <TermsModal visible={termsOpen} onClose={() => setTermsOpen(false)} />
