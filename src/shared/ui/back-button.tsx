@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { Pressable } from 'react-native';
 
@@ -7,7 +7,10 @@ import { colors } from '@/theme';
 
 /** Round back button used at the top of the sign-in and registration screens. */
 export function BackButton({ onPress }: { onPress?: () => void }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
+  const Arrow = isArabic ? ArrowRight : ArrowLeft;
+
   return (
     <Pressable
       accessibilityRole="button"
@@ -15,7 +18,7 @@ export function BackButton({ onPress }: { onPress?: () => void }) {
       onPress={onPress ?? (() => router.back())}
       hitSlop={8}
       className="h-9 w-9 items-center justify-center rounded-full border border-input/20 active:opacity-70">
-      <ArrowLeft size={22} strokeWidth={1.4} color={colors.foreground} />
+      <Arrow size={22} strokeWidth={1.4} color={colors.foreground} />
     </Pressable>
   );
 }

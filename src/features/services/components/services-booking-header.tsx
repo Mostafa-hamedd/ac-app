@@ -13,13 +13,15 @@ type ServicesBookingHeaderProps = {
 /** "Services & Booking" section title with its Book New button, shown on Home. */
 export function ServicesBookingHeader({ onBookNew }: ServicesBookingHeaderProps) {
   const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
+
   return (
     <View
       className={cn(
         'items-center justify-between gap-3',
-        i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row',
+        isArabic ? 'flex-row-reverse' : 'flex-row',
       )}>
-      <Text variant="h3" className="flex-1">
+      <Text variant="h3" className={cn('shrink', isArabic && 'text-right')} numberOfLines={1}>
         {t('services.servicesAndBooking')}
       </Text>
       <Button

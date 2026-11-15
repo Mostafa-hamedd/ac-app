@@ -1,7 +1,9 @@
+import { router } from 'expo-router';
 import { Tabs } from 'expo-router/js-tabs';
 import { Bell, Globe, Menu, Warehouse } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
-import { Image, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Image, Pressable, View } from 'react-native';
 
 import { useUnreadNotificationCount } from '@/features/notifications';
 import { BrandLogo } from '@/shared/ui/brand-logo';
@@ -13,9 +15,52 @@ import { colors } from '@/theme';
 const WORDMARK = require('../../../../assets/images/splash-icon.png');
 /** Matches `BrandLogo` wordmark proportions. */
 const WORDMARK_RATIO = 430 / 120;
+/** My Garage header height below the status bar. */
+const HEADER_HEIGHT = 60;
+
+/** Wordmark and screen title shown at the top of My Garage. */
+function GarageTitle() {
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
+  return (
+    <View className={cn('items-center gap-2', isArabic ? 'flex-row-reverse px-4' : 'flex-row')}>
+      <Image
+        accessibilityIgnoresInvertColors
+        source={WORDMARK}
+        resizeMode="contain"
+        style={{ width: 72, height: 72 / WORDMARK_RATIO, tintColor: colors.foreground }}
+      />
+      <Text variant="h2">{t('tabs.myGarage')}</Text>
+    </View>
+  );
+}
+
+/** Round bell button in the My Garage header; opens the Notifications tab. */
+function NotificationsButton() {
+  const { t } = useTranslation();
+  const unread = useUnreadNotificationCount();
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={t('tabs.notifications')}
+      onPress={() => router.navigate('/notifications')}
+      hitSlop={8}
+      className="mx-8 size-9 items-center justify-center rounded-full border border-border active:opacity-80">
+      <Bell size={16} className="mr-8" color={colors.foreground} />
+      {unread > 0 ? (
+        <View
+          testID="header-unread-dot"
+          className="absolute right-1 top-1 size-2 rounded-full bg-destructive"
+        />
+      ) : null}
+    </Pressable>
+  );
+}
 
 export default function TabsLayout() {
   const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
+  const insets = useSafeAreaInsets();
   const unread = useUnreadNotificationCount();
 
   return (
@@ -26,22 +71,14 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: t('tabs.myGarage'),
+          // React Navigation can't right-align a title, so in Arabic the title takes the right
+          // slot and the bell moves to the left one.
+          // Taller than the default bar, so the title and bell get more room above and below.
+          headerStyle: { height: insets.top + HEADER_HEIGHT },
           headerTitleAlign: 'left',
-          headerTitle: () => (
-            <View
-              className={cn(
-                'items-center gap-2',
-                i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row',
-              )}>
-              <Image
-                accessibilityIgnoresInvertColors
-                source={WORDMARK}
-                resizeMode="contain"
-                style={{ width: 72, height: 72 / WORDMARK_RATIO, tintColor: colors.foreground }}
-              />
-              <Text variant="h3">{t('tabs.myGarage')}</Text>
-            </View>
-          ),
+          headerTitle: isArabic ? '' : () => <GarageTitle />,
+          headerRight: isArabic ? () => <GarageTitle /> : undefined,
+          // headerLeft: isArabic ? () => <NotificationsButton /> : undefined,
           tabBarIcon: ({ color, size }) => <Warehouse color={color} size={size} />,
         }}
       />

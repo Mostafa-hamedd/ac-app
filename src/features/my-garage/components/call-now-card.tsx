@@ -6,15 +6,24 @@ import { Button } from '@/shared/ui/button';
 import { Card } from '@/shared/ui/card';
 import { Text } from '@/shared/ui/text';
 import { colors } from '@/theme';
+import { cn } from '@/shared/utils/cn';
 
 /** Home card prompting roadside help; its button opens the Assistance sheet. */
 export function CallNowCard({ onPress }: { onPress: () => void }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === 'ar';
+
   return (
-    <Card className="flex-row items-center justify-between gap-3 py-3">
-      <View className="flex-1 flex-row items-center gap-3">
+    <Card
+      className={cn(
+        'w-full flex-row items-center justify-between py-3',
+        isArabic && 'flex-row-reverse',
+      )}>
+      <View className={cn('shrink flex-row items-center gap-3', isArabic && 'flex-row-reverse')}>
         <TriangleAlert size={20} color={colors.foreground} />
-        <Text className="flex-1 text-sm">{t('myGarage.callNowTitle')}</Text>
+        <Text className={cn('shrink text-sm', isArabic && 'text-right')} numberOfLines={1}>
+          {t('myGarage.callNowTitle')}
+        </Text>
       </View>
       <Button
         size="sm"

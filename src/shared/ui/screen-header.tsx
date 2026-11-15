@@ -31,19 +31,22 @@ export function ScreenHeader({
 }: ScreenHeaderProps) {
   const { i18n } = useTranslation();
   const insets = useSafeAreaInsets();
-  const row = i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row';
+  const isArabic = i18n.language === 'ar';
 
   return (
     <View
       className={cn(
-        row,
         'items-center gap-3 bg-background px-5 pb-3',
+        isArabic ? 'flex-row-reverse' : 'flex-row',
         bordered && 'border border-border',
         className,
       )}
       style={{ paddingTop: insets.top + 12 }}>
       <BackButton onPress={onBack} />
-      <Text variant={titleVariant} className="flex-1" numberOfLines={1}>
+      <Text
+        variant={titleVariant}
+        className={cn('flex-1', isArabic && 'text-right')}
+        numberOfLines={1}>
         {title}
       </Text>
       {trailing}
