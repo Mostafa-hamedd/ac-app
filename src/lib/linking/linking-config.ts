@@ -6,7 +6,6 @@ import { env } from '@/config/env';
  */
 export type AppLink =
   | { type: 'request'; id: string; href: `/requests/${string}` }
-  | { type: 'payment'; id: string; href: `/payments/${string}` }
   | { type: 'vehicle'; id: string; href: `/vehicles/${string}` }
   | { type: 'notification'; id: string; href: `/notifications/${string}` };
 
@@ -16,7 +15,6 @@ const ID_PATTERN = /^[A-Za-z0-9_-]{1,64}$/;
 
 const ROUTES = {
   requests: 'request',
-  payments: 'payment',
   vehicles: 'vehicle',
   notifications: 'notification',
 } as const satisfies Record<string, AppLink['type']>;

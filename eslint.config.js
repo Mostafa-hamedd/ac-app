@@ -8,7 +8,6 @@ const FEATURES = [
   'my-garage',
   'vehicles',
   'requests',
-  'payments',
   'notifications',
   'profile',
   'locations',

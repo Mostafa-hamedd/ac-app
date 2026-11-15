@@ -3,7 +3,6 @@ import { apiClient } from '@/lib/api/client';
 
 import { authRoutes } from './auth';
 import { notificationsRoutes } from './notifications';
-import { paymentsRoutes } from './payments';
 import { requestsRoutes } from './requests';
 import { createMockAdapter } from './server';
 import { vehiclesRoutes } from './vehicles';
@@ -18,7 +17,6 @@ if (env.useMockApi) {
     ...authRoutes,
     ...requestsRoutes,
     ...vehiclesRoutes,
-    ...paymentsRoutes,
     ...notificationsRoutes,
   ]);
 }

@@ -28,10 +28,6 @@ export const endpoints = {
     list: '/vehicles',
     detail: (vehicleId: string) => `/vehicles/${id(vehicleId)}`,
   },
-  payments: {
-    list: '/payments',
-    detail: (paymentId: string) => `/payments/${id(paymentId)}`,
-  },
   notifications: {
     list: '/notifications',
     detail: (notificationId: string) => `/notifications/${id(notificationId)}`,

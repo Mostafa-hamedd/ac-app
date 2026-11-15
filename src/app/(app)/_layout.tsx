@@ -15,8 +15,6 @@ export default function AppLayout() {
       <Stack.Screen name="update-photo" options={{ headerShown: false }} />
       <Stack.Screen name="vehicles/[vehicleId]" options={{ title: t('vehicles.title') }} />
       <Stack.Screen name="requests/[requestId]" options={{ title: t('requests.title') }} />
-      <Stack.Screen name="payments/index" options={{ title: t('payments.title') }} />
-      <Stack.Screen name="payments/[paymentId]" options={{ title: t('payments.detailTitle') }} />
       <Stack.Screen
         name="notifications/[notificationId]"
         options={{ title: t('notifications.title') }}

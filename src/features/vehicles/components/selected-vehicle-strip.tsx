@@ -24,7 +24,7 @@ export function SelectedVehicleStrip({ className }: { className?: string }) {
       className={cn(
         'items-center gap-3 rounded-lg border border-border bg-card p-3',
         isArabic ? ' flex-row-reverse' : 'flex-row',
-        className, 
+        className,
       )}>
       <VehiclePhoto className="size-10 rounded-md" iconSize={20} />
       <View className={cn('flex-1', isArabic ? 'items-end' : 'items-start')}>

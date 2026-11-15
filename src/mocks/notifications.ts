@@ -2,7 +2,7 @@ import type { AppNotification } from '@/features/notifications';
 
 import { findById, paginate, type MockRoute } from './server';
 
-/** Centralized, realistic mock dataset — some cross-link to requests/payments/vehicles. */
+/** Centralized, realistic mock dataset — some cross-link to requests/vehicles. */
 const MOCK_NOTIFICATIONS: AppNotification[] = [
   {
     id: 'NOTIF_301',
@@ -11,7 +11,6 @@ const MOCK_NOTIFICATIONS: AppNotification[] = [
     category: 'payment',
     read: false,
     createdAt: '2026-10-29T08:00:00.000Z',
-    relatedHref: '/payments/PAY_202',
   },
   {
     id: 'NOTIF_302',

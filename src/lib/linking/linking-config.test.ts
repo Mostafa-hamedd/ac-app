@@ -6,7 +6,7 @@ jest.mock('@/config/env', () => ({ env: { linkDomain: 'app.example.com' } }));
 describe('parseAppLink', () => {
   it.each([
     ['/requests/REQ_123', '/requests/REQ_123', 'request'],
-    ['autoconnect://payments/PAY_456', '/payments/PAY_456', 'payment'],
+    ['autoconnect://vehicles/VEH_456', '/vehicles/VEH_456', 'vehicle'],
     ['https://app.example.com/notifications/NOTIF_789', '/notifications/NOTIF_789', 'notification'],
     ['/vehicles/abc-1?ref=push', '/vehicles/abc-1', 'vehicle'],
   ])('accepts %s', (input, href, type) => {
