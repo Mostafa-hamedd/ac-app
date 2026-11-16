@@ -18,7 +18,7 @@ export function BookServiceScreen() {
   const { t, i18n } = useTranslation();
   const [selected, setSelected] = useState<ServiceTypeId | null>(null);
   const row = i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row';
-
+  const IsArabic = i18n.language === 'ar';
   const contactSupport = useContactSupport();
 
   return (
@@ -30,7 +30,7 @@ export function BookServiceScreen() {
       />
       <ScrollView contentContainerClassName="gap-5 px-6 pb-4 pt-2">
         <SelectedVehicleStrip />
-        <Text className="font-sans-medium text-base text-primary font-bold rtl:text-right">
+        <Text className={cn("font-sans-medium text-base text-primary font-bold", IsArabic ? 'text-right' : 'text-left')}>
           {t('services.selectServiceType')}
         </Text>
         <View className={cn(row, 'flex-wrap gap-3')} accessibilityRole="radiogroup">

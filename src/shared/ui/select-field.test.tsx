@@ -1,4 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { SelectField } from './select-field';
 
@@ -9,18 +10,25 @@ const options = [
   { value: '10', label: '10K Maintenance' },
 ];
 
+const initialMetrics = {
+  frame: { x: 0, y: 0, width: 390, height: 844 },
+  insets: { top: 0, left: 0, right: 0, bottom: 0 },
+};
+
 function setup(props: Partial<React.ComponentProps<typeof SelectField>> = {}) {
   const onChange = jest.fn();
   const view = render(
-    <SelectField
-      label="Service Type"
-      required
-      placeholder="Select maintenance"
-      options={options}
-      value={null}
-      onChange={onChange}
-      {...props}
-    />,
+    <SafeAreaProvider initialMetrics={initialMetrics}>
+      <SelectField
+        label="Service Type"
+        required
+        placeholder="Select maintenance"
+        options={options}
+        value={null}
+        onChange={onChange}
+        {...props}
+      />
+    </SafeAreaProvider>,
   );
   return { onChange, view };
 }
