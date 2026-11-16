@@ -17,7 +17,7 @@ export function BackButton({ onPress }: { onPress?: () => void }) {
       accessibilityLabel={t('fields.goBack')}
       onPress={onPress ?? (() => router.back())}
       hitSlop={8}
-      className="h-9 w-9 items-center justify-center rounded-full border border-input/20 active:opacity-70">
+      className="h-9 w-9 items-center justify-center rounded-[8px] border border-input/20 active:opacity-70">
       <Arrow size={22} strokeWidth={1.4} color={colors.foreground} />
     </Pressable>
   );

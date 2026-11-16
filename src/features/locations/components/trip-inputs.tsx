@@ -89,7 +89,7 @@ export function TripInputs({
             accessibilityLabel={t('location.useMyLocation')}
             onPress={onUseMyLocation}
             hitSlop={8}
-            className="size-9 items-center justify-center rounded-full bg-muted active:opacity-70">
+            className="size-9 items-center justify-center rounded-[8px] bg-muted active:opacity-70">
             <Navigation size={16} color={colors.foreground} />
           </Pressable>
         ) : null}
@@ -100,7 +100,7 @@ export function TripInputs({
           onPress={onTogglePick}
           hitSlop={8}
           className={cn(
-            'size-9 items-center justify-center rounded-full active:opacity-70',
+            'size-9 items-center justify-center rounded-[8px] active:opacity-70',
             pickMode ? 'bg-primary' : 'bg-muted',
           )}>
           <MapPin size={16} color={pickMode ? colors['primary-foreground'] : colors.foreground} />
@@ -137,7 +137,7 @@ export function TripInputs({
             accessibilityLabel={t('location.clearDestination')}
             onPress={onClear}
             hitSlop={8}
-            className="size-9 items-center justify-center rounded-full bg-muted active:opacity-70">
+            className="size-9 items-center justify-center rounded-[8px] bg-muted active:opacity-70">
             <X size={16} color={colors.foreground} />
           </Pressable>
         ) : null}

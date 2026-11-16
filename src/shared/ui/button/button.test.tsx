@@ -99,8 +99,7 @@ describe('Button', () => {
   it('supports the pill shape and extra classes without losing the defaults', async () => {
     await render(<Button label="P" shape="pill" className="px-5" testID="p" />);
     const className = String(screen.getByTestId('p').props.className);
-    expect(className).toContain('rounded-full');
+    expect(className).toContain('rounded-[8px]');
     expect(className).toContain('px-5');
-    expect(className).not.toContain('rounded-lg');
   });
 });

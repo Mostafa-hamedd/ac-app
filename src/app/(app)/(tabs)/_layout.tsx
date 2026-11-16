@@ -45,7 +45,7 @@ function NotificationsButton() {
       accessibilityLabel={t('tabs.notifications')}
       onPress={() => router.navigate('/notifications')}
       hitSlop={8}
-      className="mx-8 size-9 items-center justify-center rounded-full border border-border active:opacity-80">
+      className="mx-8 size-9 items-center justify-center rounded-[8px] border border-border active:opacity-80">
       <Bell size={16} className="mr-8" color={colors.foreground} />
       {unread > 0 ? (
         <View

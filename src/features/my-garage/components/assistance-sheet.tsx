@@ -78,7 +78,7 @@ export function AssistanceSheet({ ref }: AssistanceSheetProps) {
           accessibilityRole="button"
           accessibilityLabel={t('common.close')}
           onPress={close}
-          className="size-9 items-center justify-center self-end rounded-full border border-border active:opacity-80">
+          className="size-9 items-center justify-center self-end rounded-[8px] border border-border active:opacity-80">
           <X size={16} color={colors.foreground} />
         </Pressable>
 

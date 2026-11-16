@@ -130,7 +130,7 @@ export function BookNewServiceScreen() {
                   key={slot}
                   size="auto"
                   variant={time === slot ? 'default' : 'subtle'}
-                  className="rounded-md px-3 py-2"
+                  className="px-3 py-2"
                   textClassName="text-xs"
                   accessibilityRole="radio"
                   accessibilityState={{ selected: time === slot }}

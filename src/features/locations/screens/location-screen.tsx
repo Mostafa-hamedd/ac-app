@@ -223,7 +223,7 @@ export function LocationScreen() {
         accessibilityRole="button"
         accessibilityLabel={t('fields.goBack')}
         onPress={() => router.back()}
-        className="absolute left-4 size-10 items-center justify-center rounded-full bg-white active:opacity-80"
+        className="absolute left-4 size-10 items-center justify-center rounded-[8px] bg-white active:opacity-80"
         style={{ top: insets.top + 9, ...styles.backShadow }}>
         <ChevronLeft size={20} color={colors.foreground} />
       </Pressable>
