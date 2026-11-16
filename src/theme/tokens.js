@@ -40,6 +40,8 @@ const colors = {
 
 /** In dp. */
 const radius = {
+  /** Cards and compact buttons in the My Garage design. */
+  xs: 8,
   sm: 6,
   md: 10,
   lg: 15,

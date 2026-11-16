@@ -24,6 +24,7 @@ module.exports = {
     extend: {
       colors,
       borderRadius: {
+        xs: px(radius.xs),
         sm: px(radius.sm),
         md: px(radius.md),
         lg: px(radius.lg),
