@@ -250,6 +250,16 @@ export const ar: TranslationResources = {
   },
   notifications: {
     title: 'إشعار',
+    markAllRead: 'تحديد الكل كمقروء',
+    time: {
+      justNow: 'الآن',
+      minutesAgo: 'منذ {{count}} د',
+      hoursAgo: 'منذ {{count}} س',
+      yesterday: 'أمس',
+      daysAgo: 'منذ {{count}} أيام',
+    },
+    emptyTitle: 'لا توجد إشعارات بعد',
+    emptyDescription: 'ستظهر هنا تحديثات خدماتك ومدفوعاتك ومركباتك.',
   },
   profile: {
     yourAccount: 'حسابك',

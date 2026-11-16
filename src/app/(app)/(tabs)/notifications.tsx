@@ -1,3 +1,5 @@
-import { ComingSoon } from '@/shared/ui/coming-soon';
+import { NotificationsScreen } from '@/features/notifications';
 
-export default ComingSoon;
+export default function NotificationsRoute() {
+  return <NotificationsScreen />;
+}

@@ -251,6 +251,16 @@ export const en = {
   },
   notifications: {
     title: 'Notification',
+    markAllRead: 'Mark all as read',
+    time: {
+      justNow: 'Just now',
+      minutesAgo: '{{count}} min ago',
+      hoursAgo: '{{count}} hr ago',
+      yesterday: 'Yesterday',
+      daysAgo: '{{count}} days ago',
+    },
+    emptyTitle: 'No notifications yet',
+    emptyDescription: 'Updates about your services, payments and vehicles will show up here.',
   },
   profile: {
     yourAccount: 'Your account',
