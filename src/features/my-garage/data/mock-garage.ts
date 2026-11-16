@@ -9,6 +9,7 @@ export const MOCK_ONGOING_SERVICE: OngoingService = {
   id: 'ongoing-10k',
   title: { en: '10k Scheduled Maintenance', ar: 'صيانة دورية ١٠ آلاف كم' },
   center: { en: 'Sheikh Zayed Service Center', ar: 'مركز خدمة الشيخ زايد' },
+  centerId: 'sheikh-zayed',
   steps: [
     {
       id: 'tire-pressure',

@@ -1,6 +1,6 @@
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, ExternalLink, Map, Phone } from 'lucide-react-native';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -56,9 +56,13 @@ export function LocationScreen() {
   const { height: windowHeight } = useWindowDimensions();
   const location = useDeviceLocation();
 
+  // A caller can open the screen with a center already chosen (e.g. from My Garage).
+  const { centerId } = useLocalSearchParams<{ centerId?: string }>();
+  const initialCenter = MAINTENANCE_CENTERS.find((c) => c.id === centerId) ?? null;
+
   const [origin, setOrigin] = useState<Origin>({ type: 'gps' });
-  const [destinationId, setDestinationId] = useState<string | null>(null);
-  const [query, setQuery] = useState('');
+  const [destinationId, setDestinationId] = useState<string | null>(initialCenter?.id ?? null);
+  const [query, setQuery] = useState(initialCenter ? pick(initialCenter.name, lang) : '');
   const [pickMode, setPickMode] = useState(false);
   const [cameraRequest, setCameraRequest] = useState<MapCameraRequest | null>(null);
   const [sheetHeight, setSheetHeight] = useState(0);
@@ -115,6 +119,12 @@ export function LocationScreen() {
     cameraId.current += 1;
     setCameraRequest({ id: cameraId.current, target });
   }
+
+  // Frame the preselected center once, when the screen opens.
+  useEffect(() => {
+    if (initialCenter) moveCamera(fitCamera(null, initialCenter.coordinates));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function selectCenter(id: string) {
     const center = MAINTENANCE_CENTERS.find((c) => c.id === id);

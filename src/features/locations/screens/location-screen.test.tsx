@@ -1,5 +1,6 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import * as Clipboard from 'expo-clipboard';
+import { useLocalSearchParams } from 'expo-router';
 import { Alert, Linking, Share } from 'react-native';
 
 import { i18n } from '@/lib/i18n';
@@ -36,7 +37,10 @@ jest.mock('../hooks/use-reverse-geocode', () => ({
 jest.mock('react-native-reanimated', () => require('@tests/mocks/react-native-reanimated'));
 jest.mock('lucide-react-native', () => new Proxy({}, { get: () => () => null }));
 jest.mock('expo-clipboard', () => ({ setStringAsync: jest.fn() }));
-jest.mock('expo-router', () => ({ router: { back: jest.fn() } }));
+jest.mock('expo-router', () => ({
+  router: { back: jest.fn() },
+  useLocalSearchParams: jest.fn(() => ({})),
+}));
 jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
 }));
@@ -69,6 +73,7 @@ function resolvedFor(coords: Coords | null) {
 
 beforeEach(async () => {
   jest.clearAllMocks();
+  jest.mocked(useLocalSearchParams).mockReturnValue({});
   await i18n.changeLanguage('en');
   mockLocation.status = 'granted';
   mockLocation.coords = GPS_A;
@@ -173,6 +178,24 @@ describe('origin (From)', () => {
     // Picking a point makes the trip usable without GPS.
     await pickPoint(PICKED);
     expect(screen.getAllByText('Selected point').length).toBeGreaterThan(0);
+  });
+});
+
+describe('opened with a center already chosen', () => {
+  it('selects that center, fills the input and frames it on the map', async () => {
+    jest.mocked(useLocalSearchParams).mockReturnValue({ centerId: 'maadi' });
+    await render(<LocationScreen />);
+    expect(mockMapProps.destinationId).toBe('maadi');
+    expect(screen.getByLabelText('To').props.value).toBe(maadi.name.en);
+    expect(mockMapProps.cameraRequest.target).toEqual(fitCamera(null, maadi.coordinates));
+    expect(screen.getAllByText(maadi.address.en).length).toBeGreaterThan(0);
+  });
+
+  it('ignores an unknown center id', async () => {
+    jest.mocked(useLocalSearchParams).mockReturnValue({ centerId: 'nowhere' });
+    await render(<LocationScreen />);
+    expect(mockMapProps.destinationId).toBeNull();
+    expect(mockMapProps.cameraRequest).toBeNull();
   });
 });
 

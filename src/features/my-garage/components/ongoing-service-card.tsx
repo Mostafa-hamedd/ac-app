@@ -1,6 +1,6 @@
 import { Calendar, Check, CircleDashed, Clock, LoaderCircle, MapPin } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
-import { View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { Card } from '@/shared/ui/card';
 import { Text } from '@/shared/ui/text';
@@ -33,7 +33,13 @@ function EstimateBadge({ icon, value }: { icon: React.ReactNode; value: string }
 }
 
 /** The service the car is in for now: its progress checklist and when it will be ready. */
-export function OngoingServiceCard({ service }: { service: OngoingService }) {
+export function OngoingServiceCard({
+  service,
+  onOpenCenter,
+}: {
+  service: OngoingService;
+  onOpenCenter: () => void;
+}) {
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
   const lang = isArabic ? 'ar' : 'en';
@@ -50,12 +56,17 @@ export function OngoingServiceCard({ service }: { service: OngoingService }) {
         <Text variant="large" className="text-base">
           {service.title[lang]}
         </Text>
-        <View className={cn(row, 'items-center gap-1.5')}>
+        <Pressable
+          accessibilityRole="link"
+          accessibilityLabel={service.center[lang]}
+          onPress={onOpenCenter}
+          hitSlop={8}
+          className={cn(row, 'items-center gap-1.5 active:opacity-60')}>
           <MapPin size={12} color={colors['muted-foreground']} />
           <Text variant="muted" className="underline">
             {service.center[lang]}
           </Text>
-        </View>
+        </Pressable>
       </View>
 
       <View className="gap-2.5 py-1">

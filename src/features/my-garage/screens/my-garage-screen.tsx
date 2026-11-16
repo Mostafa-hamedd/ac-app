@@ -59,7 +59,15 @@ export function MyGarageScreen() {
           <Text variant="h3" className={cn(titleAlign)}>
             {t('myGarage.ongoingService')}
           </Text>
-          <OngoingServiceCard service={MOCK_ONGOING_SERVICE} />
+          <OngoingServiceCard
+            service={MOCK_ONGOING_SERVICE}
+            onOpenCenter={() =>
+              router.push({
+                pathname: '/location',
+                params: { centerId: MOCK_ONGOING_SERVICE.centerId },
+              })
+            }
+          />
         </View>
 
         <View className="gap-3">

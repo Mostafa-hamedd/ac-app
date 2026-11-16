@@ -95,6 +95,15 @@ describe('MyGarageScreen sections', () => {
     expect(screen.getByText('View Service Details')).toBeTruthy();
   });
 
+  it('opens the service center on the map when its name is pressed', async () => {
+    await renderWithProviders(<MyGarageScreen />);
+    await fireEvent.press(screen.getByRole('link', { name: 'Sheikh Zayed Service Center' }));
+    expect(router.push).toHaveBeenCalledWith({
+      pathname: '/location',
+      params: { centerId: 'sheikh-zayed' },
+    });
+  });
+
   it('reschedules a booking by opening the booking form for that service', async () => {
     await renderWithProviders(<MyGarageScreen />);
     await fireEvent.press(screen.getByRole('button', { name: 'Reschedule' }));

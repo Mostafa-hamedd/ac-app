@@ -14,6 +14,8 @@ export type OngoingService = {
   id: string;
   title: Localized;
   center: Localized;
+  /** The maintenance center's id, so the name can open it on the map. */
+  centerId: string;
   steps: ChecklistStep[];
   /** When the car should be ready, as display text. */
   readyDate: Localized;
