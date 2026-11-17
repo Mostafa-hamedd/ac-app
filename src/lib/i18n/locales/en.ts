@@ -63,7 +63,7 @@ export const en = {
     amount: '{{amount}} EGP',
     viewInvoice: 'View Invoice',
     payNow: 'Pay Now',
-    needHelp: 'Need Help?',
+    needHelp: 'Need Help with your Garage?',
   },
   location: {
     openInMaps: 'Open in Google Maps',
