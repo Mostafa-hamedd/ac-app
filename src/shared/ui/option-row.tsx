@@ -22,6 +22,7 @@ export function OptionRow({
   destructive = false,
   disabled,
   className,
+  style,
   ...props
 }: OptionRowProps) {
   const { i18n } = useTranslation();
@@ -36,10 +37,12 @@ export function OptionRow({
       disabled={disabled}
       className={cn(
         row,
-        'items-center gap-4 rounded-lg border border-border bg-card px-4 py-4 active:opacity-80',
+        'items-center gap-4 rounded-lg border border-border px-4 py-4 active:opacity-80',
         disabled && 'opacity-50',
         className,
       )}
+      // NativeWind bg-* is unreliable on Pressable; keep the fill in style.
+      style={[{ backgroundColor: '#FFFFFF' }, style]}
       {...props}>
       <Icon size={20} color={color} />
       <Text className={cn('font-sans-medium text-sm', destructive && 'text-destructive')}>

@@ -25,8 +25,35 @@ jest.mock('react-native-keyboard-controller', () => {
   const { ScrollView } = require('react-native');
   return { KeyboardAwareScrollView: ScrollView };
 });
-// The assistance sheet is a native bottom sheet; it has its own flow.
-jest.mock('../components/assistance-sheet', () => ({ AssistanceSheet: () => null }));
+// The sheets are native bottom sheets with their own flows (and tests).
+const mockPresent = jest.fn();
+const mockReschedulePresent = jest.fn();
+let mockOnUpdate: (date: Date, time: string) => void = () => undefined;
+jest.mock('../components/assistance-sheet', () => {
+  const { useImperativeHandle } = require('react');
+  return {
+    AssistanceSheet: ({ ref }: { ref?: React.Ref<unknown> }) => {
+      useImperativeHandle(ref, () => ({ present: mockPresent }));
+      return null;
+    },
+  };
+});
+jest.mock('../components/reschedule-sheet', () => {
+  const { useImperativeHandle } = require('react');
+  return {
+    RescheduleSheet: ({
+      ref,
+      onUpdate,
+    }: {
+      ref?: React.Ref<unknown>;
+      onUpdate: (date: Date, time: string) => void;
+    }) => {
+      mockOnUpdate = onUpdate;
+      useImperativeHandle(ref, () => ({ present: mockReschedulePresent }));
+      return null;
+    },
+  };
+});
 
 describe('MyGarageScreen', () => {
   it('shows the vehicle photo card above the roadside help card', async () => {
@@ -104,13 +131,22 @@ describe('MyGarageScreen sections', () => {
     });
   });
 
-  it('reschedules a booking by opening the booking form for that service', async () => {
+  it('opens the reschedule sheet instead of leaving when Reschedule is pressed', async () => {
     await renderWithProviders(<MyGarageScreen />);
     await fireEvent.press(screen.getByRole('button', { name: 'Reschedule' }));
-    expect(router.push).toHaveBeenCalledWith({
-      pathname: '/book-new-service',
-      params: { type: 'tireService' },
-    });
+    expect(mockReschedulePresent).toHaveBeenCalledTimes(1);
+    expect(mockPresent).not.toHaveBeenCalled();
+    expect(router.push).not.toHaveBeenCalledWith(
+      expect.objectContaining({ pathname: '/book-new-service' }),
+    );
+  });
+
+  it('shows the new date and time on the booking after Update', async () => {
+    await renderWithProviders(<MyGarageScreen />);
+    await fireEvent.press(screen.getByRole('button', { name: 'Reschedule' }));
+    await act(async () => mockOnUpdate(new Date(2026, 11, 5), '10:00'));
+    expect(screen.queryByText('11 Sep 2023')).toBeNull();
+    expect(screen.getByText(/05 Dec 2026 · 10:00 AM/)).toBeTruthy();
   });
 
   it('asks before cancelling and removes the booking when confirmed', async () => {

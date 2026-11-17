@@ -39,14 +39,22 @@ export function ServiceBookingCard({
         <View className={cn('flex-1 gap-1', isArabic ? 'items-end' : 'items-start')}>
           <View className={cn(row, 'items-center gap-1.5')}>
             <Calendar size={12} color={colors['muted-foreground']} />
-            <Text variant="muted" className="text-2xs">
+            <Text variant="muted" className="text-caption">
               {service.date[lang]}
             </Text>
           </View>
-          <Text className="font-sans-semibold text-base">{service.title[lang]}</Text>
+          <Text className="font-sans-semibold text-subhead">{service.title[lang]}</Text>
         </View>
-        <View className="rounded-xs border border-border bg-muted/50 px-2 py-1">
-          <Text className="font-sans-semibold text-2xs">
+        <View
+          className={cn(
+            'rounded-xs border px-2 py-1',
+            isUpcoming ? 'border-gold bg-gold/15' : 'border-success bg-success/15',
+          )}>
+          <Text
+            className={cn(
+              'font-sans-semibold text-2xs',
+              isUpcoming ? 'text-gold' : 'text-success',
+            )}>
             {t(`services.status.${service.status}`)}
           </Text>
         </View>

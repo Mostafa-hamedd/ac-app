@@ -15,8 +15,11 @@ import { useShareLocation } from '../hooks/use-share-location';
 
 export type AssistanceSheetProps = { ref?: React.Ref<BottomSheetModal> };
 
+/** Top corner radius of the sheet in the design. */
+const SHEET_RADIUS = 30;
+
 function Backdrop(props: BottomSheetBackdropProps) {
-  return <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />;
+  return <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} opacity={0.9} />;
 }
 
 /** "Need roadside assistance?" sheet: share the current location or call the hotline. */
@@ -71,14 +74,18 @@ export function AssistanceSheet({ ref }: AssistanceSheetProps) {
       ref={ref}
       enableDynamicSizing
       backdropComponent={Backdrop}
-      backgroundStyle={{ backgroundColor: colors.background }}
+      backgroundStyle={{
+        backgroundColor: colors.sheet,
+        borderTopLeftRadius: SHEET_RADIUS,
+        borderTopRightRadius: SHEET_RADIUS,
+      }}
       handleComponent={null}>
-      <BottomSheetView className="gap-4 px-4 pb-8 pt-4">
+      <BottomSheetView className="gap-4 px-6 pb-8 pt-4">
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={t('common.close')}
           onPress={close}
-          className="size-9 items-center justify-center self-end rounded-[8px] border border-border active:opacity-80">
+          className="size-9 items-center justify-center self-end rounded-full border border-border active:opacity-80">
           <X size={16} color={colors.foreground} />
         </Pressable>
 

@@ -1,4 +1,4 @@
-import { Calendar, Check, CircleDashed, Clock, LoaderCircle, MapPin } from 'lucide-react-native';
+import { Calendar, Check, Clock, MapPin } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
 
@@ -7,14 +7,19 @@ import { Text } from '@/shared/ui/text';
 import { cn } from '@/shared/utils/cn';
 import { colors } from '@/theme';
 
+import { ActiveStepIcon } from './active-step-icon';
 import type { ChecklistStep, OngoingService } from '../types/garage.types';
 
 const STEP_ICON_SIZE = 12;
 
 function StepIcon({ state }: { state: ChecklistStep['state'] }) {
   if (state === 'done') return <Check size={STEP_ICON_SIZE} color={colors.success} />;
-  if (state === 'active') return <LoaderCircle size={STEP_ICON_SIZE} color={colors.foreground} />;
-  return <CircleDashed size={STEP_ICON_SIZE} color={colors.foreground} />;
+  return (
+    <ActiveStepIcon
+      size={STEP_ICON_SIZE}
+      color={state === 'active' ? colors.foreground : colors['muted-foreground']}
+    />
+  );
 }
 
 /** A small white pill with an icon and a short value (the estimated date or time). */
@@ -27,7 +32,7 @@ function EstimateBadge({ icon, value }: { icon: React.ReactNode; value: string }
         i18n.language === 'ar' ? 'flex-row-reverse' : 'flex-row',
       )}>
       {icon}
-      <Text className="font-sans-semibold text-2xs">{value}</Text>
+      <Text className="font-sans-semibold text-caption">{value}</Text>
     </View>
   );
 }
@@ -77,7 +82,7 @@ export function OngoingServiceCard({
             <StepIcon state={step.state} />
             <Text
               className={cn(
-                'text-sm',
+                'text-compact',
                 step.state === 'done' && 'text-muted-foreground line-through',
                 step.state === 'active' && 'font-sans-semibold',
               )}>
@@ -90,7 +95,7 @@ export function OngoingServiceCard({
       <View className="h-line bg-border" />
 
       <View className={cn(row, 'items-center justify-between')}>
-        <Text variant="muted">{t('myGarage.readyEstimation')}</Text>
+        <Text className="text-xs text-[#64748B]">{t('myGarage.readyEstimation')}</Text>
         <View className={cn(row, 'gap-2')}>
           <EstimateBadge
             icon={<Calendar size={12} color={colors.foreground} />}

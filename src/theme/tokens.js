@@ -13,9 +13,11 @@ const colors = {
   'primary-foreground': '#FFFFFF',
 
   // Surfaces and text
-  background: '#FFFFFF',
+  background: '#F5F5F5',
   foreground: '#0F172A',
   card: '#FFFFFF',
+  /** Background of bottom sheets. */
+  sheet: '#F5F5F5',
   'card-foreground': '#0F172A',
   muted: '#EDEDED',
   /** Backdrop behind vehicle photos and illustrations. */
@@ -35,6 +37,8 @@ const colors = {
   warning: '#B45309',
   'warning-foreground': '#FFFFFF',
   info: '#0369A1',
+  /** The Upcoming status. */
+  gold: '#B8860B',
   'info-foreground': '#FFFFFF',
 };
 
@@ -56,8 +60,14 @@ const borderWidth = 1.5;
 /** [size, line height] in dp. */
 const fontSize = {
   '2xs': [10, 14],
+  /** Small captions in the My Garage cards. */
+  caption: [11, 16],
   xs: [12, 18],
+  /** Checklist steps and the help link. */
+  compact: [13, 19],
   sm: [14, 20],
+  /** Card titles and amounts. */
+  subhead: [15, 22],
   base: [16, 24],
   lg: [18, 27],
   xl: [20, 28],

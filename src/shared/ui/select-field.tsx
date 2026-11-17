@@ -1,7 +1,15 @@
 import { Check, ChevronDown, ChevronUp } from 'lucide-react-native';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Platform, Pressable, ScrollView, StatusBar, View, type ViewInstance } from 'react-native';
+import {
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  View,
+  type ViewInstance,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { cn } from '@/shared/utils/cn';
@@ -65,9 +73,7 @@ export function SelectField({
   const Chevron = open ? ChevronUp : ChevronDown;
   const borderColor = error ? colors.destructive : colors.border;
   const yOffset =
-    Platform.OS === 'android' && isFabric
-      ? insets.top || StatusBar.currentHeight || 0
-      : 0;
+    Platform.OS === 'android' && isFabric ? insets.top || StatusBar.currentHeight || 0 : 0;
 
   function close() {
     setOpen(false);
@@ -164,7 +170,10 @@ export function SelectField({
               nestedScrollEnabled
               keyboardShouldPersistTaps="handled"
               bounces={options.length > MAX_VISIBLE_OPTIONS}
-              style={{ maxHeight: OPTION_ROW_HEIGHT * MAX_VISIBLE_OPTIONS, backgroundColor: colors.card }}>
+              style={{
+                maxHeight: OPTION_ROW_HEIGHT * MAX_VISIBLE_OPTIONS,
+                backgroundColor: colors.card,
+              }}>
               {options.map((option) => {
                 const isSelected = option.value === value;
                 return (

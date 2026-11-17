@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, View } from 'react-native';
 
-import { ServicesBookingHeader } from '@/features/services';
+import { formatSlot, ServicesBookingHeader } from '@/features/services';
 import { VehicleHeroCard, VehicleTabs } from '@/features/vehicles';
 import { useContactSupport } from '@/shared/hooks/use-contact-support';
 import { Screen } from '@/shared/ui/screen';
@@ -16,6 +16,7 @@ import { CallNowCard } from '../components/call-now-card';
 import { DuePaymentCard } from '../components/due-payment-card';
 import { GarageHelpFooter } from '../components/garage-help-footer';
 import { OngoingServiceCard } from '../components/ongoing-service-card';
+import { RescheduleSheet } from '../components/reschedule-sheet';
 import { ServiceBookingCard } from '../components/service-booking-card';
 import { MOCK_BOOKED_SERVICES, MOCK_DUE_PAYMENTS, MOCK_ONGOING_SERVICE } from '../data/mock-garage';
 import type { BookedService } from '../types/garage.types';
@@ -26,11 +27,21 @@ export function MyGarageScreen() {
   const lang = isArabic ? 'ar' : 'en';
   const assistanceRef = useRef<BottomSheetModal>(null);
   const contactSupport = useContactSupport();
+  const rescheduleRef = useRef<BottomSheetModal>(null);
   const [cancelledIds, setCancelledIds] = useState<string[]>([]);
+  // The booking being rescheduled, and the new slot of each booking that was (kept locally).
+  const [reschedulingId, setReschedulingId] = useState<string | null>(null);
+  const [newSlots, setNewSlots] = useState<Record<string, { date: Date; time: string }>>({});
 
   const bookedServices = MOCK_BOOKED_SERVICES.filter(
     (service) => !cancelledIds.includes(service.id),
-  );
+  ).map((service) => {
+    const slot = newSlots[service.id];
+    if (!slot) return service;
+    const label = (locale: 'en' | 'ar') =>
+      `${slot.date.toLocaleDateString(locale === 'en' ? 'en-GB' : locale, { day: '2-digit', month: 'short', year: 'numeric' })} · ${formatSlot(slot.time, locale)}`;
+    return { ...service, date: { en: label('en'), ar: label('ar') } };
+  });
   const titleAlign = isArabic ? 'text-right' : undefined;
 
   function confirmCancel(service: BookedService) {
@@ -77,12 +88,10 @@ export function MyGarageScreen() {
               key={service.id}
               service={service}
               onCancel={() => confirmCancel(service)}
-              onReschedule={() =>
-                router.push({
-                  pathname: '/book-new-service',
-                  params: { type: service.serviceType },
-                })
-              }
+              onReschedule={() => {
+                setReschedulingId(service.id);
+                rescheduleRef.current?.present();
+              }}
               onViewDetails={() => router.push('/services')}
             />
           ))}
@@ -106,6 +115,13 @@ export function MyGarageScreen() {
         <GarageHelpFooter onPress={contactSupport} />
       </Screen>
       <AssistanceSheet ref={assistanceRef} />
+      <RescheduleSheet
+        ref={rescheduleRef}
+        onUpdate={(date, time) => {
+          if (reschedulingId)
+            setNewSlots((slots) => ({ ...slots, [reschedulingId]: { date, time } }));
+        }}
+      />
     </>
   );
 }

@@ -30,13 +30,13 @@ export function DuePaymentCard({ payment, onViewInvoice, onPayNow }: DuePaymentC
         <View className={cn('flex-1 gap-1', isArabic ? 'items-end' : 'items-start')}>
           <View className={cn(row, 'items-center gap-1.5')}>
             <Calendar size={12} color={colors['muted-foreground']} />
-            <Text variant="muted" className="text-2xs">
+            <Text variant="muted" className="text-caption">
               {t('myGarage.dueBy', { date: payment.dueDate[lang] })}
             </Text>
           </View>
-          <Text className="font-sans-semibold text-base">{payment.title[lang]}</Text>
+          <Text className="font-sans-semibold text-subhead">{payment.title[lang]}</Text>
         </View>
-        <Text className="font-sans-semibold text-base">
+        <Text className="font-sans-semibold text-subhead">
           {t('myGarage.amount', { amount: formatNumber(payment.amount) })}
         </Text>
       </View>

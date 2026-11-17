@@ -27,8 +27,8 @@ const STATUS_TONES: Record<string, StatusTone> = {
   completed: 'success',
   مكتمل: 'success',
   مكتملة: 'success',
-  upcoming: 'info',
-  قادمة: 'info',
+  upcoming: 'gold',
+  قادمة: 'gold',
 };
 
 function statusToneForLabel(label: string): StatusTone {

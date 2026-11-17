@@ -66,16 +66,18 @@ export function FloatingTabBar({
                 'size-10 items-center justify-center rounded-md active:opacity-80',
                 focused && 'bg-white',
               )}>
-              {options.tabBarIcon?.({ focused, color: iconColor, size: 20 })}
-              {hasBadge ? (
-                <View
-                  testID={`tab-badge-${route.name}`}
-                  className="absolute -right-1 -top-1 h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1">
-                  <Text className="font-sans-medium text-2xs text-destructive-foreground">
-                    {badgeText}
-                  </Text>
-                </View>
-              ) : null}
+              <View className="relative items-center justify-center">
+                {options.tabBarIcon?.({ focused, color: iconColor, size: 20 })}
+                {hasBadge ? (
+                  <View
+                    testID={`tab-badge-${route.name}`}
+                    className="absolute -right-2 -top-1 h-4 min-w-4 items-center justify-center rounded-full border border-primary bg-destructive px-1">
+                    <Text className="font-sans-medium text-2xs text-destructive-foreground">
+                      {badgeText}
+                    </Text>
+                  </View>
+                ) : null}
+              </View>
             </Pressable>
           );
         })}
