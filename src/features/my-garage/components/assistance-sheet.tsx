@@ -85,7 +85,7 @@ export function AssistanceSheet({ ref }: AssistanceSheetProps) {
         <Text accessibilityRole="header" className={`text-lg ${textAlign}`}>
           {t('assistance.title')}
         </Text>
-        <View className="h-px bg-border" />
+        <View className="h-line bg-border" />
 
         <View className="gap-3">
           <Button

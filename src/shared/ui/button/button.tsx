@@ -17,10 +17,10 @@ import { Text, TextClassContext } from '../text';
 const variantClasses = {
   default: 'bg-primary',
   secondary: 'bg-muted-foreground',
-  outline: 'border border-input bg-card',
+  outline: 'border-1 border-input bg-card',
   ghost: 'bg-transparent',
   light: 'bg-card',
-  subtle: 'border border-border bg-card',
+  subtle: 'border-1 border-border bg-card',
 } satisfies Record<ButtonVariant, string>;
 
 const sizeClasses = {

@@ -5,3 +5,4 @@ import tokens from './tokens';
  * (navigation headers, tab bars, status bar, icon colors).
  */
 export const colors = tokens.colors;
+export const borderWidth = tokens.borderWidth;

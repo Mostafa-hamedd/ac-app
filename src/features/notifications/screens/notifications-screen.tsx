@@ -64,7 +64,7 @@ export function NotificationsScreen() {
             </View>
           ) : undefined
         }
-        ItemSeparatorComponent={() => <View className="h-px bg-border" />}
+        ItemSeparatorComponent={() => <View className="h-line bg-border" />}
         ListEmptyComponent={
           <EmptyState
             icon={BellOff}

@@ -50,6 +50,9 @@ const radius = {
   full: 9999,
 };
 
+/** Width of every border (the `border` class), in dp. */
+const borderWidth = 1.5;
+
 /** [size, line height] in dp. */
 const fontSize = {
   '2xs': [10, 14],
@@ -73,4 +76,4 @@ const fontFamily = {
   semibold: 'Poppins-SemiBold',
 };
 
-module.exports = { colors, radius, fontSize, fontFamily };
+module.exports = { colors, radius, borderWidth, fontSize, fontFamily };

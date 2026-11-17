@@ -52,7 +52,7 @@ export function ServiceBookingCard({
         </View>
       </View>
 
-      <View className="h-px bg-border" />
+      <View className="h-line bg-border" />
 
       {isUpcoming ? (
         <View className={cn(row, 'gap-2.5')}>

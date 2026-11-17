@@ -41,7 +41,7 @@ export function DuePaymentCard({ payment, onViewInvoice, onPayNow }: DuePaymentC
         </Text>
       </View>
 
-      <View className="h-px bg-border" />
+      <View className="h-line bg-border" />
 
       <View className={cn(row, 'gap-2.5')}>
         <Button

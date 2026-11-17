@@ -18,7 +18,7 @@ import {
   searchCountries,
   type Country,
 } from '@/lib/phone/phone-country';
-import { colors } from '@/theme';
+import { borderWidth, colors } from '@/theme';
 
 import { Text } from './text';
 
@@ -76,7 +76,7 @@ export function CountryPickerSheet({ selectedValue, onSelect, ref }: CountryPick
           autoCorrect={false}
           style={{
             height: 48,
-            borderWidth: 1,
+            borderWidth,
             borderColor: 'rgba(0,0,0,0.2)',
             borderRadius: 15,
             paddingHorizontal: 16,

@@ -1,4 +1,4 @@
-const { colors, radius, fontSize, fontFamily } = require('./src/theme/tokens');
+const { colors, radius, borderWidth, fontSize, fontFamily } = require('./src/theme/tokens');
 
 const px = (value) => `${value}px`;
 
@@ -23,6 +23,8 @@ module.exports = {
     },
     extend: {
       colors,
+      // `border` is the 1.5px default; `border-1` is the 1px border buttons use.
+      borderWidth: { DEFAULT: px(borderWidth), 1: px(1) },
       borderRadius: {
         xs: px(radius.xs),
         sm: px(radius.sm),
@@ -33,6 +35,8 @@ module.exports = {
       spacing: {
         // Button height from the design.
         13: px(52),
+        // Thickness of a divider line; matches the border width.
+        line: px(borderWidth),
         // Side padding of the car tabs.
         4.5: px(18),
       },

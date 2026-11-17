@@ -87,7 +87,7 @@ export function OngoingServiceCard({
         ))}
       </View>
 
-      <View className="h-px bg-border" />
+      <View className="h-line bg-border" />
 
       <View className={cn(row, 'items-center justify-between')}>
         <Text variant="muted">{t('myGarage.readyEstimation')}</Text>
