@@ -56,7 +56,7 @@ export function StaticInput({
           'flex-row',
           !multiline && 'items-center',
           isOutline && [
-            'rounded-lg border px-4',
+            'rounded-lg border bg-card px-4',
             multiline ? 'min-h-28 items-start py-3' : OUTLINE_HEIGHT[size],
             focused ? 'border-input/50' : 'border-input/20',
             error && 'border-destructive',

@@ -62,7 +62,7 @@ export function MyGarageScreen() {
   return (
     <>
       <Screen preset="scroll" edges={[]} contentClassName="gap-4">
-        <VehicleTabs />
+        <VehicleTabs onAddVehicle={() => router.push('/add-vehicle')} />
         <VehicleHeroCard onEditPhoto={() => router.push('/update-photo')} />
         <CallNowCard onPress={() => assistanceRef.current?.present()} />
 

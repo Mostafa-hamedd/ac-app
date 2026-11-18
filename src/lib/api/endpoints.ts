@@ -26,6 +26,7 @@ export const endpoints = {
   },
   vehicles: {
     list: '/vehicles',
+    create: '/vehicles',
     detail: (vehicleId: string) => `/vehicles/${id(vehicleId)}`,
   },
   notifications: {

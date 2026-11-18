@@ -6,6 +6,7 @@ import { paginatedSchema, type Paginated } from '@/shared/types/api';
 import {
   vehicleSchema,
   vehicleSummarySchema,
+  type NewVehicle,
   type Vehicle,
   type VehicleSummary,
 } from '../types/vehicle.types';
@@ -21,5 +22,10 @@ export async function getVehicles(params?: {
 
 export async function getVehicleById(vehicleId: string): Promise<Vehicle> {
   const { data } = await apiClient.get(endpoints.vehicles.detail(vehicleId));
+  return parseResponse(vehicleSchema, data);
+}
+
+export async function createVehicle(input: NewVehicle): Promise<Vehicle> {
+  const { data } = await apiClient.post(endpoints.vehicles.create, input);
   return parseResponse(vehicleSchema, data);
 }

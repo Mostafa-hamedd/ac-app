@@ -1,6 +1,6 @@
-import type { Vehicle } from '@/features/vehicles';
+import type { NewVehicle, Vehicle } from '@/features/vehicles';
 
-import { findById, paginate, type MockRoute } from './server';
+import { findById, MockHttpError, paginate, type MockRoute } from './server';
 
 /** Centralized, realistic mock dataset — shared vehicle labels appear across requests/payments too. */
 export const MOCK_VEHICLES: Vehicle[] = [
@@ -51,6 +51,29 @@ export const vehiclesRoutes: MockRoute[] = [
     method: 'GET',
     path: '/vehicles',
     handle: ({ query }) => paginate(MOCK_VEHICLES, query.cursor, 10),
+  },
+  {
+    method: 'POST',
+    path: '/vehicles',
+    handle: ({ body }) => {
+      const input = body as Partial<NewVehicle>;
+      if (!input.licensePlate || !input.vin || !input.make || !input.model || !input.year) {
+        throw new MockHttpError(400, 'Missing vehicle details.');
+      }
+      const vehicle: Vehicle = {
+        id: `VEH_${MOCK_VEHICLES.length + 1}`,
+        make: input.make,
+        model: input.model,
+        year: input.year,
+        licensePlate: input.licensePlate,
+        vin: input.vin,
+        fuelType: input.fuelType,
+        status: 'active',
+      };
+      // The mock "server" keeps the new car for the rest of the session.
+      MOCK_VEHICLES.push(vehicle);
+      return vehicle;
+    },
   },
   {
     method: 'GET',

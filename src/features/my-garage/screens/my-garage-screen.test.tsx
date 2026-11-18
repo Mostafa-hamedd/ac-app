@@ -122,6 +122,12 @@ describe('MyGarageScreen sections', () => {
     expect(screen.getByText('View Service Details')).toBeTruthy();
   });
 
+  it('opens Add Vehicle from the Add tab', async () => {
+    await renderWithProviders(<MyGarageScreen />);
+    await fireEvent.press(await screen.findByRole('button', { name: 'Add' }));
+    expect(router.push).toHaveBeenCalledWith('/add-vehicle');
+  });
+
   it('opens the service center on the map when its name is pressed', async () => {
     await renderWithProviders(<MyGarageScreen />);
     await fireEvent.press(screen.getByRole('link', { name: 'Sheikh Zayed Service Center' }));
