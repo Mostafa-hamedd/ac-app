@@ -120,7 +120,7 @@ export const en = {
     bookScreenTitle: 'Book New Service',
     selectServiceType: 'Select Service Type',
     selectToContinue: 'Select a service to continue',
-    continue: 'Select a service to continue',
+    continue: 'Continue',
     cantFind: "Can't find what you need?",
     contactSupport: 'Contact Support',
     types: {

@@ -42,7 +42,10 @@ export function OptionRow({
         className,
       )}
       // NativeWind bg-* is unreliable on Pressable; keep the fill in style.
-      style={[{ backgroundColor: '#FFFFFF' }, style]}
+      style={(state) => [
+        { backgroundColor: colors.card },
+        typeof style === 'function' ? style(state) : style,
+      ]}
       {...props}>
       <Icon size={20} color={color} />
       <Text className={cn('font-sans-medium text-sm', destructive && 'text-destructive')}>

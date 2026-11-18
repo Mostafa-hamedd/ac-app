@@ -44,11 +44,6 @@ in a `data/` folder (or in the screen's components) and do not call the API. Som
 To add an API-backed feature, copy `features/vehicles` (list, detail, add, edit and delete) and
 register its routes in `src/app`.
 
-**Exceptions to "only through `index.ts`":** `features/menu` has no `index.ts` and is not in the
-ESLint feature list, and `src/app/(app)/(tabs)/_layout.tsx` imports the tab icon components of
-`menu`, `my-garage` and `notifications` from their `components/` folders. Both are known and
-not yet cleaned up.
-
 ## Navigation
 
 - `src/app/_layout.tsx` loads the fonts and restores the session, then shows either `(app)` or
@@ -79,7 +74,8 @@ same `LoadingState`, `ErrorState` and `EmptyState` components.
 
 Client state is kept in small zustand stores, never server data: the session store (auth) and the
 vehicle photo store (the vehicle selected on My Garage, and the photo picked for each vehicle,
-kept in memory only).
+kept in memory only and cleared when the signed-in area unmounts, so signing out never leaks it
+to the next account).
 
 ## Auth
 
@@ -88,6 +84,8 @@ kept in memory only).
 - `src/app/_layout.tsx` shows the signed-in or signed-out routes from that status — screens never
   navigate after login or logout themselves.
 - A 401 while signed in ends the session everywhere (`lib/auth/auth-events.ts`).
+- Android app backups are turned off (`android.allowBackup` in `app.json`); the keychain/keystore
+  entries are not backed up either way.
 - Mock mode signs anyone in with any password (see Mock mode).
 - **Open item:** token refresh is not implemented yet; see `TODO(auth)` in `lib/api/client.ts`.
 
@@ -106,6 +104,19 @@ it off (`eas.json`), and `src/config/env.ts` refuses to start a production build
 
 Tests use the same fake backend (`jest.setup.ts`), which also stubs `expo-secure-store`, AsyncStorage
 and `@gorhom/bottom-sheet`. A test can still mock a module itself for a more specific behavior.
+
+## Build configuration
+
+- `app.json` holds the static Expo config; `app.config.js` adds what depends on the build. The
+  `android/` folder is generated (and git-ignored), so permissions and manifest settings are
+  changed in these two files, never in `android/`.
+- Preview and production builds (`EXPO_PUBLIC_APP_ENV` is set by the `eas.json` profile) remove
+  Android's `SYSTEM_ALERT_WINDOW` permission, which only the dev client's debug overlay uses.
+- `src/config/env.ts` refuses an `http://` API URL outside development, and mock mode in
+  production.
+- The location plugin only asks for `NSLocationWhenInUseUsageDescription` on iOS: the app reads the
+  position in the foreground only, so the "Always" and motion strings are switched off.
+- Native version pins follow Expo SDK 58 (`npx expo install --check` must report nothing).
 
 ## Design system
 

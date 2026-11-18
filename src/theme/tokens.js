@@ -24,6 +24,8 @@ const colors = {
   photo: '#D9D9D9',
   'muted-foreground': '#717171',
   placeholder: '#999999',
+  /** Small secondary labels in the My Garage cards. */
+  subtle: '#64748B',
   border: '#E2E2E2',
   input: '#0B0B0C',
   link: '#007AFF',

@@ -1,5 +1,5 @@
 import { Circle, MapPin, Navigation, Search, X } from 'lucide-react-native';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, View } from 'react-native';
 
@@ -53,6 +53,13 @@ export function TripInputs({
   const row = isArabic ? 'flex-row-reverse' : 'flex-row';
   const align = isArabic ? 'text-right' : 'text-left';
 
+  useEffect(
+    () => () => {
+      if (blurTimer.current) clearTimeout(blurTimer.current);
+    },
+    [],
+  );
+
   const showSuggestions = focused && !hasDestination;
   const visibleSuggestions = suggestions.slice(0, MAX_SUGGESTIONS);
 
@@ -89,7 +96,7 @@ export function TripInputs({
             accessibilityLabel={t('location.useMyLocation')}
             onPress={onUseMyLocation}
             hitSlop={8}
-            className="size-9 items-center justify-center rounded-[8px] bg-muted active:opacity-70">
+            className="size-9 items-center justify-center rounded-xs bg-muted active:opacity-70">
             <Navigation size={16} color={colors.foreground} />
           </Pressable>
         ) : null}
@@ -100,7 +107,7 @@ export function TripInputs({
           onPress={onTogglePick}
           hitSlop={8}
           className={cn(
-            'size-9 items-center justify-center rounded-[8px] active:opacity-70',
+            'size-9 items-center justify-center rounded-xs active:opacity-70',
             pickMode ? 'bg-primary' : 'bg-muted',
           )}>
           <MapPin size={16} color={pickMode ? colors['primary-foreground'] : colors.foreground} />
@@ -137,7 +144,7 @@ export function TripInputs({
             accessibilityLabel={t('location.clearDestination')}
             onPress={onClear}
             hitSlop={8}
-            className="size-9 items-center justify-center rounded-[8px] bg-muted active:opacity-70">
+            className="size-9 items-center justify-center rounded-xs bg-muted active:opacity-70">
             <X size={16} color={colors.foreground} />
           </Pressable>
         ) : null}

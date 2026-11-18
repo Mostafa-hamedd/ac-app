@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Image, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -19,6 +19,15 @@ export function VerifyingScreen({ registrationId }: { registrationId: string }) 
   const { t } = useTranslation();
   const submit = useSubmitRegistration();
   const progress = useSharedValue(0);
+  const finishTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Leaving the screen early must not navigate later.
+  useEffect(
+    () => () => {
+      if (finishTimer.current) clearTimeout(finishTimer.current);
+    },
+    [],
+  );
 
   function submitRegistration() {
     const startedAt = Date.now();
@@ -27,7 +36,7 @@ export function VerifyingScreen({ registrationId }: { registrationId: string }) 
 
     function finish(outcome: RegistrationOutcome) {
       const remaining = Math.max(0, MIN_DURATION_MS - (Date.now() - startedAt));
-      setTimeout(() => {
+      finishTimer.current = setTimeout(() => {
         router.replace(
           outcome === 'failed'
             ? { pathname: '/verifying-failed', params: { registrationId } }

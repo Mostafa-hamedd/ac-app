@@ -5,6 +5,7 @@ const prettierConfig = require('eslint-config-prettier');
 
 const FEATURES = [
   'auth',
+  'menu',
   'my-garage',
   'vehicles',
   'requests',

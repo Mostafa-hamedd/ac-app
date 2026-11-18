@@ -114,7 +114,7 @@ export function LandingScreen() {
             accessibilityLabel={t('landing.switchLanguage')}
             hitSlop={8}
             onPress={() => void setLanguage(isArabic ? 'en' : 'ar')}
-            className="h-7 min-w-13 items-center justify-center rounded-[8px] bg-card px-3 active:opacity-80">
+            className="h-7 min-w-13 items-center justify-center rounded-xs bg-card px-3 active:opacity-80">
             {/* Each label stays in its own language so people can always find theirs. */}
             <Text className="font-sans-medium text-xs">{isArabic ? 'English' : 'العربية'}</Text>
           </Pressable>

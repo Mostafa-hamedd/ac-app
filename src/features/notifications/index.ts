@@ -1,5 +1,6 @@
 // Public API of the notifications feature. Import from '@/features/notifications' only.
 export { useUnreadNotificationCount } from './hooks/use-unread-count';
+export { NotificationsTabIcon } from './components/notifications-tab-icon';
 export { NotificationsScreen } from './screens/notifications-screen';
 export { NotificationDetailScreen } from './screens/notification-detail-screen';
 export { useNotificationResponseRouting } from './hooks/use-notification-response-routing';

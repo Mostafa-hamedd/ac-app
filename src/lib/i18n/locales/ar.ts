@@ -121,7 +121,7 @@ export const ar: TranslationResources = {
     bookScreenTitle: 'حجز خدمة جديدة',
     selectServiceType: 'اختر نوع الخدمة',
     selectToContinue: 'اختر خدمة للمتابعة',
-    continue: 'اختر نوع الخدمة',
+    continue: 'متابعة',
     cantFind: 'لا تجد ما تبحث عنه؟',
     contactSupport: 'تواصل مع الدعم',
     types: {

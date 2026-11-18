@@ -31,8 +31,8 @@ const sizeClasses = {
 } satisfies Record<ButtonSize, string>;
 
 const shapeClasses = {
-  rounded: 'rounded-[8px]',
-  pill: 'rounded-[8px]',
+  rounded: 'rounded-xs',
+  pill: 'rounded-xs',
 } satisfies Record<ButtonShape, string>;
 
 const textVariantClasses = {

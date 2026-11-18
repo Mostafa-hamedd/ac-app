@@ -2,11 +2,13 @@ import { Stack } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { useNotificationResponseRouting, usePushRegistration } from '@/features/notifications';
+import { useResetVehicleSelectionOnExit } from '@/features/vehicles';
 
 export default function AppLayout() {
   const { t } = useTranslation();
   useNotificationResponseRouting();
   usePushRegistration();
+  useResetVehicleSelectionOnExit();
 
   return (
     <Stack screenOptions={{ headerBackButtonDisplayMode: 'minimal' }}>

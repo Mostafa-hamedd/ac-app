@@ -36,7 +36,7 @@ export function ProfileScreen({ name, email, onSignOut, signingOut }: ProfileScr
         <Pressable
           accessibilityRole="button"
           onPress={() => void setLanguage(isArabic ? 'en' : 'ar')}
-          className="rounded-[8px] bg-muted px-3 py-1.5 active:opacity-80">
+          className="rounded-xs bg-muted px-3 py-1.5 active:opacity-80">
           {/* Each label stays in its own language so people can always find theirs. */}
           <Text variant="small">{isArabic ? 'English' : 'العربية'}</Text>
         </Pressable>

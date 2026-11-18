@@ -95,7 +95,7 @@ export function OngoingServiceCard({
       <View className="h-line bg-border" />
 
       <View className={cn(row, 'items-center justify-between')}>
-        <Text className="text-xs text-[#64748B]">{t('myGarage.readyEstimation')}</Text>
+        <Text className="text-xs text-subtle">{t('myGarage.readyEstimation')}</Text>
         <View className={cn(row, 'gap-2')}>
           <EstimateBadge
             icon={<Calendar size={12} color={colors.foreground} />}

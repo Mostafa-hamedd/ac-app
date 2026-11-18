@@ -162,7 +162,7 @@ export function DeviceMap({
           onRecenter();
           if (userCoords) moveCamera({ coordinates: userCoords, zoom: USER_ZOOM }, true);
         }}
-        className="absolute end-4 size-11 items-center justify-center rounded-[8px] bg-white active:opacity-80"
+        className="absolute end-4 size-11 items-center justify-center rounded-xs bg-white active:opacity-80"
         style={[styles.shadow, { bottom: bottomInset + 16 }]}>
         <LocateFixed size={20} color={colors.foreground} />
       </Pressable>

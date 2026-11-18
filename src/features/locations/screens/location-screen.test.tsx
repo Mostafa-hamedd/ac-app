@@ -262,9 +262,10 @@ describe('selecting a destination keeps everything in sync', () => {
     expect(screen.getAllByText(maadi.name.en).length).toBeGreaterThan(0);
     expect(screen.getByText(maadi.address.en)).toBeTruthy();
     expect(screen.getByText(maadi.hours.en)).toBeTruthy();
-    expect(screen.getByText(maadi.phone)).toBeTruthy();
+    // The number is not printed in the sheet any more; the Call button dials it.
+    expect(screen.queryByText(maadi.phone)).toBeNull();
     expect(screen.getByText(/km away \(straight line\)/)).toBeTruthy();
-    expect(screen.getByText(/Approximate straight-line route/)).toBeTruthy();
+    expect(screen.queryByText(/Approximate straight-line route/)).toBeNull();
     expect(screen.getByText('Call')).toBeTruthy();
     expect(screen.queryByText('My location')).not.toBeNull(); // still the From row
   });

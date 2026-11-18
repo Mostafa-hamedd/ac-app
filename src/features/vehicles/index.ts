@@ -2,6 +2,7 @@
 export { AddVehicleScreen } from './screens/add-vehicle-screen';
 export { EditVehicleScreen } from './screens/edit-vehicle-screen';
 export { UpdatePhotoScreen } from './screens/update-photo-screen';
+export { useResetVehicleSelectionOnExit } from './hooks/use-reset-vehicle-selection';
 export { useSelectedVehicle } from './hooks/use-selected-vehicle';
 export { VehicleSelectorSheet } from './components/vehicle-selector-sheet';
 export { VehicleTabs, vehicleLabel } from './components/vehicle-tabs';

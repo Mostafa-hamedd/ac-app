@@ -30,6 +30,18 @@ const envSchema = z
         path: ['EXPO_PUBLIC_API_URL'],
       });
     }
+    // Tokens and personal data travel in these requests, so a build users install must use TLS.
+    if (
+      ctx.value.EXPO_PUBLIC_APP_ENV !== 'development' &&
+      ctx.value.EXPO_PUBLIC_API_URL?.startsWith('http://')
+    ) {
+      ctx.issues.push({
+        code: 'custom',
+        message: 'Preview and production builds must use an https:// API URL.',
+        input: ctx.value.EXPO_PUBLIC_API_URL,
+        path: ['EXPO_PUBLIC_API_URL'],
+      });
+    }
     // Mock mode signs anyone in with any password, so it must never reach users.
     if (ctx.value.EXPO_PUBLIC_USE_MOCK_API && ctx.value.EXPO_PUBLIC_APP_ENV === 'production') {
       ctx.issues.push({

@@ -6,10 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { Image, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { MenuTabIcon } from '@/features/menu/components/menu-tab-icon';
-import { GarageTabIcon } from '@/features/my-garage/components/garage-tab-icon';
-import { useUnreadNotificationCount } from '@/features/notifications';
-import { NotificationsTabIcon } from '@/features/notifications/components/notifications-tab-icon';
+import { MenuTabIcon } from '@/features/menu';
+import { GarageTabIcon } from '@/features/my-garage';
+import { NotificationsTabIcon, useUnreadNotificationCount } from '@/features/notifications';
 import { VehicleSelectorSheet } from '@/features/vehicles';
 import { BrandLogo } from '@/shared/ui/brand-logo';
 import { FloatingTabBar } from '@/shared/ui/floating-tab-bar';
