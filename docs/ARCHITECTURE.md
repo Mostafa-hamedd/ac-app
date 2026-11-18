@@ -6,12 +6,16 @@ How the AutoConnect app is put together, and why. Read this before changing stru
 
 ```text
 src/app/        Routes (Expo Router). Thin files: read params, render a feature screen.
+                Layouts here also wire navigation: (auth) and (app), and the tab bar in (app)/(tabs).
+src/providers/  App-wide providers (gestures, safe area, keyboard, React Query, navigation theme,
+                bottom sheets), composed in AppProviders.
 src/features/   One folder per business feature. The only place with business rules.
 src/shared/     Generic UI and helpers. Knows nothing about features.
 src/lib/        Platform services: API client, auth tokens, i18n, deep links, notifications.
 src/theme/      Design tokens (tokens.js) — the only place colors, sizes and fonts are defined.
 src/mocks/      Fake backend for development. Never shipped (see "Mock mode").
-src/config/     Validated environment variables.
+src/config/     Validated environment variables, and fixed app values (support hotline).
+tests/          Shared test helpers (render with providers), fixtures and native-module mocks.
 ```
 
 Dependencies only point downward: `app → features → shared/lib/theme`. ESLint enforces that
@@ -31,7 +35,34 @@ features/requests/
 └── utils/          Pure helpers (status → label and color)
 ```
 
-To add a feature, copy `features/vehicles` (list + detail) and register its routes in `src/app`.
+Not every feature has every folder. Features that talk to the API (`auth`, `requests`, `vehicles`,
+`notifications`) have `api/`, `types/` and `hooks/`. The screens built from the design that have no
+endpoint yet (`my-garage`, `services`, `payments`, `locations`, `profile`) keep their sample content
+in a `data/` folder (or in the screen's components) and do not call the API. Some features add a
+`store/` (zustand), `schemas/` (form validation) or `data/` folder when they need one.
+
+To add an API-backed feature, copy `features/vehicles` (list, detail, add, edit and delete) and
+register its routes in `src/app`.
+
+**Exceptions to "only through `index.ts`":** `features/menu` has no `index.ts` and is not in the
+ESLint feature list, and `src/app/(app)/(tabs)/_layout.tsx` imports the tab icon components of
+`menu`, `my-garage` and `notifications` from their `components/` folders. Both are known and
+not yet cleaned up.
+
+## Navigation
+
+- `src/app/_layout.tsx` loads the fonts and restores the session, then shows either `(app)` or
+  `(auth)` with `Stack.Protected` (see Auth).
+- `(app)/_layout.tsx` is a stack. Its first screen is the tab group; add, edit and update-photo
+  vehicle screens, the map (`location`) and the detail screens (`requests/[requestId]`,
+  `vehicles/[vehicleId]`, `notifications/[notificationId]`) are pushed on top of it.
+- `(app)/(tabs)` uses `expo-router/js-tabs` with the custom `FloatingTabBar` from `shared/ui`. Only
+  My Garage, Explore, Notifications, Menu and Brand show in the bar. The booking, services and
+  payment screens are also routes of this group, hidden from the bar with `tabBarItemStyle`.
+- The Brand tab does not open a page: its `tabPress` is intercepted to open the vehicle selector
+  sheet from the vehicles feature. The Brand and Explore pages are "Coming soon" placeholders.
+- Bottom sheets (`@gorhom/bottom-sheet`) are used for the vehicle selector, assistance,
+  rescheduling, the country picker and document upload.
 
 ## Data flow
 
@@ -41,8 +72,14 @@ To add a feature, copy `features/vehicles` (list + detail) and register its rout
 4. Errors of any kind become an `ApiError` with a `kind` (`network`, `not_found`, `server`, …)
    and a translated message. `ErrorState` and `FormError` know how to show them.
 
-Lists use `PaginatedList` and details use `QueryView`; both handle loading and error states, so
-screens only describe the content.
+Details use `QueryView`, which handles loading and error states so screens only describe the
+content. `PaginatedList` (FlashList with the same states and infinite scroll) is available in
+`shared/ui`, but no screen uses it yet: the Notifications tab renders its own `FlatList` with the
+same `LoadingState`, `ErrorState` and `EmptyState` components.
+
+Client state is kept in small zustand stores, never server data: the session store (auth) and the
+vehicle photo store (the vehicle selected on My Garage, and the photo picked for each vehicle,
+kept in memory only).
 
 ## Auth
 
@@ -51,26 +88,38 @@ screens only describe the content.
 - `src/app/_layout.tsx` shows the signed-in or signed-out routes from that status — screens never
   navigate after login or logout themselves.
 - A 401 while signed in ends the session everywhere (`lib/auth/auth-events.ts`).
+- Mock mode signs anyone in with any password (see Mock mode).
 - **Open item:** token refresh is not implemented yet; see `TODO(auth)` in `lib/api/client.ts`.
 
 ## Mock mode
 
 `EXPO_PUBLIC_USE_MOCK_API=true` (set in `.env.local`) makes `src/mocks/install.ts` replace the
-axios adapter with a small fake backend: one route file per feature in `src/mocks/`. The real API
-code still runs, including response validation, so mock mode tests the same code users get.
+axios adapter with a small fake backend: one route file per API-backed feature in `src/mocks/`
+(`auth`, `requests`, `vehicles`, `notifications`; the vehicles routes cover list, detail, create,
+update and delete, and changes last until the app restarts). The real API code still runs, including
+response validation, so mock mode tests the same code users get. Features without endpoints use
+their own `data/` files instead (see "A feature").
 
 When the variable is not `"true"`, `metro.config.js` swaps `@/mocks/install` for an empty file, so no
 mock code, demo users or sample data end up in the build. Preview and production builds always turn
 it off (`eas.json`), and `src/config/env.ts` refuses to start a production build in mock mode.
 
-Tests use the same fake backend (`jest.setup.ts`).
+Tests use the same fake backend (`jest.setup.ts`), which also stubs `expo-secure-store`, AsyncStorage
+and `@gorhom/bottom-sheet`. A test can still mock a module itself for a more specific behavior.
 
 ## Design system
 
 - All colors, radii, font sizes and fonts are in `src/theme/tokens.js`. Tailwind classes
   (`bg-primary`, `text-muted-foreground`, `rounded-lg`, `text-2xl`) are generated from it.
-- Spacing uses the standard Tailwind 4dp grid (`p-4` = 16dp).
-- Fonts are picked by family, not weight: `font-sans`, `font-sans-medium`, `font-sans-semibold`.
+- Font sizes are replaced, not extended: only the sizes in `tokens.js` exist (including `2xs`,
+  `caption`, `compact`, `subhead` and `title`). `cn` in `shared/utils` knows these names.
+- Spacing uses the standard Tailwind 4dp grid (`p-4` = 16dp), plus a few named values in
+  `tailwind.config.js` (`13` for button height, `line` for divider thickness, `4.5`).
+- Borders: `border` is 1.5dp everywhere (the `borderWidth` token); `border-1` is the 1dp border
+  buttons use. Dividers use `h-line`.
+- The font is Poppins, picked by family, not weight: `font-sans`, `font-sans-medium`,
+  `font-sans-semibold`. The files are in `assets/fonts`, embedded by the expo-font plugin and also
+  loaded with `useFonts` in the root layout. Only these three weights are bundled.
 - ESLint rejects hex colors and `[NNpx]` values in components. Add a token instead.
 - The app is light-only for now.
 
@@ -80,7 +129,12 @@ Tests use the same fake backend (`jest.setup.ts`).
   both have the same keys).
 - Dates, numbers and money use the current language (`shared/utils/format.ts`).
 - The API client sends `Accept-Language` so the backend can translate its validation messages.
-- Arabic text is right-aligned with `useTextAlign`. The layout itself is not mirrored yet.
+- The chosen language is saved with `lib/storage/preferences-storage.ts` and restored at startup
+  (`restoreLanguage`).
+- Arabic is laid out right-to-left by hand, not with `I18nManager`: screens read
+  `i18n.language === 'ar'` and switch to `flex-row-reverse` and `text-right`. `useTextAlign` does
+  the text alignment for a few shared pieces (auth headers, inputs, sheets). New UI must handle
+  both directions itself.
 
 ## Deep links and notifications
 
