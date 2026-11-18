@@ -263,26 +263,26 @@ export function LocationScreen() {
         <ScrollView style={{ maxHeight: windowHeight * 0.45 }} contentContainerClassName="gap-5">
           <View className="gap-2">
             <Text className={`font-sans-semibold text-xl ${textAlign}`}>{details.title}</Text>
-            {sheetSubtitle ? (
+            {/* {sheetSubtitle ? (
               <Text variant="muted" className={`text-sm ${textAlign}`}>
                 {sheetSubtitle}
               </Text>
-            ) : null}
+            ) : null} */}
             <Text variant="muted" className={`text-base ${textAlign}`}>
               {sheetAddress}
             </Text>
             {details.hours ? <Text className={`text-sm ${textAlign}`}>{details.hours}</Text> : null}
-            {details.phone ? <Text className={`text-sm ${textAlign}`}>{details.phone}</Text> : null}
+            {/* {details.phone ? <Text className={`text-sm ${textAlign}`}>{details.phone}</Text> : null} */}
             {details.distanceKm !== null ? (
               <Text className={`font-sans-semibold text-sm ${textAlign}`}>
                 {t('location.distanceStraight', { distance: details.distanceKm.toFixed(1) })}
               </Text>
             ) : null}
-            {route ? (
+            {/* {route ? (
               <Text variant="muted" className={textAlign}>
                 {t('location.routeApproximate')}
               </Text>
-            ) : null}
+            ) : null} */}
             {details.kind === 'origin' && geocode.isUnavailable ? (
               <Pressable accessibilityRole="button" onPress={geocode.retry} className="self-start">
                 <Text className="font-sans-medium text-sm">{t('common.tryAgain')}</Text>
