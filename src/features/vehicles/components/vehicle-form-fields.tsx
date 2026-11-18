@@ -13,16 +13,18 @@ import { FUEL_TYPES, type FuelType } from '../types/vehicle.types';
 export function FormField({
   label,
   error,
+  className,
   children,
 }: {
   label: string;
   error?: string;
+  className?: string;
   children: React.ReactNode;
 }) {
   const { i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
   return (
-    <View className="gap-2">
+    <View className={cn('gap-2', className)}>
       <Text className={cn('font-sans-semibold text-compact', isArabic && 'text-right')}>
         {label}
       </Text>
@@ -63,53 +65,61 @@ export function DropdownField({
   const Chevron = open ? ChevronUp : ChevronDown;
 
   return (
-    <FormField label={label}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={label}
-        accessibilityValue={{ text: value ?? placeholder }}
-        accessibilityState={{ expanded: open, disabled: !!disabled }}
-        disabled={disabled}
-        onPress={() => setOpen((was) => !was)}
-        className={cn(
-          FIELD_BOX,
-          'items-center justify-between gap-3 active:opacity-80',
-          isArabic ? 'flex-row-reverse' : 'flex-row',
-          disabled && 'opacity-50',
-        )}>
-        <Text
-          numberOfLines={1}
-          className={cn('flex-1 text-sm', !value && 'text-placeholder', isArabic && 'text-right')}>
-          {value ?? placeholder}
-        </Text>
-        <Chevron size={16} color={colors.foreground} />
-      </Pressable>
-      {open ? (
-        <View className="overflow-hidden rounded-md border border-border bg-card">
-          <ScrollView nestedScrollEnabled style={{ maxHeight: LIST_MAX_HEIGHT }}>
-            {options.map((option) => (
-              <Pressable
-                key={option}
-                accessibilityRole="menuitem"
-                accessibilityState={{ selected: option === value }}
-                onPress={() => {
-                  onChange(option);
-                  setOpen(false);
-                }}
-                className={cn('px-4 py-3 active:bg-muted', option === value && 'bg-muted')}>
-                <Text
-                  className={cn(
-                    'text-sm',
-                    option === value && 'font-sans-semibold',
-                    isArabic && 'text-right',
-                  )}>
-                  {option}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
-        </View>
-      ) : null}
+    <FormField label={label} className={open ? 'z-10' : undefined}>
+      <View className="relative">
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={label}
+          accessibilityValue={{ text: value ?? placeholder }}
+          accessibilityState={{ expanded: open, disabled: !!disabled }}
+          disabled={disabled}
+          onPress={() => setOpen((was) => !was)}
+          className={cn(
+            FIELD_BOX,
+            'items-center justify-between gap-3 active:opacity-80',
+            isArabic ? 'flex-row-reverse' : 'flex-row',
+            disabled && 'opacity-50',
+          )}>
+          <Text
+            numberOfLines={1}
+            className={cn(
+              'flex-1 text-sm',
+              !value && 'text-placeholder',
+              isArabic && 'text-right',
+            )}>
+            {value ?? placeholder}
+          </Text>
+          <Chevron size={16} color={colors.foreground} />
+        </Pressable>
+        {open ? (
+          <View
+            className="absolute inset-x-0 top-full z-10 mt-1 overflow-hidden rounded-md border border-border bg-card shadow-lg"
+            style={{ elevation: 4 }}>
+            <ScrollView nestedScrollEnabled style={{ maxHeight: LIST_MAX_HEIGHT }}>
+              {options.map((option) => (
+                <Pressable
+                  key={option}
+                  accessibilityRole="menuitem"
+                  accessibilityState={{ selected: option === value }}
+                  onPress={() => {
+                    onChange(option);
+                    setOpen(false);
+                  }}
+                  className={cn('px-4 py-3 active:bg-muted', option === value && 'bg-muted')}>
+                  <Text
+                    className={cn(
+                      'text-sm',
+                      option === value && 'font-sans-semibold',
+                      isArabic && 'text-right',
+                    )}>
+                    {option}
+                  </Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+        ) : null}
+      </View>
     </FormField>
   );
 }

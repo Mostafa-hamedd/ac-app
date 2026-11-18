@@ -9,6 +9,7 @@ import {
   type NewVehicle,
   type Vehicle,
   type VehicleSummary,
+  type VehicleUpdate,
 } from '../types/vehicle.types';
 
 export async function getVehicles(params?: {
@@ -23,6 +24,15 @@ export async function getVehicles(params?: {
 export async function getVehicleById(vehicleId: string): Promise<Vehicle> {
   const { data } = await apiClient.get(endpoints.vehicles.detail(vehicleId));
   return parseResponse(vehicleSchema, data);
+}
+
+export async function updateVehicle(vehicleId: string, input: VehicleUpdate): Promise<Vehicle> {
+  const { data } = await apiClient.put(endpoints.vehicles.detail(vehicleId), input);
+  return parseResponse(vehicleSchema, data);
+}
+
+export async function deleteVehicle(vehicleId: string): Promise<void> {
+  await apiClient.delete(endpoints.vehicles.detail(vehicleId));
 }
 
 export async function createVehicle(input: NewVehicle): Promise<Vehicle> {

@@ -14,7 +14,7 @@ export type MockRequest = {
 };
 
 export type MockRoute = {
-  method: 'GET' | 'POST';
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   /** Path with `:name` placeholders, e.g. '/requests/:id'. */
   path: string;
   handle: (request: MockRequest) => unknown;

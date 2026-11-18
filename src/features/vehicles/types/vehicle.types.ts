@@ -15,13 +15,13 @@ export const vehicleSummarySchema = z.object({
   year: z.number(),
   licensePlate: z.string(),
   status: vehicleStatusSchema,
+  fuelType: fuelTypeSchema.optional(),
+  mileage: z.number().optional(),
 });
 
 export const vehicleSchema = vehicleSummarySchema.extend({
   vin: z.string(),
-  fuelType: fuelTypeSchema.optional(),
   color: z.string().optional(),
-  mileage: z.number().optional(),
   lastServiceAt: isoDateSchema.optional(),
   nextServiceDueAt: isoDateSchema.optional(),
 });
@@ -34,6 +34,16 @@ export type NewVehicle = {
   model: string;
   year: number;
   fuelType: FuelType;
+};
+
+/** What the Edit Vehicle form sends. */
+export type VehicleUpdate = {
+  licensePlate: string;
+  vin: string;
+  make: string;
+  model: string;
+  year: number;
+  mileage?: number;
 };
 
 export type FuelType = z.infer<typeof fuelTypeSchema>;

@@ -10,6 +10,8 @@ jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 
+jest.mock('@gorhom/bottom-sheet', () => require('./tests/mocks/gorhom-bottom-sheet'));
+
 // API calls in tests are answered by the same fake backend the app uses in mock mode.
 // Required (not imported) so it loads after the environment variables above are set.
 require('./src/mocks/install');

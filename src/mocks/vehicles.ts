@@ -1,4 +1,4 @@
-import type { NewVehicle, Vehicle } from '@/features/vehicles';
+import type { NewVehicle, Vehicle, VehicleUpdate } from '@/features/vehicles';
 
 import { findById, MockHttpError, paginate, type MockRoute } from './server';
 
@@ -9,6 +9,7 @@ export const MOCK_VEHICLES: Vehicle[] = [
     nickname: 'Daily driver',
     make: 'Toyota',
     model: 'Corolla',
+    fuelType: 'petrol',
     year: 2022,
     licensePlate: 'ABC-1234',
     status: 'active',
@@ -23,6 +24,7 @@ export const MOCK_VEHICLES: Vehicle[] = [
     nickname: 'Family SUV',
     make: 'Honda',
     model: 'CR-V',
+    fuelType: 'hybrid',
     year: 2021,
     licensePlate: 'XYZ-5678',
     status: 'needs_attention',
@@ -36,6 +38,7 @@ export const MOCK_VEHICLES: Vehicle[] = [
     id: 'VEH_3',
     make: 'Ford',
     model: 'F-150',
+    fuelType: 'petrol',
     year: 2023,
     licensePlate: 'TRK-9012',
     status: 'in_service',
@@ -79,5 +82,27 @@ export const vehiclesRoutes: MockRoute[] = [
     method: 'GET',
     path: '/vehicles/:id',
     handle: ({ params }) => findById(MOCK_VEHICLES, params.id),
+  },
+  {
+    method: 'PUT',
+    path: '/vehicles/:id',
+    handle: ({ params, body }) => {
+      const vehicle = findById(MOCK_VEHICLES, params.id);
+      const input = body as Partial<VehicleUpdate>;
+      if (!input.licensePlate || !input.vin || !input.make || !input.model || !input.year) {
+        throw new MockHttpError(400, 'Missing vehicle details.');
+      }
+      Object.assign(vehicle, input);
+      return vehicle;
+    },
+  },
+  {
+    method: 'DELETE',
+    path: '/vehicles/:id',
+    handle: ({ params }) => {
+      const vehicle = findById(MOCK_VEHICLES, params.id);
+      MOCK_VEHICLES.splice(MOCK_VEHICLES.indexOf(vehicle), 1);
+      return null;
+    },
   },
 ];
