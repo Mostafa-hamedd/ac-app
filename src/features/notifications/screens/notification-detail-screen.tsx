@@ -21,7 +21,7 @@ export function NotificationDetailScreen({ notificationId }: { notificationId: s
       {(notification) => {
         const related = parseAppLink(notification.relatedHref);
         return (
-          <Screen preset="scroll" contentClassName="gap-4">
+          <Screen preset="scroll" adjustForHeader contentClassName="gap-4 px-6 pt-6">
             <View className="gap-2">
               <Text variant="h2">{notification.title}</Text>
               <Text variant="muted">{formatDate(notification.createdAt)}</Text>

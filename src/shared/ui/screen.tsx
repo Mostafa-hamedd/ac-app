@@ -24,6 +24,8 @@ type ScreenProps = ViewProps & {
   /** Screens under a native header usually only need the bottom edge. */
   edges?: Edge[];
   contentClassName?: string;
+  /** iOS: lets scrolling content start below a translucent native header instead of under it. */
+  adjustForHeader?: boolean;
   /** Shows the offline banner under the header (default: true). */
   offlineBanner?: boolean;
 };
@@ -34,12 +36,14 @@ export function Screen({
   className,
   contentClassName,
   offlineBanner = true,
+  adjustForHeader = false,
   children,
   ...props
 }: ScreenProps) {
   const content =
     preset === 'scroll' ? (
       <ScrollView
+        contentInsetAdjustmentBehavior={adjustForHeader ? 'automatic' : 'never'}
         contentContainerClassName={cn('grow p-4', contentClassName)}
         keyboardShouldPersistTaps="handled">
         {children}
