@@ -121,6 +121,17 @@ export default function TabsLayout() {
           name="notifications"
           options={{
             title: t('tabs.notifications'),
+            headerTitleAlign: 'left',
+            headerTitleStyle: {
+              fontFamily: 'Poppins-Medium',
+              fontSize: 24,
+              color: colors.foreground,
+            },
+            headerStyle: {
+              backgroundColor: colors.background,
+              borderBottomWidth: 1,
+              borderBottomColor: colors.border,
+            },
             tabBarBadge: unread > 0 ? unread : undefined,
             tabBarIcon: ({ color, size }) => <NotificationsTabIcon color={color} size={size} />,
           }}

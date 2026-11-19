@@ -300,6 +300,15 @@ export const en = {
   notifications: {
     title: 'Notification',
     markAllRead: 'Mark all as read',
+    sectionNew: 'New',
+    sectionOlder: 'Older',
+    payNow: 'Pay now',
+    shortTime: {
+      now: 'now',
+      minutes: '{{count}}m',
+      hours: '{{count}}h',
+      days: '{{count}}d',
+    },
     time: {
       justNow: 'Just now',
       minutesAgo: '{{count}} min ago',

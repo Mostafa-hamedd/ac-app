@@ -1,13 +1,14 @@
 import { CircleAlert, Star, TrendingUp, Users, type LucideIcon } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Image, Pressable, View } from 'react-native';
 
 import { Text } from '@/shared/ui/text';
 import { cn } from '@/shared/utils/cn';
 import { colors } from '@/theme';
 
+import { NOTIFICATION_AVATARS } from '../data/avatars';
 import type { AppNotification, NotificationCategory } from '../types/notification.types';
-import { formatRelativeTime } from '../utils/relative-time';
+import { formatShortTime } from '../utils/relative-time';
 
 const CATEGORY_ICON: Record<NotificationCategory, LucideIcon> = {
   request: TrendingUp,
@@ -18,17 +19,15 @@ const CATEGORY_ICON: Record<NotificationCategory, LucideIcon> = {
 
 type NotificationItemProps = {
   notification: AppNotification;
-  /** Unread notifications show a dot; the list clears it when everything is marked as read. */
-  unread: boolean;
   onPress: () => void;
 };
 
-/** One row of the notifications list: icon tile, title, message, how long ago, and an unread dot. */
-export function NotificationItem({ notification, unread, onPress }: NotificationItemProps) {
+/** One white card of the notifications list: round icon, message, how long ago, and "Pay now" for payments. */
+export function NotificationItem({ notification, onPress }: NotificationItemProps) {
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
   const row = isArabic ? 'flex-row-reverse' : 'flex-row';
-  const align = isArabic ? 'items-end' : 'items-start';
+  const avatar = notification.avatarKey ? NOTIFICATION_AVATARS[notification.avatarKey] : undefined;
   const Icon = CATEGORY_ICON[notification.category];
 
   return (
@@ -36,24 +35,31 @@ export function NotificationItem({ notification, unread, onPress }: Notification
       accessibilityRole="button"
       accessibilityLabel={notification.title}
       onPress={onPress}
-      className={cn(row, 'items-start gap-3 py-3.5 active:opacity-70')}>
-      <View className="size-9 items-center justify-center rounded-md bg-muted/60">
-        <Icon size={18} color={colors.foreground} />
-      </View>
+      className={cn(row, 'items-start gap-3 rounded-lg bg-card p-4 active:opacity-70')}>
+      {avatar ? (
+        <Image
+          accessibilityIgnoresInvertColors
+          source={avatar}
+          className="size-10 rounded-full bg-muted"
+        />
+      ) : (
+        <View className="size-10 items-center justify-center rounded-full bg-muted">
+          <Icon size={18} color={colors.foreground} />
+        </View>
+      )}
 
-      <View className={cn('flex-1', align)}>
-        <View className={cn(row, 'w-full items-start justify-between gap-2')}>
-          <Text className="flex-1 font-sans-semibold text-xs">{notification.title}</Text>
-          {unread ? (
-            <View testID="unread-dot" className="mt-1 size-2 rounded-full bg-info" />
+      <View className="flex-1 gap-3">
+        <Text className={cn(isArabic && 'text-right')}>{notification.body}</Text>
+        <View className={cn(row, 'items-center justify-between py-1')}>
+          <Text className="text-xs text-muted-foreground">
+            {formatShortTime(notification.createdAt, t)}
+          </Text>
+          {notification.category === 'payment' ? (
+            <Text className="font-sans-medium text-compact underline">
+              {t('notifications.payNow')}
+            </Text>
           ) : null}
         </View>
-        <Text variant="muted" className={cn('mt-0.5 text-xs', isArabic && 'text-right')}>
-          {notification.body}
-        </Text>
-        <Text className="mt-1 text-2xs text-placeholder">
-          {formatRelativeTime(notification.createdAt, t)}
-        </Text>
       </View>
     </Pressable>
   );

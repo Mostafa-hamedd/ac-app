@@ -61,20 +61,24 @@ beforeEach(async () => {
 });
 
 describe('NotificationsScreen', () => {
-  it('lists notifications and marks only the unread one', async () => {
+  it('groups unread notifications under New and the rest under Older', async () => {
     mockQuery.mockReturnValue(loaded([UNREAD, READ]));
     await renderWithProviders(<NotificationsScreen />);
-    expect(screen.getByText('Invoice ready')).toBeTruthy();
-    expect(screen.getByText('Service completed')).toBeTruthy();
-    expect(screen.getAllByTestId('unread-dot')).toHaveLength(1);
+    expect(screen.getByText('New')).toBeTruthy();
+    expect(screen.getByText('Older')).toBeTruthy();
+    expect(screen.getByText('Your invoice is ready to pay.')).toBeTruthy();
+    expect(screen.getByText('Your annual service is complete.')).toBeTruthy();
+    // Only the payment notification offers "Pay now".
+    expect(screen.getAllByText('Pay now')).toHaveLength(1);
   });
 
-  it('clears the unread dots with "Mark all as read"', async () => {
+  it('moves everything to Older with "Mark all as read"', async () => {
     mockQuery.mockReturnValue(loaded([UNREAD, READ]));
     await renderWithProviders(<NotificationsScreen />);
     await fireEvent.press(screen.getByRole('button', { name: 'Mark all as read' }));
-    expect(screen.queryAllByTestId('unread-dot')).toHaveLength(0);
+    expect(screen.queryByText('New')).toBeNull();
     expect(screen.queryByText('Mark all as read')).toBeNull();
+    expect(screen.getByText('Older')).toBeTruthy();
   });
 
   it('opens the notification details when a row is pressed', async () => {

@@ -19,3 +19,17 @@ export function formatRelativeTime(iso: string, t: TFunction, now = Date.now()):
     return t('notifications.time.daysAgo', { count: Math.floor(elapsed / DAY) });
   return formatDate(iso);
 }
+
+/** Compact form used on the notification cards: "now", "5m", "2h", "3d", then a plain date after a week. */
+export function formatShortTime(iso: string, t: TFunction, now = Date.now()): string {
+  const elapsed = now - new Date(iso).getTime();
+  if (Number.isNaN(elapsed) || elapsed < 0) return formatDate(iso);
+  if (elapsed < MINUTE) return t('notifications.shortTime.now');
+  if (elapsed < HOUR)
+    return t('notifications.shortTime.minutes', { count: Math.floor(elapsed / MINUTE) });
+  if (elapsed < DAY)
+    return t('notifications.shortTime.hours', { count: Math.floor(elapsed / HOUR) });
+  if (elapsed < 7 * DAY)
+    return t('notifications.shortTime.days', { count: Math.floor(elapsed / DAY) });
+  return formatDate(iso);
+}

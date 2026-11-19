@@ -1,6 +1,6 @@
 import { i18n } from '@/lib/i18n';
 
-import { formatRelativeTime } from './relative-time';
+import { formatRelativeTime, formatShortTime } from './relative-time';
 
 const NOW = new Date('2026-11-16T12:00:00.000Z').getTime();
 const ago = (ms: number) => new Date(NOW - ms).toISOString();
@@ -34,5 +34,18 @@ describe('formatRelativeTime', () => {
     await i18n.changeLanguage('ar');
     expect(formatRelativeTime(ago(2 * MIN), i18n.t.bind(i18n), NOW)).toBe('منذ 2 د');
     expect(formatRelativeTime(ago(30 * HR), i18n.t.bind(i18n), NOW)).toBe('أمس');
+  });
+});
+
+describe('formatShortTime', () => {
+  const t = i18n.t.bind(i18n);
+  beforeEach(async () => {
+    await i18n.changeLanguage('en');
+  });
+  it('uses compact units', () => {
+    expect(formatShortTime(ago(10_000), t, NOW)).toBe('now');
+    expect(formatShortTime(ago(5 * MIN), t, NOW)).toBe('5m');
+    expect(formatShortTime(ago(2 * HR), t, NOW)).toBe('2h');
+    expect(formatShortTime(ago(DAY + HR), t, NOW)).toBe('1d');
   });
 });

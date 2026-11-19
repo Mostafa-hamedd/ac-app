@@ -2,51 +2,50 @@ import type { AppNotification } from '@/features/notifications';
 
 import { findById, paginate, type MockRoute } from './server';
 
-/** Centralized, realistic mock dataset — some cross-link to requests/vehicles. */
+const HOUR = 3_600_000;
+const ago = (ms: number) => new Date(Date.now() - ms).toISOString();
+const SERVICE_DONE =
+  'Your Opel’s 10k maintenance service is finished. You can now complete its payment and collect your car.';
+
+/** Centralized, realistic mock dataset — some cross-link to requests/vehicles. Times are relative to now. */
 const MOCK_NOTIFICATIONS: AppNotification[] = [
   {
     id: 'NOTIF_301',
-    title: 'Invoice ready',
-    body: 'Your invoice for the brake pad replacement is ready to pay.',
+    title: 'Service finished',
+    body: SERVICE_DONE,
     category: 'payment',
     read: false,
-    createdAt: '2026-10-29T08:00:00.000Z',
+    createdAt: ago(2 * HOUR),
+    avatarKey: 'avatar-1',
   },
   {
     id: 'NOTIF_302',
-    title: 'Approval needed',
-    body: 'Check engine light diagnostics found an issue that needs your approval.',
+    title: 'Checked into service',
+    body: 'Your Opel has been checked into service at Mansour Auto Sheikh Zayed. You can collect your car on 15 Sep 2022 at 5:00 PM.',
     category: 'request',
     read: false,
-    createdAt: '2026-10-27T15:05:00.000Z',
+    createdAt: ago(3 * HOUR),
     relatedHref: '/requests/REQ_103',
+    avatarKey: 'avatar-2',
   },
   {
     id: 'NOTIF_303',
-    title: 'Service completed',
-    body: 'Your Toyota Corolla’s annual service is complete.',
-    category: 'request',
-    read: true,
-    createdAt: '2026-10-02T09:20:00.000Z',
-    relatedHref: '/requests/REQ_101',
+    title: 'Service finished',
+    body: SERVICE_DONE,
+    category: 'payment',
+    read: false,
+    createdAt: ago(5 * HOUR),
+    avatarKey: 'avatar-3',
   },
-  {
-    id: 'NOTIF_304',
-    title: 'Service due soon',
-    body: 'Your Honda CR-V is due for service in two weeks.',
-    category: 'vehicle',
+  ...[4, 5, 6, 7].map((n, i) => ({
+    id: `NOTIF_30${i + 4}`,
+    title: 'Service finished',
+    body: SERVICE_DONE,
+    category: 'payment' as const,
     read: true,
-    createdAt: '2026-10-01T09:00:00.000Z',
-    relatedHref: '/vehicles/VEH_2',
-  },
-  {
-    id: 'NOTIF_305',
-    title: 'Welcome to AutoConnect',
-    body: 'Track requests, invoices and vehicles all in one place.',
-    category: 'system',
-    read: true,
-    createdAt: '2026-07-01T12:00:00.000Z',
-  },
+    createdAt: ago(24 * HOUR + i * HOUR),
+    avatarKey: `avatar-${n}`,
+  })),
 ];
 
 export const notificationsRoutes: MockRoute[] = [

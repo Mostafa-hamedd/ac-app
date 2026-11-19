@@ -10,6 +10,8 @@ export const notificationSchema = z.object({
   read: z.boolean(),
   createdAt: isoDateSchema,
   /** In-app path this notification is about. Comes from the server, so check it with parseAppLink. */
+  /** Which sample photo to show on the card; without one the category icon is shown. */
+  avatarKey: z.string().optional(),
   relatedHref: z.string().optional(),
 });
 

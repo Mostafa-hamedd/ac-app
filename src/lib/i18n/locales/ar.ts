@@ -299,6 +299,15 @@ export const ar: TranslationResources = {
   notifications: {
     title: 'إشعار',
     markAllRead: 'تحديد الكل كمقروء',
+    sectionNew: 'جديد',
+    sectionOlder: 'الأقدم',
+    payNow: 'ادفع الآن',
+    shortTime: {
+      now: 'الآن',
+      minutes: '{{count}} د',
+      hours: '{{count}} س',
+      days: '{{count}} ي',
+    },
     time: {
       justNow: 'الآن',
       minutesAgo: 'منذ {{count}} د',
