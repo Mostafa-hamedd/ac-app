@@ -10,7 +10,8 @@ const navigationTheme: Theme = {
     ...DefaultTheme.colors,
     primary: colors.primary,
     background: colors.background,
-    card: colors.card,
+    // Header bars use `card`; keep them the same colour as the page body.
+    card: colors.background,
     text: colors.foreground,
     border: colors.border,
     notification: colors.destructive,
