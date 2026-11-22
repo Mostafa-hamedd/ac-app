@@ -1,8 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'expo-router';
+import { Link, useFocusEffect } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import * as SystemUI from 'expo-system-ui';
+import { useCallback } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { DEFAULT_COUNTRY_VALUE } from '@/lib/phone/phone-country';
 import { Button } from '@/shared/ui/button';
@@ -10,6 +14,7 @@ import { PasswordField } from '@/shared/ui/password-field';
 import { PhoneField } from '@/shared/ui/phone-field';
 import { Screen } from '@/shared/ui/screen';
 import { Text } from '@/shared/ui/text';
+import { colors } from '@/theme';
 
 import { AuthHeader } from '../components/auth-header';
 import { FormError } from '../components/form-error';
@@ -24,6 +29,7 @@ export function LoginScreen({
   initialCountry?: string;
 }) {
   const { t } = useTranslation();
+  const insets = useSafeAreaInsets();
   const login = useLogin();
   const { control, handleSubmit, setValue, clearErrors } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -35,14 +41,31 @@ export function LoginScreen({
   });
   const selectedCountry = useWatch({ control, name: 'country' });
 
+  // Keep the Android status-bar fill on #F5F5F5 with the screen body.
+  useFocusEffect(
+    useCallback(() => {
+      if (Platform.OS !== 'android') return;
+      void SystemUI.setBackgroundColorAsync(colors.background);
+    }, []),
+  );
+
   // No navigation here: the root layout switches to the signed-in screens when the
   // session changes, and resumes a pending deep link there.
   const onSubmit = handleSubmit((values) => login.mutate(values));
 
   return (
-    <Screen preset="keyboard" edges={['top', 'bottom']} contentClassName="px-6 pt-3">
+    <Screen
+      preset="keyboard"
+      edges={[]}
+      contentClassName="px-6 pt-3"
+      className="bg-background"
+      style={{
+        backgroundColor: colors.background,
+        paddingTop: insets.top,
+        paddingBottom: insets.bottom,
+      }}>
+      <StatusBar style="dark" />
       <AuthHeader title={t('login.title')} />
-
       <View className="gap-5">
         <FormError error={login.error} />
         <Controller

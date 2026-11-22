@@ -52,7 +52,8 @@ export function Screen({
       <KeyboardAwareScrollView
         bottomOffset={24}
         keyboardShouldPersistTaps="handled"
-        contentContainerClassName={cn('grow p-4', contentClassName)}>
+        className="flex-1 bg-background"
+        contentContainerClassName={cn('grow bg-background p-4', contentClassName)}>
         {children}
       </KeyboardAwareScrollView>
     ) : (

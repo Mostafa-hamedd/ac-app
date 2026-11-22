@@ -73,9 +73,10 @@ describe('Input (floating, default)', () => {
     expect(ref.current).toBeTruthy();
   });
 
-  it('applies the size', async () => {
+  it('keeps height on the bordered box so iOS text stays vertically centered', async () => {
     await render(<Input label="Small" size="sm" testID="field" />);
-    expect(String(screen.getByTestId('field').props.className)).toContain('h-12');
+    expect(String(screen.getByTestId('field').props.className)).not.toContain('h-12');
+    expect(String(screen.getByTestId('field').props.className)).not.toContain('h-14');
   });
 });
 

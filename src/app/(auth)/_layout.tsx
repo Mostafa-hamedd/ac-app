@@ -8,7 +8,12 @@ export const unstable_settings = {
 
 export default function AuthLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
+    <Stack
+      screenOptions={{
+        headerShown: false,
+        // Forms use app background (#F5F5F5); only landing overrides to black.
+        contentStyle: { backgroundColor: colors.background },
+      }}>
       <Stack.Screen
         name="index"
         options={{ animation: 'none', contentStyle: { backgroundColor: colors.primary } }}

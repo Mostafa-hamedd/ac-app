@@ -33,6 +33,10 @@ jest.mock('react-native-reanimated', () => {
 jest.mock('expo-router', () => ({
   router: { replace: jest.fn() },
   Link: ({ children }: { children: React.ReactNode }) => children,
+  useFocusEffect: (effect: () => void | (() => void)) => {
+    const { useEffect } = jest.requireActual('react');
+    useEffect(() => effect(), [effect]);
+  },
 }));
 
 jest.mock('react-native-safe-area-context', () => ({

@@ -1,7 +1,7 @@
-import { Link } from 'expo-router';
+import { Link, useFocusEffect } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SystemUI from 'expo-system-ui';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, View } from 'react-native';
 import Animated, {
@@ -67,13 +67,16 @@ export function LandingScreen() {
 
   // Android edge-to-edge no longer supports StatusBar.setBackgroundColor; tint the
   // root view instead so the status-bar / safe-area fill stays dark on this screen.
-  useEffect(() => {
-    if (Platform.OS !== 'android') return;
-    void SystemUI.setBackgroundColorAsync(colors.primary);
-    return () => {
-      void SystemUI.setBackgroundColorAsync(colors.background);
-    };
-  }, []);
+  // Use focus so navigating to register/login restores #F5F5F5 (landing stays mounted).
+  useFocusEffect(
+    useCallback(() => {
+      if (Platform.OS !== 'android') return;
+      void SystemUI.setBackgroundColorAsync(colors.primary);
+      return () => {
+        void SystemUI.setBackgroundColorAsync(colors.background);
+      };
+    }, []),
+  );
 
   const logoWidth = getSplashLogoWidth(width);
   const logoHeight = logoWidth / SPLASH_LOGO_ASPECT;

@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
 
-import { formatDialCode, getCountry } from '@/lib/phone/phone-country';
+import { formatInternationalPhone, getCountry } from '@/lib/phone/phone-country';
 import { Button } from '@/shared/ui/button';
 import { OtpInput } from '@/shared/ui/otp-input';
 import { Screen } from '@/shared/ui/screen';
@@ -22,6 +22,8 @@ import {
 import { otpSchema, type OtpFormValues } from '../schemas/auth.schemas';
 
 const RESEND_SECONDS = 59;
+/** Matches the mt-20 gap above the code boxes, where the error banner floats. */
+const ERROR_SLOT = 80;
 
 /** Keeps numbers like "+20 10…" or "00:59" left-to-right inside an Arabic sentence. */
 const leftToRight = (text: string) => `⁦${text}⁩`;
@@ -98,12 +100,18 @@ export function VerifyOtpScreen({ purpose, id, phone, country }: VerifyOtpScreen
       <AuthHeader
         title={t('verifyOtp.title')}
         subtitle={t('verifyOtp.subtitle', {
-          phone: leftToRight(`${formatDialCode(getCountry(country))} ${phone}`),
+          phone: leftToRight(formatInternationalPhone(getCountry(country), phone)),
         })}
       />
 
-      <View className="gap-8">
-        <FormError error={verifying.error ?? resending.error} />
+      <View className="gap-8 mt-20">
+        {/* Floats in the 80 gap above the boxes, so showing it never moves the form. */}
+        <View
+          pointerEvents="none"
+          className="justify-end pb-4"
+          style={{ position: 'absolute', left: 0, right: 0, top: -ERROR_SLOT, height: ERROR_SLOT }}>
+          <FormError error={verifying.error ?? resending.error} />
+        </View>
         <Controller
           control={control}
           name="code"
@@ -124,7 +132,7 @@ export function VerifyOtpScreen({ purpose, id, phone, country }: VerifyOtpScreen
       </View>
 
       {secondsLeft > 0 ? (
-        <Text className="mt-7 text-center">
+        <Text className="mt-7 text-center" style={{ textDecorationLine: 'underline' }}>
           {t('verifyOtp.resendIn', { time: leftToRight(`${minutes}:${seconds}`) })}
         </Text>
       ) : (
@@ -133,7 +141,9 @@ export function VerifyOtpScreen({ purpose, id, phone, country }: VerifyOtpScreen
           disabled={resending.isPending}
           onPress={handleResend}
           className="mt-7 items-center">
-          <Text variant="link">{t('verifyOtp.resend')}</Text>
+          <Text variant="link" style={{ textDecorationLine: 'underline' }}>
+            {t('verifyOtp.resend')}
+          </Text>
         </Pressable>
       )}
     </Screen>

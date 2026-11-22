@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react';
-import { TextInput, View } from 'react-native';
+import { Platform, TextInput, View } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -50,6 +50,7 @@ export function FloatingInput({
   inputClassName,
   containerClassName,
   editable,
+  style,
   ref,
   ...props
 }: Omit<InputProps, 'variant'>) {
@@ -91,33 +92,44 @@ export function FloatingInput({
               {leading}
             </View>
           ) : null}
-          <TextInput
-            ref={ref}
-            accessibilityLabel={labelText}
-            accessibilityLabelledBy={id}
-            accessibilityHint={error}
-            accessibilityState={{ disabled: !!disabled }}
-            editable={disabled ? false : editable}
-            value={value}
-            // While the label is resting in the box it doubles as the placeholder.
-            placeholder={floated ? placeholder : undefined}
-            onFocus={(event) => {
-              setFocused(true);
-              onFocus?.(event);
-            }}
-            onBlur={(event) => {
-              setFocused(false);
-              onBlur?.(event);
-            }}
-            placeholderTextColor={colors['muted-foreground']}
-            className={cn(
-              'flex-1 font-sans text-sm text-foreground',
-              BOX_CLASS[size],
-              inputClassName,
-              className,
-            )}
-            {...props}
-          />
+          {/*
+            Keep TextInput at one-line height and center it in the row. Giving it the
+            full box height overflows the border on iOS and pins typed text to the bottom.
+          */}
+          <View className="min-h-0 flex-1 justify-center">
+            <TextInput
+              ref={ref}
+              accessibilityLabel={labelText}
+              accessibilityLabelledBy={id}
+              accessibilityHint={error}
+              accessibilityState={{ disabled: !!disabled }}
+              editable={disabled ? false : editable}
+              value={value}
+              // While the label is resting in the box it doubles as the placeholder.
+              placeholder={floated ? placeholder : undefined}
+              onFocus={(event) => {
+                setFocused(true);
+                onFocus?.(event);
+              }}
+              onBlur={(event) => {
+                setFocused(false);
+                onBlur?.(event);
+              }}
+              placeholderTextColor={colors['muted-foreground']}
+              className={cn('w-full font-sans text-sm text-foreground', inputClassName, className)}
+              style={[
+                {
+                  paddingTop: 0,
+                  paddingBottom: 0,
+                  ...(Platform.OS === 'android'
+                    ? { textAlignVertical: 'center' as const, includeFontPadding: false }
+                    : null),
+                },
+                style,
+              ]}
+              {...props}
+            />
+          </View>
           {trailing}
         </View>
         <Animated.Text

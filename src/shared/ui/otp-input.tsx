@@ -20,24 +20,99 @@ export type OtpInputProps = {
 export function OtpInput({ length = 4, value, onChange, onComplete, error }: OtpInputProps) {
   const { t } = useTranslation();
   const refs = useRef<(TextInputInstance | null)[]>([]);
+  // Latest code for key handlers — avoids stale closures when Backspace fires
+  // in the same tick as an onChangeText clear.
+  const valueRef = useRef(value);
+  valueRef.current = value;
+  // When onKeyPress already handled Backspace, ignore the follow-up onChangeText('').
+  const skipNextEmptyChange = useRef(false);
+
   const digits = Array.from({ length }, (_, index) => value[index] ?? '');
 
-  function setDigit(index: number, char: string) {
-    const next = digits.slice();
-    next[index] = char;
-    const joined = next.join('');
-    onChange(joined);
-    if (char && index < length - 1) {
-      refs.current[index + 1]?.focus();
+  function focusIndex(index: number) {
+    // Defer so focus survives the re-render from onChange (Android especially).
+    setTimeout(() => {
+      refs.current[index]?.focus();
+    }, 0);
+  }
+
+  function emit(code: string) {
+    const next = code.slice(0, length);
+    valueRef.current = next;
+    onChange(next);
+    if (next.length === length) onComplete?.(next);
+  }
+
+  /** Clear this cell and move focus to the previous input. */
+  function deleteAt(index: number) {
+    emit(valueRef.current.slice(0, index));
+    if (index > 0) focusIndex(index - 1);
+  }
+
+  function handleChangeText(index: number, text: string) {
+    const digitsOnly = text.replace(/\D/g, '');
+    const previous = value[index] ?? '';
+
+    // Typing over a filled cell reports old + new digit; keep only the new one.
+    let newDigit = digitsOnly;
+    if (previous && digitsOnly.length === 2) {
+      newDigit = digitsOnly.startsWith(previous) ? digitsOnly.charAt(1) : digitsOnly.charAt(0);
     }
-    if (joined.length === length && !joined.includes('')) {
-      onComplete?.(joined);
+    const cleaned = newDigit;
+
+    // Paste / SMS autofill / typing that yields more than one digit at once.
+    if (cleaned.length > 1) {
+      skipNextEmptyChange.current = false;
+      const start = cleaned.length >= length ? 0 : index;
+      const merged = (valueRef.current.slice(0, start) + cleaned).slice(0, length);
+      emit(merged);
+      focusIndex(Math.min(merged.length, length) - 1);
+      return;
+    }
+
+    // Platform cleared this cell (Backspace). Move to the previous input.
+    if (cleaned.length === 0) {
+      if (skipNextEmptyChange.current) {
+        skipNextEmptyChange.current = false;
+        return;
+      }
+      deleteAt(index);
+      return;
+    }
+
+    skipNextEmptyChange.current = false;
+    // Single digit typed (or replacement via slice(-1) if platform prepends).
+    const char = cleaned.slice(-1);
+    // Overwriting a filled cell keeps the digits after it.
+    const next = (
+      valueRef.current.slice(0, index) +
+      char +
+      (previous ? valueRef.current.slice(index + 1) : '')
+    ).slice(0, length);
+    emit(next);
+    if (next.length < length) {
+      focusIndex(index + 1);
+    } else {
+      focusIndex(length - 1);
     }
   }
 
   function handleKeyPress(index: number, key: string) {
-    if (key === 'Backspace' && !digits[index] && index > 0) {
-      refs.current[index - 1]?.focus();
+    if (key !== 'Backspace') return;
+
+    const current = valueRef.current;
+
+    // Filled cell: clear it and move to the previous input.
+    if (current[index]) {
+      skipNextEmptyChange.current = true;
+      deleteAt(index);
+      return;
+    }
+
+    // Empty cell: delete the previous digit and focus it.
+    if (index > 0) {
+      skipNextEmptyChange.current = true;
+      deleteAt(index - 1);
     }
   }
 
@@ -50,10 +125,14 @@ export function OtpInput({ length = 4, value, onChange, onComplete, error }: Otp
             refs.current[index] = ref;
           }}
           value={digit}
-          onChangeText={(text) => setDigit(index, text.replace(/\D/g, '').slice(-1))}
+          onChangeText={(text) => handleChangeText(index, text)}
           onKeyPress={({ nativeEvent }) => handleKeyPress(index, nativeEvent.key)}
           keyboardType="number-pad"
-          maxLength={1}
+          // Allow multi-digit paste / autofill into a single box; we slice in handlers.
+          maxLength={length}
+          textContentType={index === 0 ? 'oneTimeCode' : 'none'}
+          autoComplete={index === 0 ? 'sms-otp' : 'off'}
+          blurOnSubmit={false}
           accessibilityLabel={t('fields.otpDigit', { index: index + 1, length })}
           className={cn(
             'aspect-square max-w-20 flex-1 rounded-full border bg-transparent p-0 text-center font-sans text-sm text-foreground',
