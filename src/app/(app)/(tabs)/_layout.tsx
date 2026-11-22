@@ -16,6 +16,12 @@ import { Text } from '@/shared/ui/text';
 import { cn } from '@/shared/utils/cn';
 import { colors } from '@/theme';
 
+/**
+ * Explore is the tab the app opens on. Setting it here (not redirecting after the first render)
+ * means My Garage is never mounted on the way in.
+ */
+export const unstable_settings = { initialRouteName: 'explore' };
+
 const WORDMARK = require('../../../../assets/images/splash-icon.png');
 /** Matches `BrandLogo` wordmark proportions. */
 const WORDMARK_RATIO = 430 / 120;

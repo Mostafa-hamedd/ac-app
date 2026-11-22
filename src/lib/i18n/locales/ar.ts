@@ -44,6 +44,9 @@ export const ar: TranslationResources = {
     comingSoonDescription: 'هذا القسم غير متاح حاليًا.',
   },
   myGarage: {
+    guestTitle: 'هل تمتلك أوتو كونكت؟',
+    guestMessage: 'أضف سيارتك الأولى.',
+    guestAction: 'تسجيل الدخول أو إنشاء حساب',
     callNowTitle: 'تحتاج مساعدة على الطريق؟',
     callNow: 'اتصل الآن',
     ongoingService: 'الخدمة الجارية',
@@ -322,12 +325,14 @@ export const ar: TranslationResources = {
     yourAccount: 'حسابك',
     language: 'اللغة',
     signOut: 'تسجيل الخروج',
+    login: 'تسجيل الدخول',
   },
   landing: {
     welcome: 'مرحبًا بك في',
     appName: 'أوتو كونكت',
     createAccount: 'إنشاء حساب',
     login: 'لديك حساب؟ تسجيل الدخول',
+    continueAsGuest: 'المتابعة كضيف',
     switchLanguage: 'تغيير اللغة إلى الإنجليزية',
   },
   fields: {

@@ -42,6 +42,9 @@ export const en = {
     comingSoonDescription: 'This section is not available yet.',
   },
   myGarage: {
+    guestTitle: 'Do you own an AutoConnect?',
+    guestMessage: 'Add Your First Car.',
+    guestAction: 'Login or Create Account',
     callNowTitle: 'Need roadside help?',
     callNow: 'Call now',
     ongoingService: 'Ongoing Service',
@@ -323,12 +326,14 @@ export const en = {
     yourAccount: 'Your account',
     language: 'Language',
     signOut: 'Sign out',
+    login: 'Login',
   },
   landing: {
     welcome: 'Welcome to',
     appName: 'Auto Connect',
     createAccount: 'Create account',
     login: 'Have an account? Login',
+    continueAsGuest: 'Continue as a Guest',
     switchLanguage: 'Switch language to Arabic',
   },
   fields: {

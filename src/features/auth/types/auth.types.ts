@@ -54,7 +54,7 @@ export type KycDocument = z.infer<typeof kycDocumentSchema>;
 export type RegistrationDraft = z.infer<typeof registrationDraftSchema>;
 export type RegistrationOutcome = z.infer<typeof registrationOutcomeSchema>;
 
-export type SessionStatus = 'restoring' | 'authenticated' | 'unauthenticated';
+export type SessionStatus = 'restoring' | 'authenticated' | 'unauthenticated' | 'guest';
 
 export type KycUploadInput = {
   registrationId: string;

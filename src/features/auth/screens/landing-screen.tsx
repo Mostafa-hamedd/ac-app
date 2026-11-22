@@ -1,8 +1,9 @@
 import { Link } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import * as SystemUI from 'expo-system-ui';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -14,16 +15,19 @@ import Animated, {
 import { useSafeAreaFrame, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { setLanguage } from '@/lib/i18n';
+import { useTextAlign } from '@/shared/hooks/use-text-align';
 import {
   getSplashLogoWidth,
   NATIVE_SPLASH_LOGO_WIDTH,
   SPLASH_LOGO_ASPECT,
 } from '@/shared/ui/app-splash';
-import { useTextAlign } from '@/shared/hooks/use-text-align';
 import { Button } from '@/shared/ui/button';
 import { Screen } from '@/shared/ui/screen';
 import { Text } from '@/shared/ui/text';
 import { cn } from '@/shared/utils/cn';
+import { colors } from '@/theme';
+
+import { enterGuestMode } from '../hooks/use-session';
 
 const LOGO_GROW_MS = 350;
 const SPLASH_HOLD_MS = 450;
@@ -61,6 +65,16 @@ export function LandingScreen() {
     );
   }, [playIntro, logoGrow, slide]);
 
+  // Android edge-to-edge no longer supports StatusBar.setBackgroundColor; tint the
+  // root view instead so the status-bar / safe-area fill stays dark on this screen.
+  useEffect(() => {
+    if (Platform.OS !== 'android') return;
+    void SystemUI.setBackgroundColorAsync(colors.primary);
+    return () => {
+      void SystemUI.setBackgroundColorAsync(colors.background);
+    };
+  }, []);
+
   const logoWidth = getSplashLogoWidth(width);
   const logoHeight = logoWidth / SPLASH_LOGO_ASPECT;
   const isLogoCapped = logoWidth < width * (371 / 390);
@@ -89,8 +103,13 @@ export function LandingScreen() {
   }));
 
   return (
-    <Screen preset="fixed" edges={[]} offlineBanner={false} className="bg-primary">
-      {/* Overrides the app-wide StatusBar for this screen only (black header below); reverts on navigation away. */}
+    <Screen
+      preset="fixed"
+      edges={[]}
+      offlineBanner={false}
+      className="bg-primary"
+      style={{ backgroundColor: colors.primary }}>
+      {/* Light icons for the black header; Android bar color is set in the effect above. */}
       <StatusBar style="light" />
       <View className="flex-[383]">
         <Animated.Image
@@ -114,7 +133,7 @@ export function LandingScreen() {
             accessibilityLabel={t('landing.switchLanguage')}
             hitSlop={8}
             onPress={() => void setLanguage(isArabic ? 'en' : 'ar')}
-            className="h-7 min-w-13 items-center justify-center rounded-xs bg-card px-3 active:opacity-80">
+            className="h-7 min-w-13 items-center justify-center rounded-lg bg-card px-3 active:opacity-80">
             {/* Each label stays in its own language so people can always find theirs. */}
             <Text className="font-sans-medium text-xs">{isArabic ? 'English' : 'العربية'}</Text>
           </Pressable>
@@ -140,7 +159,20 @@ export function LandingScreen() {
               <Button variant="secondary">{t('landing.login')}</Button>
             </Link>
           </View>
-          <View className="flex-[88]" />
+          <View className="flex-[88] items-center justify-center">
+            <Pressable
+              accessibilityRole="button"
+              hitSlop={12}
+              onPress={enterGuestMode}
+              className="active:opacity-70">
+              {/* RN underline has no offset — border + padding spaces the line under the glyphs. */}
+              <Text
+                className="  text-xs tracking-wide text-muted-foreground"
+                style={{ borderBottomWidth: 0.5, borderBottomColor: colors['muted-foreground'] }}>
+                {t('landing.continueAsGuest')}
+              </Text>
+            </Pressable>
+          </View>
         </View>
       </Animated.View>
     </Screen>

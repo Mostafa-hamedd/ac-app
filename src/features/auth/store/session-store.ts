@@ -12,6 +12,8 @@ type SessionState = {
   user: User | null;
   setAuthenticated: (user: User | null) => void;
   setUnauthenticated: () => void;
+  /** Browsing without an account: the signed-in screens open, but no user data is shown. */
+  setGuest: () => void;
 };
 
 export const useSessionStore = create<SessionState>()((set) => ({
@@ -19,4 +21,5 @@ export const useSessionStore = create<SessionState>()((set) => ({
   user: null,
   setAuthenticated: (user) => set({ status: 'authenticated', user }),
   setUnauthenticated: () => set({ status: 'unauthenticated', user: null }),
+  setGuest: () => set({ status: 'guest', user: null }),
 }));

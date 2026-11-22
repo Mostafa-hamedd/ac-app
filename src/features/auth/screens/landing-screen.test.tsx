@@ -1,8 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { router } from 'expo-router';
 
 import { i18n, restoreLanguage } from '@/lib/i18n';
 import { getSplashLogoWidth } from '@/shared/ui/app-splash';
+
+import { useSessionStore } from '../store/session-store';
 
 import { LandingScreen } from './landing-screen';
 
@@ -28,6 +31,7 @@ jest.mock('react-native-reanimated', () => {
 });
 
 jest.mock('expo-router', () => ({
+  router: { replace: jest.fn() },
   Link: ({ children }: { children: React.ReactNode }) => children,
 }));
 
@@ -65,5 +69,16 @@ describe('LandingScreen language toggle', () => {
     await AsyncStorage.setItem('autoconnect.pref.language', '"ar"');
     await restoreLanguage();
     expect(i18n.language).toBe('ar');
+  });
+});
+
+describe('LandingScreen guest mode', () => {
+  it('"Continue as a Guest" opens the app as a guest', async () => {
+    await i18n.changeLanguage('en');
+    await render(<LandingScreen />);
+    await fireEvent.press(screen.getByRole('button', { name: 'Continue as a Guest' }));
+    expect(useSessionStore.getState().status).toBe('guest');
+    expect(router.replace).toHaveBeenCalledWith('/explore');
+    useSessionStore.setState({ status: 'restoring', user: null });
   });
 });

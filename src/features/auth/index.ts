@@ -10,6 +10,13 @@ export { VerifyingDoneScreen } from './screens/verifying-done-screen';
 export { ForgotPasswordScreen } from './screens/forgot-password-screen';
 export { ResetPasswordScreen } from './screens/reset-password-screen';
 export { useSessionBootstrap } from './hooks/use-session-bootstrap';
-export { useSessionStatus, useCurrentUser, getSessionStatus } from './hooks/use-session';
+export {
+  useSessionStatus,
+  useCurrentUser,
+  useIsGuest,
+  getSessionStatus,
+  enterGuestMode,
+  leaveGuestMode,
+} from './hooks/use-session';
 export { useLogout } from './hooks/use-auth-mutations';
 export type { KycDocumentType, RegistrationDraft, SessionStatus, User } from './types/auth.types';

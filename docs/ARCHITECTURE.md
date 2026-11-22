@@ -69,8 +69,10 @@ register its routes in `src/app`.
 
 Details use `QueryView`, which handles loading and error states so screens only describe the
 content. `PaginatedList` (FlashList with the same states and infinite scroll) is available in
-`shared/ui`, but no screen uses it yet: the Notifications tab renders its own `FlatList` with the
-same `LoadingState`, `ErrorState` and `EmptyState` components.
+`shared/ui`, but no screen uses it yet: the Notifications tab renders its own `SectionList` ("New"
+and "Older") with the same `LoadingState`, `ErrorState` and `EmptyState` components. A
+notification can name a sample photo with `avatarKey` (the images are in
+`features/notifications/data/avatars`); without one the card shows its category icon.
 
 Client state is kept in small zustand stores, never server data: the session store (auth) and the
 vehicle photo store (the vehicle selected on My Garage, and the photo picked for each vehicle,
@@ -131,6 +133,8 @@ and `@gorhom/bottom-sheet`. A test can still mock a module itself for a more spe
 - The font is Poppins, picked by family, not weight: `font-sans`, `font-sans-medium`,
   `font-sans-semibold`. The files are in `assets/fonts`, embedded by the expo-font plugin and also
   loaded with `useFonts` in the root layout. Only these three weights are bundled.
+- `Screen` (`shared/ui`) takes `adjustForHeader` on iOS so scrolling content starts below a
+  translucent native header; only the notification details screen uses it.
 - ESLint rejects hex colors and `[NNpx]` values in components. Add a token instead.
 - The app is light-only for now.
 

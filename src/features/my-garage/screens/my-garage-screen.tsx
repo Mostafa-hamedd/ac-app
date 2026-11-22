@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, View } from 'react-native';
 
+import { leaveGuestMode, useIsGuest } from '@/features/auth';
 import { formatSlot, ServicesBookingHeader } from '@/features/services';
 import { VehicleHeroCard, VehicleTabs } from '@/features/vehicles';
 import { useContactSupport } from '@/shared/hooks/use-contact-support';
@@ -14,6 +15,7 @@ import { cn } from '@/shared/utils/cn';
 import { AssistanceSheet } from '../components/assistance-sheet';
 import { CallNowCard } from '../components/call-now-card';
 import { DuePaymentCard } from '../components/due-payment-card';
+import { GuestGarageState } from '../components/guest-garage-state';
 import { GarageHelpFooter } from '../components/garage-help-footer';
 import { OngoingServiceCard } from '../components/ongoing-service-card';
 import { RescheduleSheet } from '../components/reschedule-sheet';
@@ -25,6 +27,7 @@ export function MyGarageScreen() {
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === 'ar';
   const lang = isArabic ? 'ar' : 'en';
+  const isGuest = useIsGuest();
   const assistanceRef = useRef<BottomSheetModal>(null);
   const contactSupport = useContactSupport();
   const rescheduleRef = useRef<BottomSheetModal>(null);
@@ -56,6 +59,15 @@ export function MyGarageScreen() {
           onPress: () => setCancelledIds((ids) => [...ids, service.id]),
         },
       ],
+    );
+  }
+
+  // Guests have no vehicles or services to show.
+  if (isGuest) {
+    return (
+      <Screen edges={[]}>
+        <GuestGarageState onLogin={leaveGuestMode} />
+      </Screen>
     );
   }
 

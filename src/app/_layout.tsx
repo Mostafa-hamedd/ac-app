@@ -61,7 +61,7 @@ function RootNavigator() {
   // Protected groups improve UX only — the backend still authorizes every request.
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={status === 'authenticated'}>
+      <Stack.Protected guard={status === 'authenticated' || status === 'guest'}>
         <Stack.Screen name="(app)" />
       </Stack.Protected>
       <Stack.Protected guard={status === 'unauthenticated'}>

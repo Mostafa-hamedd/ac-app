@@ -2,13 +2,14 @@ import { act, fireEvent, screen } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import { Alert, Linking } from 'react-native';
 
+import { enterGuestMode, getSessionStatus, leaveGuestMode } from '@/features/auth';
 import { ROADSIDE_HOTLINE } from '@/config/support';
 import { i18n } from '@/lib/i18n';
 import { renderWithProviders } from '@tests/helpers/render-with-providers';
 
 import { MyGarageScreen } from './my-garage-screen';
 
-jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn() } }));
+jest.mock('expo-router', () => ({ router: { push: jest.fn(), back: jest.fn(), replace: jest.fn() } }));
 jest.mock('@react-native-community/netinfo', () =>
   require('@react-native-community/netinfo/jest/netinfo-mock.js'),
 );
@@ -56,6 +57,17 @@ jest.mock('../components/reschedule-sheet', () => {
 });
 
 describe('MyGarageScreen', () => {
+  afterEach(() => leaveGuestMode());
+
+  it('shows a sign-in prompt instead of the garage to a guest', async () => {
+    enterGuestMode();
+    await renderWithProviders(<MyGarageScreen />);
+    expect(screen.getByText('Do you own an AutoConnect?')).toBeTruthy();
+    expect(screen.queryByText('Ongoing service')).toBeNull();
+    await fireEvent.press(screen.getByRole('button', { name: 'Login or Create Account' }));
+    expect(getSessionStatus()).toBe('unauthenticated');
+  });
+
   it('shows the vehicle photo card above the roadside help card', async () => {
     await renderWithProviders(<MyGarageScreen />);
     expect(screen.getByTestId('vehicle-photo-default')).toBeTruthy();
