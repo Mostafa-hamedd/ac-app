@@ -8,11 +8,13 @@ import { Button } from '@/shared/ui/button';
 import { QueryView } from '@/shared/ui/query-view';
 import { Screen } from '@/shared/ui/screen';
 import { Text } from '@/shared/ui/text';
+import { colors } from '@/theme';
 
 import { AuthHeader } from '../components/auth-header';
 import { DocumentRow } from '../components/document-row';
 import { DocumentUploadSheet } from '../components/document-upload-sheet';
 import { FormError } from '../components/form-error';
+import { LegalModal, type LegalDocument } from '../components/legal-modal';
 import { useUploadKycDocument } from '../hooks/use-auth-mutations';
 import { useRegistrationDraft } from '../hooks/use-registration-draft';
 import type { KycDocumentType } from '../types/auth.types';
@@ -24,12 +26,16 @@ const DOCUMENT_TYPES: KycDocumentType[] = [
   'car_registration_back',
 ];
 
+/** Design gap between the document rows and the submit button. */
+const SECTION_GAP = 35;
+
 export function UploadDocumentsScreen({ registrationId }: { registrationId: string }) {
   const { t } = useTranslation();
   const query = useRegistrationDraft(registrationId);
   const upload = useUploadKycDocument();
   const sheetRef = useRef<BottomSheetModal>(null);
   const [activeType, setActiveType] = useState<KycDocumentType | null>(null);
+  const [legalDocument, setLegalDocument] = useState<LegalDocument | null>(null);
   const uploadingType = upload.isPending ? upload.variables.type : null;
 
   function openSheet(type: KycDocumentType) {
@@ -41,11 +47,17 @@ export function UploadDocumentsScreen({ registrationId }: { registrationId: stri
     <QueryView query={query}>
       {(draft) => (
         <Screen preset="scroll" edges={['top', 'bottom']} contentClassName="px-6 pt-3">
-          <AuthHeader title={t('uploadDocuments.title')} subtitle={t('uploadDocuments.subtitle')} />
+          <AuthHeader
+            title={t('uploadDocuments.title')}
+            subtitle={t('uploadDocuments.subtitle')}
+            styleWrapper="mb-20"
+            styleSubTitle="text-subhead"
+            styleTitle="text-2xl"
+          />
 
-          <View className="gap-5">
+          <View style={{ gap: SECTION_GAP }}>
             <FormError error={upload.error} />
-            <View className="gap-3">
+            <View className="gap-5">
               {DOCUMENT_TYPES.map((type) => (
                 <DocumentRow
                   key={type}
@@ -61,10 +73,28 @@ export function UploadDocumentsScreen({ registrationId }: { registrationId: stri
               onPress={() => router.push({ pathname: '/verifying', params: { registrationId } })}>
               {t('uploadDocuments.submit')}
             </Button>
-            <Text variant="muted" className="text-center">
-              {t('uploadDocuments.terms')}
+            <Text className="text-center text-subhead" style={{ color: '#000000' }}>
+              {t('uploadDocuments.termsPrefix')}
+              <Text
+                accessibilityRole="link"
+                onPress={() => setLegalDocument('privacy')}
+                className="text-subhead"
+                style={{ color: colors.link, textDecorationLine: 'underline' }}>
+                {t('uploadDocuments.privacyLink')}
+              </Text>
+              {t('uploadDocuments.termsAnd')}
+              <Text
+                accessibilityRole="link"
+                onPress={() => setLegalDocument('terms')}
+                className="text-subhead"
+                style={{ color: colors.link, textDecorationLine: 'underline' }}>
+                {t('uploadDocuments.termsLink')}
+              </Text>
+              {t('uploadDocuments.termsSuffix')}
             </Text>
           </View>
+
+          <LegalModal document={legalDocument} onClose={() => setLegalDocument(null)} />
 
           <DocumentUploadSheet
             ref={sheetRef}

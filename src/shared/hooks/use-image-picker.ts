@@ -6,9 +6,20 @@ export type PickedImage = { uri: string; mimeType?: string; fileName?: string };
 export type PickResult =
   { status: 'picked'; image: PickedImage } | { status: 'cancelled' } | { status: 'denied' };
 
-const PICKER_OPTIONS: ImagePicker.ImagePickerOptions = { mediaTypes: ['images'], quality: 0.8 };
+export type ImagePickerOptions = {
+  /** Opens the system crop / edit screen after the photo is taken or chosen. */
+  allowsEditing?: boolean;
+};
 
-async function pickFrom(source: 'camera' | 'gallery'): Promise<PickResult> {
+async function pickFrom(
+  source: 'camera' | 'gallery',
+  { allowsEditing = false }: ImagePickerOptions,
+): Promise<PickResult> {
+  const pickerOptions: ImagePicker.ImagePickerOptions = {
+    mediaTypes: ['images'],
+    quality: 0.8,
+    allowsEditing,
+  };
   const permission =
     source === 'camera'
       ? await ImagePicker.requestCameraPermissionsAsync()
@@ -17,8 +28,8 @@ async function pickFrom(source: 'camera' | 'gallery'): Promise<PickResult> {
 
   const result =
     source === 'camera'
-      ? await ImagePicker.launchCameraAsync(PICKER_OPTIONS)
-      : await ImagePicker.launchImageLibraryAsync(PICKER_OPTIONS);
+      ? await ImagePicker.launchCameraAsync(pickerOptions)
+      : await ImagePicker.launchImageLibraryAsync(pickerOptions);
 
   const [asset] = result.assets ?? [];
   if (result.canceled || !asset) return { status: 'cancelled' };
@@ -33,13 +44,13 @@ async function pickFrom(source: 'camera' | 'gallery'): Promise<PickResult> {
 }
 
 /** Camera / gallery picker that asks for permission first. */
-export function useImagePicker() {
+export function useImagePicker(options: ImagePickerOptions = {}) {
   const [isPicking, setIsPicking] = useState(false);
 
   async function pick(source: 'camera' | 'gallery'): Promise<PickResult> {
     setIsPicking(true);
     try {
-      return await pickFrom(source);
+      return await pickFrom(source, options);
     } finally {
       setIsPicking(false);
     }

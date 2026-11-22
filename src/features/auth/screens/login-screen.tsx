@@ -108,7 +108,7 @@ export function LoginScreen({
         </Pressable>
       </Link>
 
-      <Button className="mt-6" onPress={() => onSubmit()} loading={login.isPending}>
+      <Button className="mt-6 rounded-lg" onPress={() => onSubmit()} loading={login.isPending}>
         {t('login.submit')}
       </Button>
     </Screen>

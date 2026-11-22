@@ -394,12 +394,60 @@ export const en = {
     resendIn: 'Resend code in {{time}}',
     resend: 'Resend code',
   },
+  // FICTIONAL MOCK TEXT: replace with the real legal text when the business provides it.
+  legal: {
+    privacy: {
+      title: 'Privacy Policy',
+      clauses: {
+        collect: {
+          title: 'What we collect',
+          body: 'Your name, phone number, car details and the documents you upload to verify your account.',
+        },
+        use: {
+          title: 'How we use it',
+          body: 'To verify your account, book and track your services, and contact you about them.',
+        },
+        share: {
+          title: 'Sharing',
+          body: 'We share your details only with the service center you book. We never sell your data.',
+        },
+        rights: {
+          title: 'Your choices',
+          body: 'You can ask to see, correct or delete your data at any time by contacting support.',
+        },
+      },
+    },
+    terms: {
+      title: 'Terms of Use',
+      clauses: {
+        account: {
+          title: 'Your account',
+          body: 'Keep your details accurate and your password private. You are responsible for activity on your account.',
+        },
+        service: {
+          title: 'Using the app',
+          body: 'Use AutoConnect only to manage your own vehicles and bookings. Do not misuse or disrupt the service.',
+        },
+        documents: {
+          title: 'Documents',
+          body: 'The documents you upload must be yours and valid. We may reject unclear or invalid documents.',
+        },
+        changes: {
+          title: 'Changes',
+          body: 'We may update these terms. Continuing to use the app means you accept the updated terms.',
+        },
+      },
+    },
+  },
   uploadDocuments: {
     title: 'One last step...',
     subtitle: 'Please scan or upload the following documents',
     submit: 'Submit & Create Account',
-    terms:
-      "By creating an account, you hereby agree to AutoConnect's Privacy Policy and Terms of Use",
+    termsPrefix: "By creating an account, you hereby agree to AutoConnect's ",
+    privacyLink: 'Privacy Policy',
+    termsAnd: ' and ',
+    termsLink: 'Terms of Use',
+    termsSuffix: '',
     replace: 'Replace',
     rowUploaded: '{{label}}, uploaded, replace',
     rowEmpty: '{{label}}, upload',

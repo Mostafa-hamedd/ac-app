@@ -65,7 +65,7 @@ export function RegisterScreen() {
         title={t('register.title')}
         subtitle={t('register.subtitle')}
         styleWrapper="mb-20"
-        styleSubTitle="text-[18px]"
+        styleSubTitle="text-lg"
       />
 
       <View className="gap-5">

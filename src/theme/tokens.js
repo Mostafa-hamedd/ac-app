@@ -20,6 +20,8 @@ const colors = {
   sheet: '#F5F5F5',
   'card-foreground': '#0F172A',
   muted: '#EDEDED',
+  /** Chips and notes on a light sheet (the Recommended chip, the passport note). */
+  'muted-strong': '#D8D8D8',
   /** Backdrop behind vehicle photos and illustrations. */
   photo: '#D9D9D9',
   'muted-foreground': '#717171',
