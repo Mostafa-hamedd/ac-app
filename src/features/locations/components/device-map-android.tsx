@@ -9,7 +9,7 @@ import { colors } from '@/theme';
 
 import type { Coordinates } from '../utils/distance';
 import type { CameraTarget } from '../utils/trip';
-import type { DeviceMapProps } from './device-map';
+import type { DeviceMapProps } from './device-map.types';
 import { MAP_ATTRIBUTION, MAP_STYLE, MAP_USER_AGENT } from './map-config';
 
 /**

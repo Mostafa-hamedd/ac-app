@@ -7,7 +7,19 @@ import { cn } from '@/shared/utils/cn';
 import { BackButton } from '@/shared/ui/back-button';
 
 /** Back button, title and optional subtitle at the top of every sign-in and registration form. */
-export function AuthHeader({ title, subtitle, styleWrapper, styleTitle, styleSubTitle }: { title: string; subtitle?: string; styleWrapper?: string; styleTitle?: string; styleSubTitle?: string }) {
+export function AuthHeader({
+  title,
+  subtitle,
+  styleWrapper,
+  styleTitle,
+  styleSubTitle,
+}: {
+  title: string;
+  subtitle?: string;
+  styleWrapper?: string;
+  styleTitle?: string;
+  styleSubTitle?: string;
+}) {
   const textAlign = useTextAlign();
   return (
     <View className={cn('mb-10 gap-3', styleWrapper)}>

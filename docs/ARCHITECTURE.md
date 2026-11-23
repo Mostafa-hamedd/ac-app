@@ -85,6 +85,9 @@ to the next account).
 - `features/auth/store/session-store.ts` holds only the session status and user.
 - `src/app/_layout.tsx` shows the signed-in or signed-out routes from that status — screens never
   navigate after login or logout themselves.
+- The session status is `restoring`, `authenticated`, `unauthenticated` or `guest`. "Continue as
+  guest" on the landing page calls `enterGuestMode` (`features/auth/hooks/use-session.ts`), which
+  sets `guest` and opens the Explore tab. Guests use the signed-in routes.
 - A 401 while signed in ends the session everywhere (`lib/auth/auth-events.ts`).
 - Android app backups are turned off (`android.allowBackup` in `app.json`); the keychain/keystore
   entries are not backed up either way.
@@ -156,3 +159,26 @@ and `@gorhom/bottom-sheet`. A test can still mock a module itself for a more spe
 Only the paths in `lib/linking/linking-config.ts` are accepted, and IDs are validated. The same check
 applies to push notification payloads and to links that come from the API. A link opened while
 signed out is resumed after sign-in.
+
+## Maps and location
+
+- `features/locations` owns the map screen. `DeviceMap` (`components/device-map.tsx`) picks the
+  renderer by platform: Apple Maps through `expo-maps` on iOS, and OpenStreetMap through
+  MapLibre (`components/device-map-android.tsx`) on Android, so Android needs no Google Maps key.
+  Both take the same `DeviceMapProps` (`components/device-map.types.ts`).
+- Tile and style settings are the `EXPO_PUBLIC_MAP_*` variables, read in `components/map-config.ts`
+  (names in `.env.example`).
+- `expo-maps` (iOS) and MapLibre (Android) are both loaded lazily, and only when the binary contains
+  their native module, so a build without it opens the map screen with a "Map unavailable"
+  message instead of crashing.
+- The device position comes from `hooks/use-device-location.ts` (foreground permission only);
+  the address of a position comes from `hooks/use-reverse-geocode.ts`.
+- Trip logic (distance, camera fitting, the Google Maps link, copy text) is pure and tested in
+  `utils/trip.ts`.
+
+## Development build size
+
+The EAS `development` profile builds Android for `arm64-v8a` only (set in `app.config.js` when
+`EXPO_PUBLIC_APP_ENV` is `development`), which keeps the debug APK to roughly a third of an
+all-architecture build. x86 emulators cannot run that APK. Preview and production builds keep
+every architecture.

@@ -5,3 +5,5 @@ android
 ios
 coverage
 package-lock.json
+.eas-backup-*
+.claude

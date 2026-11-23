@@ -20,7 +20,8 @@ import { Button } from '@/shared/ui/button';
 import { Text } from '@/shared/ui/text';
 import { colors } from '@/theme';
 
-import { DeviceMap, type MapCameraRequest, type MapCenterMarker } from '../components/device-map';
+import { DeviceMap } from '../components/device-map';
+import type { MapCameraRequest, MapCenterMarker } from '../components/device-map.types';
 import { LocationNotice } from '../components/location-notice';
 import { TripInputs, type Suggestion } from '../components/trip-inputs';
 import { MAINTENANCE_CENTERS } from '../data/maintenance-centers';
@@ -95,7 +96,6 @@ export function LocationScreen() {
           : t('location.addressUnavailable');
   const originAddress = geocode.address?.full ?? originFallback;
   const sheetAddress = details.kind === 'center' ? details.fullAddress : originAddress;
-  const sheetSubtitle = details.kind === 'center' ? details.shortAddress : null;
 
   const centerMarkers: MapCenterMarker[] = MAINTENANCE_CENTERS.map((center) => ({
     id: center.id,
@@ -199,6 +199,7 @@ export function LocationScreen() {
     }
     try {
       // Lazy load so a missing native module does not crash the screen on import.
+      // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/consistent-type-imports
       const Clipboard = require('expo-clipboard') as typeof import('expo-clipboard');
       await Clipboard.setStringAsync(text);
       Alert.alert(t('location.addressCopied'));

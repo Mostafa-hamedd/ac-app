@@ -20,7 +20,17 @@ module.exports = defineConfig([
   expoConfig,
   prettierConfig,
   {
-    ignores: ['dist/*', '.expo/*', 'android/*', 'ios/*', 'coverage/*', 'expo-env.d.ts'],
+    ignores: [
+      'dist/*',
+      '.expo/*',
+      'android/*',
+      'ios/*',
+      'coverage/*',
+      'expo-env.d.ts',
+      // Local-only folders (git-ignored): EAS config backups and editor tooling.
+      '.eas-backup-*/**',
+      '.claude/**',
+    ],
   },
   {
     rules: {

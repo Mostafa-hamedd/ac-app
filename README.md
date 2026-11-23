@@ -23,14 +23,15 @@ Anything prefixed `EXPO_PUBLIC_` ships inside the app — never put secrets ther
 
 ## Scripts
 
-| Script              | What it does                              |
-| ------------------- | ----------------------------------------- |
-| `npm start`         | Start the Metro dev server                |
-| `npm run typecheck` | `tsc --noEmit`                            |
-| `npm run lint`      | ESLint (Expo config + architecture rules) |
-| `npm test`          | Jest (`jest-expo` preset)                 |
-| `npm run format`    | Prettier                                  |
-| `npm run check`     | All of the above, for CI                  |
+| Script                 | What it does                              |
+| ---------------------- | ----------------------------------------- |
+| `npm start`            | Start the Metro dev server                |
+| `npm run typecheck`    | `tsc --noEmit`                            |
+| `npm run lint`         | ESLint (Expo config + architecture rules) |
+| `npm run format:check` | Prettier check (CI runs it)               |
+| `npm test`             | Jest (`jest-expo` preset)                 |
+| `npm run format`       | Prettier                                  |
+| `npm run check`        | Typecheck, lint and tests                 |
 
 ## Mock mode
 

@@ -31,11 +31,13 @@ export function ResultCard({ tone, title, description, note, action }: ResultCar
           <Icon size={22} color={tone === 'success' ? 'white' : colors.destructive} />
         </View>
         <View className="gap-1 ">
-          <Text className="text-center text-lg" >{title}</Text>
+          <Text className="text-center text-lg">{title}</Text>
           <Text className="text-center">{description}</Text>
           {note ? <Text className="text-center text-xs">{note}</Text> : null}
         </View>
-        <View className="w-full" style={{ marginTop: 50 }}>{action}</View>
+        <View className="w-full" style={{ marginTop: 50 }}>
+          {action}
+        </View>
       </Card>
     </Screen>
   );
