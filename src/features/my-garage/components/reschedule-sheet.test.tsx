@@ -20,8 +20,35 @@ jest.mock('@gorhom/bottom-sheet', () => {
   };
 });
 
+// Friday 20 November 2026, 12:00. The calendar reads the real clock, so freeze only the Date:
+// timers stay real so Testing Library's async helpers keep working.
+const NOW = new Date(2026, 10, 20, 12, 0);
+
 beforeEach(async () => {
+  jest.useFakeTimers({
+    doNotFake: [
+      'setTimeout',
+      'clearTimeout',
+      'setInterval',
+      'clearInterval',
+      'setImmediate',
+      'clearImmediate',
+      'nextTick',
+      'queueMicrotask',
+      'requestAnimationFrame',
+      'cancelAnimationFrame',
+      'requestIdleCallback',
+      'cancelIdleCallback',
+      'performance',
+      'hrtime',
+    ],
+  });
+  jest.setSystemTime(NOW);
   await i18n.changeLanguage('en');
+});
+
+afterEach(() => {
+  jest.useRealTimers();
 });
 
 function pickFirstEnabledDay() {
@@ -67,8 +94,7 @@ describe('RescheduleSheet', () => {
   });
 
   describe('when the new day is today', () => {
-    // Friday 20 November 2026, 12:00: the 09:00, 10:00 and 11:00 slots are over, 15:30 is not.
-    const NOW = new Date(2026, 10, 20, 12, 0);
+    // At NOW the 09:00, 10:00 and 11:00 slots are over, 15:30 is not.
     const slot = (label: string) => screen.getByRole('radio', { name: label });
 
     async function openTimesForToday() {
