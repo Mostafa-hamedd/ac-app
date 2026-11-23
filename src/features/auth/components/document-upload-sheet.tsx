@@ -119,7 +119,7 @@ export function DocumentUploadSheet({ label, onPicked, ref }: DocumentUploadShee
             paddingStart: NOTE_ICON_INSET,
             paddingEnd: NOTE_END_INSET,
             gap: NOTE_GAP,
-            backgroundColor: '#D8D8D8',
+            backgroundColor: colors['muted-strong'],
           }}>
           <CircleAlert size={18} color={colors.foreground} />
           <Text className={cn('flex-1 text-caption', textAlign)}>
@@ -152,7 +152,7 @@ export function DocumentUploadSheet({ label, onPicked, ref }: DocumentUploadShee
                 borderRadius: CHIP_RADIUS,
                 paddingHorizontal: 11,
                 paddingVertical: 8,
-                backgroundColor: '#D8D8D8',
+                backgroundColor: colors['muted-strong'],
               }}>
               <Text className="font-sans-medium text-2xs">{t('uploadDocuments.recommended')}</Text>
             </View>

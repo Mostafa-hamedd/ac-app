@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TextInput, type TextInputInstance, View } from 'react-native';
 
@@ -23,7 +23,9 @@ export function OtpInput({ length = 4, value, onChange, onComplete, error }: Otp
   // Latest code for key handlers — avoids stale closures when Backspace fires
   // in the same tick as an onChangeText clear.
   const valueRef = useRef(value);
-  valueRef.current = value;
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
   // When onKeyPress already handled Backspace, ignore the follow-up onChangeText('').
   const skipNextEmptyChange = useRef(false);
 

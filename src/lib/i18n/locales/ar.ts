@@ -72,6 +72,9 @@ export const ar: TranslationResources = {
   },
   location: {
     openInMaps: 'فتح في خرائط جوجل',
+    sendLocation: 'إرسال الموقع الحالي',
+    sendLocationUnavailable: 'موقعك الحالي غير متاح بعد.',
+    sendLocationFailed: 'تعذر مشاركة موقعك.',
     copyAddress: 'نسخ العنوان',
     addressCopied: 'تم نسخ العنوان',
     copyFailed: 'تعذر نسخ العنوان.',
@@ -96,6 +99,7 @@ export const ar: TranslationResources = {
     call: 'اتصال',
     callFailed: 'تعذر فتح تطبيق الاتصال.',
     mapsUnavailable: 'تعذر فتح الخرائط على هذا الجهاز.',
+    mapUnavailable: 'الخريطة غير متاحة في هذا الإصدار. استخدم نسخة التطوير لعرضها.',
     recenter: 'العودة إلى موقعي',
     finding: 'جارٍ تحديد موقعك…',
     allowLocation: 'السماح بالوصول إلى الموقع',

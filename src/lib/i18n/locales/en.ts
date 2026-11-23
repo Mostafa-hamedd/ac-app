@@ -70,6 +70,9 @@ export const en = {
   },
   location: {
     openInMaps: 'Open in Google Maps',
+    sendLocation: 'Send current location',
+    sendLocationUnavailable: 'Your current location is not available yet.',
+    sendLocationFailed: 'Could not share your location.',
     copyAddress: 'Copy Address',
     addressCopied: 'Address copied',
     copyFailed: 'Could not copy the address.',
@@ -94,6 +97,7 @@ export const en = {
     call: 'Call',
     callFailed: 'Could not open the phone dialer.',
     mapsUnavailable: 'Could not open maps on this device.',
+    mapUnavailable: 'Map unavailable in this build. Use a development build to see it.',
     recenter: 'Recenter on my location',
     finding: 'Finding your location…',
     allowLocation: 'Allow location',

@@ -9,10 +9,10 @@
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.beyondcreation.autoconnect"
+      "bundleIdentifier": "com.paralleltech.autoconnect"
     },
     "android": {
-      "package": "com.beyondcreation.autoconnect",
+      "package": "com.paralleltech.autoconnect",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -25,6 +25,7 @@
     "plugins": [
       "expo-router",
       "expo-secure-store",
+      "@maplibre/maplibre-react-native",
       [
         "expo-splash-screen",
         {
@@ -91,7 +92,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "d06406db-6949-43bb-8afb-370917eb757e"
+        "projectId": "acbcabe0-2627-46a8-8bb1-642712d71db9"
       }
     },
     "owner": "mostafahamed"

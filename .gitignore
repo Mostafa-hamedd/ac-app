@@ -43,3 +43,6 @@ yarn-error.*
 # logs
 *.log
 *-log.txt
+
+# EAS config backup
+/.eas-backup-20261123-114143/

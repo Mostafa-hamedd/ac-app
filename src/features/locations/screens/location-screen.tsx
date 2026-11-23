@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import { ChevronLeft, ExternalLink, Map, Phone } from 'lucide-react-native';
+import { ChevronLeft, ExternalLink, Map, Phone, Send } from 'lucide-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -175,6 +175,22 @@ export function LocationScreen() {
     }
   }
 
+  /** Shares the device's own GPS position (not a picked start point) as a Google Maps link. */
+  async function sendCurrentLocation() {
+    const coords = location.coords;
+    if (!coords) {
+      Alert.alert(t('location.sendLocationUnavailable'));
+      return;
+    }
+    try {
+      await Share.share({
+        message: `https://www.google.com/maps/search/?api=1&query=${coords.latitude},${coords.longitude}`,
+      });
+    } catch {
+      Alert.alert(t('location.sendLocationFailed'));
+    }
+  }
+
   async function copyAddress() {
     const text = getCopyText(details);
     if (!text) {
@@ -312,6 +328,14 @@ export function LocationScreen() {
             textClassName="text-base"
             leftIcon={({ color }) => <Map size={18} color={color} />}
             rightIcon={({ color }) => <ExternalLink size={16} color={color} />}
+          />
+
+          <Button
+            variant="outline"
+            onPress={sendCurrentLocation}
+            label={t('location.sendLocation')}
+            textClassName="text-base"
+            leftIcon={({ color }) => <Send size={16} color={color} />}
           />
 
           <Button

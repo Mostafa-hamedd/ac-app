@@ -73,7 +73,7 @@ export function UploadDocumentsScreen({ registrationId }: { registrationId: stri
               onPress={() => router.push({ pathname: '/verifying', params: { registrationId } })}>
               {t('uploadDocuments.submit')}
             </Button>
-            <Text className="text-center text-subhead" style={{ color: '#000000' }}>
+            <Text className="text-center text-subhead" style={{ color: colors.primary }}>
               {t('uploadDocuments.termsPrefix')}
               <Text
                 accessibilityRole="link"
